@@ -12,6 +12,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderGame.cpp" />
+    <ClCompile Include="Battle_Map.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Battle_Map.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BCAF4BB5-671A-464B-AB39-59A81EE58B7F}</ProjectGuid>

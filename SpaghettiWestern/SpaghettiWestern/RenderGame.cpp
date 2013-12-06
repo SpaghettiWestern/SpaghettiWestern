@@ -11,7 +11,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-//Intializes key components of the teapot's rendering
+//Intializes key components :)
 void init() 
 {
 	
