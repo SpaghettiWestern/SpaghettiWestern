@@ -7,6 +7,7 @@
 
 virtual class Setpiece{
 	public:
-		virtual void render() = 0;
+		virtual void render(int x_pos, int y_pos, int z_pos, 
+			double x_rot, double y_rot, double z_rot) = 0;
 }
 #endif
