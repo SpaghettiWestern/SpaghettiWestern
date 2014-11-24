@@ -1,0 +1,25 @@
+#ifndef ANIMATION_H
+#define ANIMATION_H
+
+#include <vector>
+#include "Frame.h"
+
+class Animation{
+private:
+	std::vector<Frame> frames;
+	bool repeating;
+	int curr_frame;
+
+public:
+	Animation();
+	Animation(int length, bool repeating);
+	void update();
+
+	Frame& getCurrFrame();
+	void addFrame(Frame new_frame);
+	void reset();
+};
+
+
+
+#endif
