@@ -15,7 +15,7 @@ public:
 	Animation(int length, bool repeating);
 	void update();
 
-	Frame& getCurrFrame();
+	const Frame& getCurrFrame() const;
 	void addFrame(Frame new_frame);
 	void reset();
 };

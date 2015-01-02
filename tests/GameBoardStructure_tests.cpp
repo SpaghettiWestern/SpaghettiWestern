@@ -7,6 +7,7 @@
 
 SUITE(GameBoardStructure){
 	TEST(constructor_default){
+		std::cerr << "Testing GameBoardStructure\n";
 		int length = 20;
 		int width = 20;
 

@@ -10,10 +10,10 @@ ActionActor::ActionActor(Coordinate loc, Player& owner, Attack attack) :
 
 }
 
-Attack& ActionActor::getAttack(){
+const Attack& ActionActor::getAttack() const{
 	return attack;
 }
 
-actor_type ActionActor::getType(){
+actor_type ActionActor::getType() const{
 	return ACTIONACTOR;
 }

@@ -8,17 +8,17 @@ Frame::Frame(std::tuple<int, int, int> color, float size) : color(color), size(s
 
 }
 
-bool Frame::operator==(const Frame& other){
+bool Frame::operator==(const Frame& other) const{
 	return std::get<0>(color) == std::get<0>(other.color) &&
 		std::get<1>(color) == std::get<1>(other.color) &&
 		std::get<2>(color) == std::get<2>(other.color) &&
 		size == other.size;
 }
 
-float Frame::getSize(){
+float Frame::getSize() const{
 	return size;
 }
 
-std::tuple<int, int, int> Frame::getColor(){
+const std::tuple<int, int, int>& Frame::getColor() const{
 	return color;
 }

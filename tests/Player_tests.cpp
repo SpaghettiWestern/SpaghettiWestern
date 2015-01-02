@@ -6,6 +6,8 @@
 
 SUITE(Player){
 	TEST(constructor_basic){
+		std::cerr << "Testing Player\n";
+
 		Player testplayer("tester1", true);
 		CHECK(testplayer.getName().compare("tester1") == 0);
 		CHECK(testplayer.isHuman() == true);
@@ -21,7 +23,7 @@ SUITE(Player){
 		CHECK(testplayer.isHuman() == true);
 
 		testplayer.createActor(Coordinate(0,0));
-		BoardActor& testact = testplayer.getActor(0);
+		const BoardActor& testact = testplayer.getActor(0);
 		CHECK(testact.getLocation() == Coordinate(0,0));
 		CHECK(testact.getCurrentHealth() == -1);
 		CHECK(testact.getMaxHealth() == -1);
@@ -33,7 +35,7 @@ SUITE(Player){
 		CHECK(testplayer.isHuman() == true);
 
 		testplayer.createActor(Coordinate(0,0), 28);
-		BoardActor& testact = testplayer.getActor(0);
+		const BoardActor& testact = testplayer.getActor(0);
 		CHECK(testact.getLocation() == Coordinate(0,0));
 		CHECK(testact.getCurrentHealth() == 28);
 		CHECK(testact.getMaxHealth() == 28);

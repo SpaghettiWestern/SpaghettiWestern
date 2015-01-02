@@ -7,7 +7,7 @@ private:
 
 public:
 	Attack(int damage);
-	int getDamage();
+	int getDamage() const;
 	void setDamage(int new_damage);
 
 };

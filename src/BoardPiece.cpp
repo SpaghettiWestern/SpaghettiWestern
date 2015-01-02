@@ -14,15 +14,19 @@ void BoardPiece::resetScreenLocation(){
 	screen_location = Util::coordToScreen(location);
 }
 
-Coordinate BoardPiece::getLocation(){
+const Coordinate& BoardPiece::getLocation() const{
 	return location;
 }
 
 void BoardPiece::setLocation(Coordinate new_location){
-	location = new_location;
-	resetScreenLocation();
+	if(new_location != location){
+		location = new_location;
+		if(Util::screenToCoord(screen_location) != location){
+			resetScreenLocation();
+		}
+	}
 }
 
-ScreenCoordinate BoardPiece::getScreenLocation(){
+const ScreenCoordinate& BoardPiece::getScreenLocation() const{
 	return screen_location;
 }

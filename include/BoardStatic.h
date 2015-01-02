@@ -11,7 +11,7 @@ private:
 public:
 	BoardStatic(Coordinate loc, bool isTraversable);
 	void setTraversable(bool traversable);
-	bool isTraversable();
+	bool isTraversable() const;
 
 
 };

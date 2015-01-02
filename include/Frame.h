@@ -13,10 +13,10 @@ public:
 	Frame();
 	Frame(std::tuple<int, int, int> color, float size);
 
-	bool operator==(const Frame& other);
+	bool operator==(const Frame& other) const;
 
-	float getSize();
-	std::tuple<int, int, int> getColor();
+	float getSize() const;
+	const std::tuple<int, int, int>& getColor() const;
 };
 
 

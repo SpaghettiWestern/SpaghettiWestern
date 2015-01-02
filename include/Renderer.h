@@ -25,11 +25,11 @@ public:
 	Renderer(GameModel& model);
 	void render();
 	void render(GameModel& model);
-	void render(GameBoard& gameboard);
-	void render(GameBoardStructure& board);
-	void render(BoardStatic& piece);
-	void render(BoardActor& actor);
-
+	void render(const GameBoard& gameboard);
+	void render(const GameBoardStructure& board);
+	void render(const BoardStatic& piece);
+	void render(const BoardActor& actor);
+	void render(const Effect& effect);
 
 	void drawQuadrangle(const ScreenCoordinate botLeft, const ScreenCoordinate botRight,
 			  	  	  	const ScreenCoordinate topLeft, const ScreenCoordinate topRight,

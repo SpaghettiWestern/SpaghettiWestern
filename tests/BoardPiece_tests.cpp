@@ -4,6 +4,7 @@
 SUITE(BoardPiece){
 	TEST(boardpiece_constructor_default)
 	{
+		std::cerr << "Testing BoardPiece\n";
 		BoardPiece testpiece;
 		CHECK(testpiece.getLocation() == Coordinate(-1,-1));
 	}

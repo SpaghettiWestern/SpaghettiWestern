@@ -43,7 +43,7 @@ bool GameController::handleClick(SDL_Event& click){
 }
 
 bool GameController::handleLClick(ScreenCoordinate loc){
-	GameBoardStructure& board = model.getGameBoard().getBoard();
+	const GameBoardStructure& board = model.getGameBoard().getBoard();
 	Coordinate boardloc = Util::screenToCoord(loc);
 	std::cout << "Left Click\n";
 	if (board.actorExists(boardloc)){

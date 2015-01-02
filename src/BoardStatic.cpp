@@ -9,6 +9,6 @@ void BoardStatic::setTraversable(bool traversable){
 	this->traversable = traversable;
 }
 
-bool BoardStatic::isTraversable(){
+bool BoardStatic::isTraversable() const{
 	return traversable;
 }

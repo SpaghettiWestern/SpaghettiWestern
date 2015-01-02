@@ -27,19 +27,19 @@ void BoardActor::initAnimations(){
 	active_animation = 0;
 }
 
-bool BoardActor::isMoving(){
+bool BoardActor::isMoving() const{
 	return active_animation == 1;
 }
 
 void BoardActor::generateMovePath(Coordinate start, Coordinate end){
 	ScreenCoordinate final_pos = Util::coordToScreen(end);
 	ScreenCoordinate start_pos = Util::coordToScreen(start);
-	float x_step = (final_pos.first - screen_location.first)/(float)move_speed;
-	float y_step = (final_pos.second - screen_location.second)/(float)move_speed;
+	double x_step = (final_pos.first - start_pos.first)/(float)move_speed;
+	double y_step = (final_pos.second - start_pos.second)/(float)move_speed;
 
 	//move_path.push_back(final_pos); Handled in the larger path wrapper
+	ScreenCoordinate next_pos = final_pos;
 	for(int i = 0; i < move_speed-1; i++){
-		ScreenCoordinate next_pos = move_path[i];
 		next_pos.first-=x_step;
 		next_pos.second-=y_step;
 		move_path.push_back(next_pos);
@@ -60,14 +60,14 @@ void BoardActor::generateMovePath(std::vector<Coordinate> path){
 	moveStep();
 }
 
-void BoardActor::recieveAttack(Attack& attack){
+void BoardActor::recieveAttack(const Attack& attack){
 	recieveDamage(attack.getDamage());
 }
 
-int BoardActor::getCurrentHealth(){
+int BoardActor::getCurrentHealth() const{
 	return curr_hitpoints;
 }
-int BoardActor::getMaxHealth(){
+int BoardActor::getMaxHealth() const{
 	return max_hitpoints;
 }
 
@@ -86,7 +86,7 @@ void BoardActor::recieveDamage(int damage){
 	}
 }
 
-bool BoardActor::isAlive(){
+bool BoardActor::isAlive() const{
 	return !(curr_hitpoints == 0);
 }
 
@@ -104,7 +104,7 @@ void BoardActor::setAnimation_Idle(){
 	}
 }
 
-Frame& BoardActor::getCurrentAnimationFrame(){
+const Frame& BoardActor::getCurrentAnimationFrame() const{
 	return animations[active_animation].getCurrFrame();
 }
 
@@ -133,23 +133,23 @@ void BoardActor::moveStep(){
 			return;
 		}
 		screen_location = move_path.back();
-		move_path.pop_back();
 		location = Util::screenToCoord(screen_location);
+		move_path.pop_back();
 	}
 }
 
-Coordinate BoardActor::getNextStep(){
+Coordinate BoardActor::getNextStep() const{
 	if(!move_path.empty() && isMoving()){
 		return Util::screenToCoord(move_path.back());
 	}
 	return Coordinate(-1,-1);
 }
 
-Coordinate BoardActor::getDestination(){
+const Coordinate& BoardActor::getDestination() const{
 	return destination;
 }
 
-int BoardActor::getMoveSpeed(){
+int BoardActor::getMoveSpeed() const{
 	return move_speed;
 }
 
@@ -159,11 +159,11 @@ void BoardActor::update(){
 	moveStep();
 }
 
-Player& BoardActor::getOwner(){
+const Player& BoardActor::getOwner() const{
 	return owner;
 }
 
-actor_type BoardActor::getType(){
+actor_type BoardActor::getType() const{
 	return BOARDACTOR;
 }
 

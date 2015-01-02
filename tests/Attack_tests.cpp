@@ -1,8 +1,12 @@
+#include <iostream>
+
 #include "Attack.h"
 #include "UnitTest++.h"
 
 SUITE(Attack){
 	TEST(constructor){
+		std::cerr << "Testing Attack\n";
+
 		Attack testattack(28);
 		CHECK(testattack.getDamage() == 28);
 	}

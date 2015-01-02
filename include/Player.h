@@ -16,16 +16,16 @@ private:
 public:
 	Player(std::string name, bool is_human);
 
-	std::string getName();
-	bool isHuman();
+	std::string getName() const;
+	bool isHuman() const;
 	void createActor(Coordinate loc);
 	void createActor(Coordinate loc, int hitpoints);
 	void addActor(std::shared_ptr<BoardActor> actor);
 
-	int getNumActors();
+	int getNumActors() const;
 
-	bool actorExists(int index);
-	BoardActor& getActor(int index);
+	bool actorExists(int index) const;
+	const BoardActor& getActor(int index) const;
 	bool deleteActor(int index);
 
 	void update();

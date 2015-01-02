@@ -21,16 +21,19 @@ public:
 	GameModel(int board_length, int board_width, std::vector<std::pair<std::string, bool>> init_players);
 
 	GameBoard& getGameBoard();
-	std::vector<Player>& getPlayers();
+	const std::vector<Player>& getPlayers() const;
 
-	bool playerExists(int index);
-	Player& getPlayer(int index);
+	bool playerExists(int index) const;
+	const Player& getPlayer(int index) const;
 
 	bool createActor(Coordinate loc, int owner_index, int hitpoints);
 	bool createActor(Coordinate loc, int owner_index, int hitpoints, Attack attack);
 
 	bool sendAttack(Coordinate attacker_loc, Coordinate attack_loc);
 	bool sendAttack(ActionActor& attacker, BoardActor& receiver);
+
+	bool playMovingBoardEffect(const Coordinate& start, const Coordinate& dest);
+	bool playMovingSurfaceEffect(const ScreenCoordinate& start, const ScreenCoordinate& dest);
 
 	void update();
 };

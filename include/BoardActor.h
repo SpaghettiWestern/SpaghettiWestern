@@ -36,31 +36,31 @@ public:
 	BoardActor(Coordinate loc, Player& owner);
 	BoardActor(Coordinate loc, Player& owner, int hitpoints);
 
-	int getCurrentHealth();
-	int getMaxHealth();
+	int getCurrentHealth() const;
+	int getMaxHealth() const;
 
-	void recieveAttack(Attack& attack);
-	bool isAlive();
+	void recieveAttack(const Attack& attack);
+	bool isAlive() const;
 
 	void setAnimation_Moving();
 	void setAnimation_Idle();
-	Frame& getCurrentAnimationFrame();
+	const Frame& getCurrentAnimationFrame() const;
 	void updateAnimation();
 	void resetAnimation();
 
-	bool isMoving();
+	bool isMoving() const;
 	void startMove(std::vector<Coordinate> path);
 	void stopMove();
 	void moveStep();
-	Coordinate getNextStep();
-	Coordinate getDestination();
-	int getMoveSpeed();
+	Coordinate getNextStep() const;
+	const Coordinate& getDestination() const;
+	int getMoveSpeed() const;
 
 	void update();
 
-	virtual actor_type getType();
+	virtual actor_type getType() const;
 
-	Player& getOwner();
+	const Player& getOwner() const;
 };
 
 

@@ -5,12 +5,16 @@ ScreenCoordinate Util::coordToScreen(Coordinate loc){
 }
 
 Coordinate Util::screenToCoord(ScreenCoordinate scr){
-	return Coordinate((int)(scr.first*20), (int)(scr.second*20));
+	return Coordinate((int)(scr.first*20.0+epsilon()), (int)(scr.second*20.0+epsilon()));
 }
 
 void Util::printErrCoordinate(const Coordinate loc){
 	std::cerr << "(" << loc.first << "," <<loc.second << ")";
 }
 void Util::printErrScreenCoordinate(const ScreenCoordinate scr){
-	std::cerr << "(" << scr.first << "," <<scr.second << ")";
+	std::cerr << std::fixed << "(" << scr.first << "," <<scr.second << ")";
+}
+
+bool Util::almostEquals_ScreenCoordinate(const ScreenCoordinate& s1, const ScreenCoordinate& s2){
+	return (std::abs(s1.first - s2.first) < epsilon()) && (std::abs(s1.second - s2.second) < epsilon());
 }

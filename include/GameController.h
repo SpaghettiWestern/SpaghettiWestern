@@ -31,5 +31,4 @@ public:
 
 };
 
-
-#endif GAMECONTROLLER_H
+#endif

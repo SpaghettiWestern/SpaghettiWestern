@@ -8,6 +8,8 @@
 SUITE(GameModel){
 
 	TEST(constructor_noplayers){
+		std::cerr << "Testing GameModel\n";
+
 		GameModel testmodel(50, 30);
 		CHECK(testmodel.getGameBoard().getBoard().getLength() == 50);
 		CHECK(testmodel.getGameBoard().getBoard().getWidth() == 30);

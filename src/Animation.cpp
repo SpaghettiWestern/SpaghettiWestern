@@ -22,7 +22,7 @@ void Animation::update(){
 	}
 }
 
-Frame& Animation::getCurrFrame(){
+const Frame& Animation::getCurrFrame() const{
 	return frames[curr_frame];
 }
 

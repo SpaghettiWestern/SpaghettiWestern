@@ -8,6 +8,8 @@
 SUITE(boardactor){
 
 	TEST(locationconstructor){
+		std::cerr << "Testing BoardActor\n";
+
 		Player testplayer("tester1", true);
 		BoardActor testactor(Coordinate(1,2), testplayer);
 		CHECK(testactor.getLocation() == Coordinate(1,2));
@@ -216,7 +218,7 @@ SUITE(boardactor){
 		test_path.push_back(Coordinate(0,0));
 		test_path.push_back(Coordinate(60,4000));
 		test_path.push_back(Coordinate(5,200));
-		test_path.push_back(Coordinate(1,4));
+		test_path.push_back(Coordinate(0,4));
 		test_path.push_back(Coordinate(1,3));
 		test_path.push_back(Coordinate(1,2));
 		test_path.push_back(Coordinate(1,3));
@@ -238,13 +240,62 @@ SUITE(boardactor){
 		CHECK(testactor.getLocation() == test_path[0]);
 	}
 
-
-
-//
 //	void update();
+	TEST(update){
+		Player testplayer("tester1", true);
+		Coordinate startloc(4,3);
+		BoardActor testactor(startloc, testplayer);
 
+		Frame black(std::make_tuple<int,int,int>(0,0,0), .05);
+		Frame red(std::make_tuple<int,int,int>(255,0,0), .05);
+		Frame green(std::make_tuple<int,int,int>(0,255,0), .05);
 
+		CHECK(testactor.getCurrentAnimationFrame() == red);
+		CHECK(testactor.getLocation() == startloc);
+		testactor.update();
+		CHECK(testactor.getCurrentAnimationFrame() == black);
+		CHECK(testactor.getLocation() == startloc);
+		testactor.update();
+		CHECK(testactor.getCurrentAnimationFrame() == red);
+		CHECK(testactor.getLocation() == startloc);
 
+		std::vector<Coordinate> test_path;
+		test_path.clear();
+
+		test_path.push_back(Coordinate(0,0));
+		test_path.push_back(Coordinate(60,4000));
+		test_path.push_back(Coordinate(5,200));
+		test_path.push_back(Coordinate(1,4));
+		test_path.push_back(Coordinate(1,3));
+		test_path.push_back(Coordinate(1,1));
+		test_path.push_back(Coordinate(777777,1000000));
+		test_path.push_back(Coordinate(0,0));
+		test_path.push_back(Coordinate(99,0));
+		test_path.push_back(startloc);
+
+		CHECK(testactor.getLocation() == startloc);
+		int speed = testactor.getMoveSpeed();
+		testactor.startMove(test_path);
+		CHECK(testactor.getDestination() == test_path[0]);
+		bool evenstep = true;
+		for(int i = test_path.size()-1; i > -1 ; i--){
+			CHECK(testactor.getLocation() == test_path[i]);
+			for(int j = 0; j < speed; j++){
+				if(evenstep){
+					if(i == 0){
+						CHECK(testactor.getCurrentAnimationFrame() == red);
+					}else{
+						CHECK(testactor.getCurrentAnimationFrame() == green);
+					}
+				}else{
+					CHECK(testactor.getCurrentAnimationFrame() == black);
+				}
+				testactor.update();
+				evenstep = !evenstep;
+			}
+		}
+		CHECK(testactor.getLocation() == test_path[0]);
+	}
 }
 
 

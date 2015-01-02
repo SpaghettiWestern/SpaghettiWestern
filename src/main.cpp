@@ -60,7 +60,8 @@ void gameLoop(SDL_Window& displayWindow, GameView& view, GameController& control
 		view.render();
 
 		SDL_GL_SwapWindow(&displayWindow);
-		SDL_Delay(100);
+		//To keep my computer from running at maximum
+		SDL_Delay(10);
 	}
 }
 
@@ -100,7 +101,8 @@ auto make_resource(Creator c, Destructor d, Arguments&&... args)
  * Initialize the game objects, and run the game loop.
  */
 void startGame() {
-	std::cout << "starting";
+	std::cout << "starting\n";
+
 	auto displayWindow = make_resource(SDL_CreateWindow, SDL_DestroyWindow,
 		"Spaghetti Western",
 		20.0,//(float)getGraphicsConfig()["screen.x"],
@@ -129,6 +131,9 @@ void startGame() {
 	GameModel model(20,20, {std::make_pair("P1", true), std::make_pair("P2", true)});
 	model.createActor(Coordinate(0,0), 0, 28, Attack(28));
 	model.createActor(Coordinate(2,2), 1, 42, Attack(42));
+	model.playMovingSurfaceEffect(ScreenCoordinate(0,0), ScreenCoordinate(1,1));
+	model.getGameBoard().addSurfaceEffect(ScreenCoordinate(0.43,0.28));
+	model.getGameBoard().addBoardEffect(Util::coordToScreen(Coordinate(2,8)));
 
 	GameView view(model);
 	GameController controller(model);
@@ -139,9 +144,8 @@ void startGame() {
 }
 
 
-
 int main(int argc, char *argv[]) {
-	std::cout << "program begin";
+	std::cout << "program begin\n";
 
 	if(TTF_Init()==-1) {
 		std::cerr << "Error in TTF_Init: " << TTF_GetError() << std::endl;

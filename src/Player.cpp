@@ -5,11 +5,11 @@ Player::Player(std::string name, bool is_human) : name(name), human(is_human){
 	actors.clear();
 }
 
-std::string Player::getName(){
+std::string Player::getName() const{
 	return name;
 }
 
-bool Player::isHuman(){
+bool Player::isHuman() const{
 	return human;
 }
 
@@ -25,15 +25,15 @@ void Player::addActor(std::shared_ptr<BoardActor> actor){
 	actors.push_back(actor);
 }
 
-int Player::getNumActors(){
+int Player::getNumActors() const{
 	return actors.size();
 }
 
-bool Player::actorExists(int index){
+bool Player::actorExists(int index) const{
 	return index >= 0 && index < actors.size();
 }
 
-BoardActor& Player::getActor(int index){
+const BoardActor& Player::getActor(int index) const{
 	return *(actors[index]);
 }
 

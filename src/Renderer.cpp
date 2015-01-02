@@ -5,7 +5,6 @@ Renderer::Renderer(GameModel& model) : model(model){
 }
 
 void Renderer::render(){
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	render(model);
 	glFlush();
@@ -15,24 +14,32 @@ void Renderer::render(GameModel& model){
 	render(model.getGameBoard());
 }
 
-void Renderer::render(GameBoard& gameboard){
+void Renderer::render(const GameBoard& gameboard){
 	render(gameboard.getBoard());
+	for(auto it = gameboard.getSurfaceEffects().begin(); it != gameboard.getSurfaceEffects().end(); ++it){
+		render(**it);
+	}
+
 }
 
-void Renderer::render(GameBoardStructure& board){
+void Renderer::render(const GameBoardStructure& board){
 	for(int i = 0; i < board.getWidth(); i++){
 		for(int j = 0; j < board.getLength(); j++){
 			render(board.getEnvironmentPiece(i,j));
 			if (board.actorExists(i, j)){
 				render(*(board.getActor(i,j)));
 			}
+			if (board.effectsExist(Coordinate(i,j))){
+				for(auto it = board.getEffects(Coordinate(i,j)).begin(); it != board.getEffects(Coordinate(i,j)).end(); ++it){
+					render((**it));
+				}
+			}
 		}
 	}
-
 }
 
 
-void Renderer::render(BoardStatic& piece){
+void Renderer::render(const BoardStatic& piece){
 	Coordinate piececoord = piece.getLocation();
 	ScreenCoordinate botLeft = Util::coordToScreen(piececoord);
 	ScreenCoordinate botRight(botLeft.first, botLeft.second+0.05);
@@ -44,7 +51,7 @@ void Renderer::render(BoardStatic& piece){
 
 }
 
-void Renderer::render(BoardActor& actor){
+void Renderer::render(const BoardActor& actor){
 	ScreenCoordinate topLeft = actor.getScreenLocation();
 	topLeft = ScreenCoordinate(topLeft.first+0.0125, topLeft.second+0.0125);
 	ScreenCoordinate botLeft(topLeft.first, topLeft.second+0.025);
@@ -55,6 +62,20 @@ void Renderer::render(BoardActor& actor){
 	auto color = actor.getCurrentAnimationFrame().getColor();
 
 	drawQuadrangle(botLeft, botRight, topLeft, topRight, color);
+}
+
+void Renderer::render(const Effect& effect){
+	ScreenCoordinate topLeft = effect.getScreenLocation();
+	topLeft = ScreenCoordinate(topLeft.first+0.0025, topLeft.second+0.0025);
+	ScreenCoordinate botLeft(topLeft.first, topLeft.second+0.005);
+	ScreenCoordinate botRight(topLeft.first+0.005, topLeft.second+0.005);
+	ScreenCoordinate topRight(topLeft.first+0.005, topLeft.second);
+
+	//auto color = std::make_tuple(0.0, 0.0, 100);
+	auto color = effect.getCurrentAnimationFrame().getColor();
+
+	drawQuadrangle(botLeft, botRight, topLeft, topRight, color);
+
 }
 
 

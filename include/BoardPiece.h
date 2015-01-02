@@ -18,10 +18,10 @@ public:
 	BoardPiece();
 	BoardPiece(Coordinate loc);
 
-	Coordinate getLocation();
+	const Coordinate& getLocation() const;
 	void setLocation(Coordinate new_location);
 
-	ScreenCoordinate getScreenLocation();
+	const ScreenCoordinate& getScreenLocation() const;
 
 };
 

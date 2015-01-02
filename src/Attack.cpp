@@ -5,7 +5,7 @@ Attack::Attack(int damage) : damage(damage){
 
 }
 
-int Attack::getDamage(){
+int Attack::getDamage() const{
 	return damage;
 }
 

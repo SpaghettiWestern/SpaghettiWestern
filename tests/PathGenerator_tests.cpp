@@ -6,6 +6,8 @@
 SUITE(PathGenerator){
 
 	TEST(constructor){
+		std::cerr << "Testing PathGenerator\n";
+
 		std::shared_ptr<GameBoardStructure> test_board = std::make_shared<GameBoardStructure>(3,3);
 		PathGenerator test_pathgen(test_board);
 		CHECK(test_pathgen.getPath().size() == 0);

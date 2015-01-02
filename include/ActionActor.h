@@ -13,8 +13,8 @@ private:
 public:
 	ActionActor(Coordinate loc, Player& owner, int hitpoints, Attack attack);
 	ActionActor(Coordinate loc, Player&owner, Attack attack);
-	Attack& getAttack();
-	actor_type getType();
+	const Attack& getAttack() const;
+	actor_type getType() const;
 };
 
 

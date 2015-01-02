@@ -1,8 +1,8 @@
-#include <UnitTest++.h>
-#include <exception>
-#include <iostream>
-
-int main() {
-	return UnitTest::RunAllTests();
-}
-
+//#include <UnitTest++.h>
+//#include <exception>
+//#include <iostream>
+//
+//int main() {
+//	return UnitTest::RunAllTests();
+//}
+//
