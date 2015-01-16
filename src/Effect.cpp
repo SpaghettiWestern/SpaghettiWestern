@@ -37,6 +37,6 @@ effect_type Effect::getType() const{
 	return EFFECT;
 }
 
-void Effect::update(){
-	animation.update();
+bool Effect::update(){
+	return animation.update();
 }

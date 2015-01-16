@@ -224,13 +224,13 @@ SUITE(MovingEffect){
 			test_path.pop_back();
 
 			CHECK(test_effect.getNextStep() == step_loc);
-			test_effect.update();
+			CHECK(test_effect.update() == true);
 			CHECK(test_effect.getScreenLocation() == step_loc);
 		}
 		CHECK(test_effect.getScreenLocation() == path2);
 		CHECK(test_effect.getCurrentAnimationFrame() == yellow);
 		CHECK(test_effect.isMoving() == true);
-		test_effect.update();
+		CHECK(test_effect.update() == false);
 		CHECK(test_effect.getCurrentAnimationFrame() == black);
 		CHECK(test_effect.isMoving() == false);
 		CHECK(test_effect.getScreenLocation() == path2);

@@ -145,6 +145,9 @@ const Effect& GameBoardStructure::getEffect(const Coordinate& loc) const{
 
 bool GameBoardStructure::addEffect(std::unique_ptr<Effect>& new_effect){
 	Coordinate loc = Util::screenToCoord(new_effect->getScreenLocation());
+	if(!inBounds(loc)){
+		return false;
+	}
 	effects[loc].push_back(std::unique_ptr<Effect>(new_effect.release()));
 	return true;
 }
@@ -158,24 +161,57 @@ int GameBoardStructure::getWidth() const{
 	return width;
 }
 
-
-void GameBoardStructure::updateEffects(){
-	for (auto map_it = effects.begin(); map_it != effects.end(); ++map_it){
-		for(auto vec_it = map_it->second.begin(); vec_it != map_it->second.end(); ++vec_it){
-			(*vec_it)->update();
+bool GameBoardStructure::handleEffect(const std::unique_ptr<Effect>& effect, const Coordinate& loc){
+	switch (effect->getType()){
+	case ATTACKEFFECT:
+		if(actorExists(loc)){
+			AttackEffect& attack_effect = (AttackEffect&)(*effect);
+			getActor(loc)->recieveAttack(attack_effect.getAttack());
+			return true;
 		}
+		break;
+	default:
+		return false;
+		break;
 	}
+	return false;
+}
+
+void GameBoardStructure::updateEffects_base(){
 	for (auto map_it = effects.begin(); map_it != effects.end(); ++map_it){
-		Coordinate board_loc = map_it->first;
-		for(auto vec_it = map_it->second.begin(); vec_it != map_it->second.end(); ++vec_it){
-			Coordinate effect_loc = Util::screenToCoord((*vec_it)->getScreenLocation());
-			if(effect_loc != board_loc){
-				std::unique_ptr<Effect> tmp_effect(vec_it->release());
-				addEffect(tmp_effect);
-				map_it->second.erase(vec_it);
+		for(auto vec_it = map_it->second.begin(); vec_it < map_it->second.end(); ++vec_it){
+			if(!(*vec_it)->update()){
+				vec_it = map_it->second.erase(vec_it);
 			}
 		}
 	}
+}
+
+void GameBoardStructure::updateEffects_reposition(){
+	std::vector<Coordinate> empty_cells;
+	for (auto map_it = effects.begin(); map_it != effects.end(); ++map_it){
+		Coordinate board_loc = map_it->first;
+		for(auto vec_it = map_it->second.begin(); vec_it < map_it->second.end(); ++vec_it){
+			Coordinate effect_loc = Util::screenToCoord((*vec_it)->getScreenLocation());
+			if(effect_loc != board_loc){
+				if(!handleEffect(*vec_it, effect_loc)){
+					addEffect(*vec_it);
+				}
+				vec_it = map_it->second.erase(vec_it);
+			}
+		}
+		if(map_it->second.empty()){
+			empty_cells.push_back(board_loc);
+		}
+	}
+
+	for(unsigned int i = 0; i < empty_cells.size(); i++)
+		effects.erase(effects.find(empty_cells[i]));
+}
+
+void GameBoardStructure::updateEffects(){
+	updateEffects_base();
+	updateEffects_reposition();
 }
 
 void GameBoardStructure::update(){

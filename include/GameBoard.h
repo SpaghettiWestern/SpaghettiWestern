@@ -19,6 +19,7 @@ private:
 
 	void updateActors();
 	void updateEffects();
+	void updateBoard();
 
 
 public:
@@ -46,6 +47,7 @@ public:
 	const std::map<Coordinate, std::vector<std::unique_ptr<Effect>>>& getBoardEffects() const;
 	bool addBoardEffect(const ScreenCoordinate& loc);
 	bool addBoardEffect(const ScreenCoordinate& loc, const Animation& animation);
+	bool addBoardEffect(std::unique_ptr<Effect>& new_effect);
 	bool addMovingBoardEffect(const ScreenCoordinate& loc, const std::vector<ScreenCoordinate>& path);
 
 	const std::vector<std::unique_ptr<Effect>>& getSurfaceEffects() const;

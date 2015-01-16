@@ -32,8 +32,8 @@ public:
 	bool sendAttack(Coordinate attacker_loc, Coordinate attack_loc);
 	bool sendAttack(ActionActor& attacker, BoardActor& receiver);
 
-	bool playMovingBoardEffect(const Coordinate& start, const Coordinate& dest);
-	bool playMovingSurfaceEffect(const ScreenCoordinate& start, const ScreenCoordinate& dest);
+	bool playStaticEffect(const ScreenCoordinate& loc, bool surface_level);
+	bool playMovingEffect(const ScreenCoordinate& start, const ScreenCoordinate& dest, bool surface_level);
 
 	void update();
 };

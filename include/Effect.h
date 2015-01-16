@@ -4,7 +4,7 @@
 #include "Animation.h"
 #include "Util.h"
 
-enum effect_type {EFFECT, MOVINGEFFECT};
+enum effect_type {EFFECT, MOVINGEFFECT, ATTACKEFFECT};
 
 class Effect {
 private:
@@ -27,7 +27,7 @@ public:
 
 	virtual effect_type getType() const;
 
-	virtual void update();
+	virtual bool update();
 };
 
 

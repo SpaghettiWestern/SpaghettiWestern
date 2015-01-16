@@ -13,7 +13,7 @@ private:
 public:
 	Animation();
 	Animation(int length, bool repeating);
-	void update();
+	bool update();
 
 	const Frame& getCurrFrame() const;
 	void addFrame(Frame new_frame);

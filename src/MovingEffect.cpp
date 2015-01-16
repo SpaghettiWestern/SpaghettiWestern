@@ -77,9 +77,9 @@ effect_type MovingEffect::getType() const{
 	return MOVINGEFFECT;
 }
 
-void MovingEffect::update(){
+bool MovingEffect::update(){
 	Effect::update();
-	moveStep();
+	return moveStep();
 }
 
 

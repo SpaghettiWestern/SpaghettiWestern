@@ -96,6 +96,11 @@ bool GameBoard::addBoardEffect(const ScreenCoordinate& loc, const Animation& ani
 	return true;
 }
 
+bool GameBoard::addBoardEffect(std::unique_ptr<Effect>& new_effect){
+	board->addEffect(new_effect);
+	return true;
+}
+
 bool GameBoard::addMovingBoardEffect(const ScreenCoordinate& loc, const std::vector<ScreenCoordinate>& path){
 	surface_effects.push_back(std::unique_ptr<Effect>(new MovingEffect(loc, path)));
 	return true;
@@ -145,12 +150,19 @@ void GameBoard::updateActors(){
 }
 
 void GameBoard::updateEffects(){
-	for(auto it = surface_effects.begin(); it != surface_effects.end(); ++it){
-		(*it)->update();
+	for(auto it = surface_effects.begin(); it < surface_effects.end(); ++it){
+		if(!(*it)->update()){
+			it = surface_effects.erase(it);
+		}
 	}
 }
 
-void GameBoard::update(){
+void GameBoard::updateBoard(){
 	updateActors();
+	board->update();
+}
+
+void GameBoard::update(){
+	updateBoard();
 	updateEffects();
 }

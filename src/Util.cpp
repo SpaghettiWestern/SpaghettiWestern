@@ -1,5 +1,11 @@
 #include "Util.h"
 
+std::default_random_engine Util::generator;
+
+double Util::epsilon(){
+	return 0.0000000001;
+}
+
 ScreenCoordinate Util::coordToScreen(Coordinate loc){
 	return ScreenCoordinate(loc.first/20.0, loc.second/20.0);
 }
@@ -17,4 +23,8 @@ void Util::printErrScreenCoordinate(const ScreenCoordinate scr){
 
 bool Util::almostEquals_ScreenCoordinate(const ScreenCoordinate& s1, const ScreenCoordinate& s2){
 	return (std::abs(s1.first - s2.first) < epsilon()) && (std::abs(s1.second - s2.second) < epsilon());
+}
+
+std::default_random_engine& Util::getRandomEngine(){
+	return generator;
 }

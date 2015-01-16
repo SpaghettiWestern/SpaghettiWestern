@@ -129,11 +129,10 @@ void startGame() {
 	updateViewport(800, 600);//getGraphicsConfig()["screen.width"], getGraphicsConfig()["screen.height"]);
 
 	GameModel model(20,20, {std::make_pair("P1", true), std::make_pair("P2", true)});
-	model.createActor(Coordinate(0,0), 0, 28, Attack(28));
-	model.createActor(Coordinate(2,2), 1, 42, Attack(42));
-	model.playMovingSurfaceEffect(ScreenCoordinate(0,0), ScreenCoordinate(1,1));
-	model.getGameBoard().addSurfaceEffect(ScreenCoordinate(0.43,0.28));
-	model.getGameBoard().addBoardEffect(Util::coordToScreen(Coordinate(2,8)));
+	model.createActor(Coordinate(0,0), 0, 28, Attack(28, 1.0, .05, .003));
+	model.createActor(Coordinate(2,2), 1, 42, Attack(42, .85, .1, .001));
+	model.playMovingEffect(ScreenCoordinate(0,0), ScreenCoordinate(1,1), true);
+	model.playMovingEffect(ScreenCoordinate(0,.95), ScreenCoordinate(.95,0), false);
 
 	GameView view(model);
 	GameController controller(model);

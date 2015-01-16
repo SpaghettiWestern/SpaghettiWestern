@@ -12,14 +12,16 @@ Animation::Animation(int length, bool repeating) : repeating(repeating){
 	curr_frame = 0;
 }
 
-void Animation::update(){
+bool Animation::update(){
 	if(curr_frame < frames.size()-1){
 		curr_frame++;
-		return;
+		return true;
 	}
 	if(repeating){
 		curr_frame = 0;
+		true;
 	}
+	return false;
 }
 
 const Frame& Animation::getCurrFrame() const{

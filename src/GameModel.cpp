@@ -58,20 +58,34 @@ bool GameModel::sendAttack(Coordinate attacker_loc, Coordinate attack_loc){
 }
 
 bool GameModel::sendAttack(ActionActor& attacker, BoardActor& receiver){
-	receiver.recieveAttack(attacker.getAttack());
+	std::unique_ptr<Effect> attack_ptr(new AttackEffect(attacker.getScreenLocation(), attacker.getAttack()));
+	AttackEffect& bullet = (AttackEffect&)(*attack_ptr);
+	bullet.generatePath(receiver.getScreenLocation());
+	bullet.MovingEffect::startMove();
+	board.addBoardEffect(attack_ptr);
 	return true;
 }
 
-bool GameModel::playMovingBoardEffect(const Coordinate& start, const Coordinate& dest){
+bool GameModel::playStaticEffect(const ScreenCoordinate& loc, bool surface_level){
+	std::unique_ptr<Effect> new_effect_ptr(new Effect(loc));
+	if(surface_level)
+		board.addSurfaceEffect(new_effect_ptr);
+	else
+		board.addBoardEffect(new_effect_ptr);
+
 	return true;
 }
 
-bool GameModel::playMovingSurfaceEffect(const ScreenCoordinate& start, const ScreenCoordinate& dest){
+bool GameModel::playMovingEffect(const ScreenCoordinate& start, const ScreenCoordinate& dest, bool surface_level){
 	std::unique_ptr<Effect> new_effect_ptr(new MovingEffect(start));
 	MovingEffect& new_effect = (MovingEffect&)(*new_effect_ptr);
 	new_effect.generatePath(dest, .001);
 	new_effect.startMove();
-	board.addSurfaceEffect(new_effect_ptr);
+	if(surface_level)
+		board.addSurfaceEffect(new_effect_ptr);
+	else
+		board.addBoardEffect(new_effect_ptr);
+
 	return true;
 }
 

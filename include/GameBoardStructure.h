@@ -10,6 +10,7 @@
 #include "BoardStatic.h"
 #include "Player.h"
 #include "Effect.h"
+#include "AttackEffect.h"
 
 class GameBoardStructure{
 private:
@@ -22,6 +23,11 @@ private:
 
 	void initEnvironment();
 	void initActors();
+
+	bool handleEffect(const std::unique_ptr<Effect>& effect, const Coordinate& loc);
+	void updateEffects_base();
+	void updateEffects_reposition();
+	void updateEffects();
 
 public:
 	GameBoardStructure(int length, int width);
@@ -50,12 +56,10 @@ public:
 	bool effectsExist(const Coordinate& loc) const;
 	const Effect& getEffect(const Coordinate& loc) const;
 	bool addEffect(std::unique_ptr<Effect>& new_effect);
-	bool moveEffects(const Coordinate& coord);
 
 	int getLength() const;
 	int getWidth() const;
 
-	void updateEffects();
 	void update();
 };
 

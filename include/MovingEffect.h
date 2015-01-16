@@ -28,7 +28,7 @@ public:
 	ScreenCoordinate getNextStep() const;
 	virtual effect_type getType() const;
 
-	virtual void update();
+	virtual bool update();
 };
 
 
