@@ -6,9 +6,8 @@ Animation::Animation(){
 	frames.clear();
 }
 
-Animation::Animation(int length, bool repeating) : repeating(repeating){
+Animation::Animation(bool repeating) : repeating(repeating){
 	frames.clear();
-	frames.resize(length);
 	curr_frame = 0;
 }
 
@@ -19,7 +18,7 @@ bool Animation::update(){
 	}
 	if(repeating){
 		curr_frame = 0;
-		true;
+		return true;
 	}
 	return false;
 }

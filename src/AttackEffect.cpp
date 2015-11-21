@@ -40,3 +40,7 @@ effect_type AttackEffect::getType() const{
 bool AttackEffect::update(){
 	return MovingEffect::update();
 }
+
+
+
+

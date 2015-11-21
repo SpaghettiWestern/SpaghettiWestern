@@ -12,8 +12,6 @@ enum actor_type {BOARDACTOR, ACTIONACTOR};
 class BoardActor : public BoardPiece{
 private:
 	Player& owner;
-	int max_hitpoints;
-	int curr_hitpoints;
 
 	std::vector<ScreenCoordinate> move_path;
 	void generateMovePath(Coordinate start, Coordinate end);
@@ -22,30 +20,20 @@ private:
 	Coordinate destination;
 
 	int move_speed;
-
 	void recieveDamage(int damage);
 
-
 protected:
-	std::vector<Animation> animations;
-	int active_animation;
-	void initAnimations();
-
+	virtual void initAnimations();
 
 public:
+
 	BoardActor(Coordinate loc, Player& owner);
 	BoardActor(Coordinate loc, Player& owner, int hitpoints);
 
-	int getCurrentHealth() const;
-	int getMaxHealth() const;
-
-	void recieveAttack(const Attack& attack);
 	bool isAlive() const;
 
 	void setAnimation_Moving();
 	void setAnimation_Idle();
-	const Frame& getCurrentAnimationFrame() const;
-	void updateAnimation();
 	void resetAnimation();
 
 	bool isMoving() const;
@@ -56,7 +44,7 @@ public:
 	const Coordinate& getDestination() const;
 	int getMoveSpeed() const;
 
-	void update();
+	virtual bool update();
 
 	virtual actor_type getType() const;
 

@@ -50,6 +50,11 @@ bool GameModel::createActor(Coordinate loc, int owner_index, int hitpoints, Atta
 	return false;
 }
 
+bool GameModel::createWall(Coordinate loc, int hitpoints){
+	board.addStaticCoverPiece(loc, false, hitpoints, 1000);
+	return true;
+}
+
 bool GameModel::sendAttack(Coordinate attacker_loc, Coordinate attack_loc){
 	if(board.canAttack(attacker_loc, attack_loc)){
 		return sendAttack((ActionActor&)board.getActor(attacker_loc), board.getActor(attack_loc));

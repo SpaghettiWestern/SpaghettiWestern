@@ -23,9 +23,7 @@ public:
 	static bool almostEquals_ScreenCoordinate(const ScreenCoordinate& s1, const ScreenCoordinate& s2);
 
 	static std::default_random_engine& getRandomEngine();
-
 };
-
 
 
 #endif

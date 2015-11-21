@@ -117,41 +117,7 @@ SUITE(boardactor){
 		CHECK(testactor.isMoving() == false);
 	}
 
-//	Frame& getCurrentAnimationFrame();
-//	void updateAnimation();
-//	void resetAnimation();
-	TEST(updating_resetting_animations){
-		Frame black(std::make_tuple<int,int,int>(0,0,0), .05);
-		Frame red(std::make_tuple<int,int,int>(255,0,0), .05);
-		Frame green(std::make_tuple<int,int,int>(0,255,0), .05);
 
-		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer);
-		CHECK(testactor.getCurrentAnimationFrame() == red);
-		testactor.updateAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == black);
-		testactor.updateAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == red);
-		testactor.updateAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == black);
-		testactor.resetAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == red);
-
-		testactor.setAnimation_Moving();
-		CHECK(testactor.getCurrentAnimationFrame() == green);
-		testactor.updateAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == black);
-		testactor.updateAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == green);
-		testactor.updateAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == black);
-		testactor.updateAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == green);
-		testactor.resetAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == green);
-		testactor.resetAnimation();
-		CHECK(testactor.getCurrentAnimationFrame() == green);
-	}
 
 //	bool isMoving();
 //	void startMove(std::vector<Coordinate> path);
@@ -246,9 +212,9 @@ SUITE(boardactor){
 		Coordinate startloc(4,3);
 		BoardActor testactor(startloc, testplayer);
 
-		Frame black(std::make_tuple<int,int,int>(0,0,0), .05);
-		Frame red(std::make_tuple<int,int,int>(255,0,0), .05);
-		Frame green(std::make_tuple<int,int,int>(0,255,0), .05);
+		Frame black(std::make_tuple<int,int,int>(0,0,0), .04);
+		Frame red(std::make_tuple<int,int,int>(255,0,0), .04);
+		Frame green(std::make_tuple<int,int,int>(0,255,0), .04);
 
 		CHECK(testactor.getCurrentAnimationFrame() == red);
 		CHECK(testactor.getLocation() == startloc);

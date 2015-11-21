@@ -29,6 +29,8 @@ public:
 	bool createActor(Coordinate loc, int owner_index, int hitpoints);
 	bool createActor(Coordinate loc, int owner_index, int hitpoints, Attack attack);
 
+	bool createWall(Coordinate loc, int hitpoints);
+
 	bool sendAttack(Coordinate attacker_loc, Coordinate attack_loc);
 	bool sendAttack(ActionActor& attacker, BoardActor& receiver);
 

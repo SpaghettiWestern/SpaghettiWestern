@@ -27,6 +27,7 @@ private:
 	bool handleEffect(const std::unique_ptr<Effect>& effect, const Coordinate& loc);
 	void updateEffects_base();
 	void updateEffects_reposition();
+	void updateEnvironment();
 	void updateEffects();
 
 public:
@@ -37,8 +38,11 @@ public:
 	const BoardStatic& getEnvironmentPiece(int x, int y) const;
 	const BoardStatic& getEnvironmentPiece(const Coordinate& loc) const;
 
+	bool addEnvironmentPiece(std::unique_ptr<BoardStatic>& newpiece);
+
 	bool openSpace(const Coordinate& loc) const;
 	bool inBounds(const Coordinate& loc) const;
+	bool traversableSpace(const Coordinate& loc) const;
 
 	bool actorExists(int x, int y) const;
 	bool actorExists(const Coordinate& loc) const;

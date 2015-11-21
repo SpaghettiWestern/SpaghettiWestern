@@ -26,15 +26,15 @@ void Attack::setDamage(int new_damage){
 	damage = new_damage;
 }
 
-void Attack::setAccuracy(float new_accuracy){
+void Attack::setAccuracy(double new_accuracy){
 	accuracy = new_accuracy;
 }
 
-void Attack::setSpread(float new_spread){
+void Attack::setSpread(double new_spread){
 	spread = new_spread;
 }
 
-void Attack::setSpeed(float new_speed){
+void Attack::setSpeed(double new_speed){
 	speed = new_speed;
 }
 

@@ -12,7 +12,7 @@ private:
 
 public:
 	Animation();
-	Animation(int length, bool repeating);
+	Animation(bool repeating);
 	bool update();
 
 	const Frame& getCurrFrame() const;

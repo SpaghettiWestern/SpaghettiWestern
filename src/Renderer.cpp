@@ -38,29 +38,29 @@ void Renderer::render(const GameBoardStructure& board){
 	}
 }
 
-
 void Renderer::render(const BoardStatic& piece){
-	Coordinate piececoord = piece.getLocation();
-	ScreenCoordinate botLeft = Util::coordToScreen(piececoord);
-	ScreenCoordinate botRight(botLeft.first, botLeft.second+0.05);
-	ScreenCoordinate topRight(botLeft.first+0.05, botLeft.second+0.05);
-	ScreenCoordinate topLeft(botLeft.first+0.05, botLeft.second);
-	auto color = std::make_tuple(botLeft.first, botLeft.second, 0.05);
+	double size = piece.getCurrentAnimationFrame().getSize()/2.0;
 
+	ScreenCoordinate topLeft = piece.getScreenLocation();
+	topLeft = ScreenCoordinate(topLeft.first, topLeft.second);
+	ScreenCoordinate botLeft(topLeft.first, topLeft.second+size);
+	ScreenCoordinate botRight(topLeft.first+size, topLeft.second+size);
+	ScreenCoordinate topRight(topLeft.first+size, topLeft.second);
+
+	auto color = piece.getCurrentAnimationFrame().getColor();
 	drawQuadrangle(botLeft, botRight, topLeft, topRight, color);
-
 }
 
 void Renderer::render(const BoardActor& actor){
+	float size = actor.getCurrentAnimationFrame().getSize();
+
 	ScreenCoordinate topLeft = actor.getScreenLocation();
-	topLeft = ScreenCoordinate(topLeft.first+0.0125, topLeft.second+0.0125);
-	ScreenCoordinate botLeft(topLeft.first, topLeft.second+0.025);
-	ScreenCoordinate botRight(topLeft.first+0.025, topLeft.second+0.025);
-	ScreenCoordinate topRight(topLeft.first+0.025, topLeft.second);
+	topLeft = ScreenCoordinate(topLeft.first, topLeft.second);
+	ScreenCoordinate botLeft(topLeft.first, topLeft.second+size);
+	ScreenCoordinate botRight(topLeft.first+size, topLeft.second+size);
+	ScreenCoordinate topRight(topLeft.first+size, topLeft.second);
 
-	//auto color = std::make_tuple(0.0, 0.0, 100);
 	auto color = actor.getCurrentAnimationFrame().getColor();
-
 	drawQuadrangle(botLeft, botRight, topLeft, topRight, color);
 }
 

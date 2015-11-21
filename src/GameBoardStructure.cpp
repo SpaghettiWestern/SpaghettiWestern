@@ -15,7 +15,10 @@ void GameBoardStructure::initEnvironment(){
 	environment.clear();
 	for(int i = 0; i < width; i++){
 		for(int j = 0; j < length; j++){
-			environment[Coordinate(i,j)] = std::unique_ptr<BoardStatic>(new BoardStatic(Coordinate(i,j), true));
+//			if (j > 6)
+//				environment[Coordinate(i,j)] = std::unique_ptr<BoardStatic>(new BoardStatic(Coordinate(i,j), false));
+//			else
+				environment[Coordinate(i,j)] = std::unique_ptr<BoardStatic>(new BoardStatic(Coordinate(i,j), true, -1));
 		}
 	}
 }
@@ -73,9 +76,26 @@ const BoardStatic& GameBoardStructure::getEnvironmentPiece(const Coordinate& loc
 	return *(this->environment.find(loc)->second);
 }
 
+bool GameBoardStructure::addEnvironmentPiece(std::unique_ptr<BoardStatic>& newpiece){
+	if (newpiece.get() == NULL){
+		return false;
+	}
+
+	Coordinate loc = newpiece->getLocation();
+	if (inBounds(loc)){
+		std::unique_ptr<BoardStatic>& curr_ptr = this->environment.find(loc)->second;
+		curr_ptr.swap(newpiece);
+		return true;
+	}
+	return false;
+}
 
 bool GameBoardStructure::openSpace(const Coordinate& loc) const{
-	return (inBounds(loc) && !actorExists(loc));
+	return (inBounds(loc) && !actorExists(loc) && traversableSpace(loc));
+}
+
+bool GameBoardStructure::traversableSpace(const Coordinate& loc) const{
+	return (this->environment.find(loc)->second)->isTraversable();
 }
 
 bool GameBoardStructure::inBounds(const Coordinate& loc) const{
@@ -162,13 +182,21 @@ int GameBoardStructure::getWidth() const{
 }
 
 bool GameBoardStructure::handleEffect(const std::unique_ptr<Effect>& effect, const Coordinate& loc){
+	if(!inBounds(loc))
+		return true;
+
 	switch (effect->getType()){
 	case ATTACKEFFECT:
+	{
+		AttackEffect& attack_effect = (AttackEffect&)(*effect);
 		if(actorExists(loc)){
-			AttackEffect& attack_effect = (AttackEffect&)(*effect);
-			getActor(loc)->recieveAttack(attack_effect.getAttack());
-			return true;
+			return getActor(loc)->recieveAttack(attack_effect.getAttack());
 		}
+		BoardStatic& setpiece = *(this->environment.find(loc)->second);
+		if(setpiece.getType() == STATICCOVER){
+			return setpiece.recieveAttack(attack_effect.getAttack());
+		}
+	}
 		break;
 	default:
 		return false;
@@ -214,8 +242,18 @@ void GameBoardStructure::updateEffects(){
 	updateEffects_reposition();
 }
 
+
+void GameBoardStructure::updateEnvironment(){
+	for(int x = 0; x < width; x++){
+		for(int y = 0; y < length; y++){
+			environment[Coordinate(x,y)]->update();
+		}
+	}
+}
+
 void GameBoardStructure::update(){
 	updateEffects();
+	updateEnvironment();
 }
 
 

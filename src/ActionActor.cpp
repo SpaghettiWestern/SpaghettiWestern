@@ -6,8 +6,7 @@ ActionActor::ActionActor(Coordinate loc, Player& owner, int hitpoints, Attack at
 }
 
 ActionActor::ActionActor(Coordinate loc, Player& owner, Attack attack) :
-	BoardActor(loc, owner), attack(attack){
-
+	BoardActor(loc, owner, -1), attack(attack){
 }
 
 const Attack& ActionActor::getAttack() const{

@@ -76,26 +76,6 @@ bool checkSDLRenderer(SDL_Renderer& displayRenderer) {
 	return (displayRendererInfo.flags & SDL_RENDERER_ACCELERATED) && (displayRendererInfo.flags & SDL_RENDERER_TARGETTEXTURE);
 }
 
-/**
- * Construct a resource unique_ptr, given a constructor, destructor, and arugments.
- * Intended for use with C-style constructor and destructor functions that operate on pointers.
- * From http://ericscottbarr.com/blog/2014/04/c-plus-plus-14-and-sdl2-managing-resources/
- * @param c The creator/initialization function.
- * @param d The destructor function
- * @param args The arguments to give to the constructor.
- * @return A unique pointer to the constructed resource.
- */
-template<typename Creator, typename Destructor, typename... Arguments>
-auto make_resource(Creator c, Destructor d, Arguments&&... args)
--> std::unique_ptr<typename std::decay<decltype(*c(std::forward<Arguments>(args)...))>::type, void(*)(typename std::decay<decltype(*c(std::forward<Arguments>(args)...))>::type*)>
-{
-	auto r = c(std::forward<Arguments>(args)...);
-	if (!r) { throw std::runtime_error {"Unable to create resource"}; }
-	typedef typename std::decay<decltype(*r)>::type ResourceType;
-	return std::unique_ptr<ResourceType, void(*)(ResourceType*)>(r, d);
-}
-
-
 
 /**
  * Initialize the game objects, and run the game loop.
@@ -103,18 +83,9 @@ auto make_resource(Creator c, Destructor d, Arguments&&... args)
 void startGame() {
 	std::cout << "starting\n";
 
-	auto displayWindow = make_resource(SDL_CreateWindow, SDL_DestroyWindow,
-		"Spaghetti Western",
-		20.0,//(float)getGraphicsConfig()["screen.x"],
-		60.0,//(float)getGraphicsConfig()["screen.y"],
-		800.0,//(float)getGraphicsConfig()["screen.width"],
-		600.0,//(float)getGraphicsConfig()["screen.height"],
-		SDL_WINDOW_OPENGL);
+	SDL_Window* displayWindow = SDL_CreateWindow("Spaghetti Western", 20.0, 60.0, 800.0, 600.0, SDL_WINDOW_OPENGL);
+	SDL_Renderer* displayRenderer = SDL_CreateRenderer(displayWindow, -1, SDL_RENDERER_ACCELERATED);
 
-	auto displayRenderer = make_resource(SDL_CreateRenderer, SDL_DestroyRenderer,
-		displayWindow.get(),
-		-1,
-		SDL_RENDERER_ACCELERATED);
 
 	if(checkSDLRenderer(*displayRenderer)) {}
 	else {
@@ -122,15 +93,19 @@ void startGame() {
 		return;
 	}
 
-	SDL_GLContext glContext = SDL_GL_CreateContext(displayWindow.get());
+	SDL_GLContext glContext = SDL_GL_CreateContext(displayWindow);
 
 	initOpenGL();
 
 	updateViewport(800, 600);//getGraphicsConfig()["screen.width"], getGraphicsConfig()["screen.height"]);
 
+	BlitHelper::initilize_blitter(displayRenderer);
+
 	GameModel model(20,20, {std::make_pair("P1", true), std::make_pair("P2", true)});
 	model.createActor(Coordinate(0,0), 0, 28, Attack(28, 1.0, .05, .003));
 	model.createActor(Coordinate(2,2), 1, 42, Attack(42, .85, .1, .001));
+	model.createWall(Coordinate(5,5), -1);
+	model.createWall(Coordinate(5,6), -1);
 	model.playMovingEffect(ScreenCoordinate(0,0), ScreenCoordinate(1,1), true);
 	model.playMovingEffect(ScreenCoordinate(0,.95), ScreenCoordinate(.95,0), false);
 
@@ -139,6 +114,8 @@ void startGame() {
 
 	gameLoop(*displayWindow, view, controller);
 
+	SDL_DestroyWindow(displayWindow);
+	SDL_DestroyRenderer(displayRenderer);
 	SDL_GL_DeleteContext(glContext);
 }
 

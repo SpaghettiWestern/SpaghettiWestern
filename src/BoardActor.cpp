@@ -1,15 +1,14 @@
 #include "BoardActor.h"
 
-BoardActor::BoardActor(Coordinate loc, Player& owner) : BoardPiece(loc), owner(owner){
-	max_hitpoints = -1;
-	curr_hitpoints = -1;
+BoardActor::BoardActor(Coordinate loc, Player& owner) :
+		BoardPiece(loc, -1), owner(owner){
 	move_speed = 5;
 	destination = Coordinate(-1,-1);
 	initAnimations();
 }
 
 BoardActor::BoardActor(Coordinate loc, Player& owner, int hitpoints) :
-		BoardPiece(loc), owner(owner), max_hitpoints(hitpoints), curr_hitpoints(hitpoints){
+		BoardPiece(loc, hitpoints), owner(owner){
 	move_speed = 5;
 	destination = Coordinate(-1,-1);
 	initAnimations();
@@ -19,10 +18,10 @@ void BoardActor::initAnimations(){
 	animations.clear();
 	animations.push_back(Animation());
 	animations.push_back(Animation());
-	animations[0].addFrame(Frame(std::make_tuple(255,0,0), .05)); //idle
-	animations[0].addFrame(Frame(std::make_tuple(0,0,0), .05));
-	animations[1].addFrame(Frame(std::make_tuple(0,255,0), .05)); //moving
-	animations[1].addFrame(Frame(std::make_tuple(0,0,0), .05));
+	animations[0].addFrame(Frame(std::make_tuple(255,0,0), .04)); //idle
+	animations[0].addFrame(Frame(std::make_tuple(0,0,0), .04));
+	animations[1].addFrame(Frame(std::make_tuple(0,255,0), .04)); //moving
+	animations[1].addFrame(Frame(std::make_tuple(0,0,0), .04));
 
 	active_animation = 0;
 }
@@ -60,32 +59,6 @@ void BoardActor::generateMovePath(std::vector<Coordinate> path){
 	moveStep();
 }
 
-void BoardActor::recieveAttack(const Attack& attack){
-	recieveDamage(attack.getDamage());
-}
-
-int BoardActor::getCurrentHealth() const{
-	return curr_hitpoints;
-}
-int BoardActor::getMaxHealth() const{
-	return max_hitpoints;
-}
-
-void BoardActor::recieveDamage(int damage){
-	// negative health is signaling invincibility right now
-	if (curr_hitpoints < 0 ){
-		return;
-	}
-	curr_hitpoints = curr_hitpoints - damage;
-	if(curr_hitpoints <= 0){
-		curr_hitpoints = 0;
-		return;
-	}
-	if(curr_hitpoints > max_hitpoints){
-		curr_hitpoints = max_hitpoints;
-	}
-}
-
 bool BoardActor::isAlive() const{
 	return !(curr_hitpoints == 0);
 }
@@ -93,27 +66,15 @@ bool BoardActor::isAlive() const{
 void BoardActor::setAnimation_Moving(){
 	if(active_animation != 1){
 		active_animation = 1;
-		resetAnimation();
+		BoardPiece::resetAnimation();
 	}
-
 }
+
 void BoardActor::setAnimation_Idle(){
 	if(active_animation != 0){
 		active_animation = 0;
-		resetAnimation();
+		BoardPiece::resetAnimation();
 	}
-}
-
-const Frame& BoardActor::getCurrentAnimationFrame() const{
-	return animations[active_animation].getCurrFrame();
-}
-
-void BoardActor::updateAnimation(){
-	animations[active_animation].update();
-}
-
-void BoardActor::resetAnimation(){
-	animations[active_animation].reset();
 }
 
 void BoardActor::startMove(std::vector<Coordinate> path){
@@ -153,10 +114,10 @@ int BoardActor::getMoveSpeed() const{
 	return move_speed;
 }
 
-
-void BoardActor::update(){
-	updateAnimation();
+bool BoardActor::update(){
+	BoardPiece::update();
 	moveStep();
+	return true;
 }
 
 const Player& BoardActor::getOwner() const{

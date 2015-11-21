@@ -9,6 +9,8 @@
 #include "GameBoardStructure.h"
 #include "Effect.h"
 #include "MovingEffect.h"
+#include "BoardStatic.h"
+#include "StaticCover.h"
 
 class GameBoard {
 private:
@@ -38,6 +40,8 @@ public:
 	bool actorExists(const Coordinate& loc);
 	BoardActor& getActor(const Coordinate& loc);
 	bool addActor(std::shared_ptr<BoardActor> new_actor);
+
+	bool addStaticCoverPiece(Coordinate loc, bool traversable, int hitpoints, int deflection_chance);
 
 	bool removeActor(const Coordinate& loc);
 

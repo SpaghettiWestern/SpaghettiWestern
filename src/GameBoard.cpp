@@ -58,6 +58,13 @@ bool GameBoard::addActor(std::shared_ptr<BoardActor> new_actor){
 	return board->addActor(new_actor);
 }
 
+
+bool GameBoard::addStaticCoverPiece(Coordinate loc, bool traversable, int hitpoints, int deflection_chance){
+	std::unique_ptr<BoardStatic> coverpiece = std::unique_ptr<BoardStatic>(new StaticCover(loc, traversable, hitpoints, deflection_chance));
+	return board->addEnvironmentPiece(coverpiece);
+}
+
+
 bool GameBoard::removeActor(const Coordinate& loc){
 	return board->removeActor(loc);
 }

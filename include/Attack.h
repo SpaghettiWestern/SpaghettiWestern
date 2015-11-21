@@ -16,9 +16,9 @@ public:
 	double getSpeed() const;
 
 	void setDamage(int new_damage);
-	void setAccuracy(float new_accuracy);
-	void setSpread(float new_spread);
-	void setSpeed(float new_speed);
+	void setAccuracy(double new_accuracy);
+	void setSpread(double new_spread);
+	void setSpeed(double new_speed);
 
 };
 
