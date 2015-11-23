@@ -18,6 +18,7 @@
 #include "GameModel.h"
 #include "GameView.h"
 #include "GameController.h"
+#include "BlitHelper.h"
 
 /**
  * Initialize some OpenGL settings.
