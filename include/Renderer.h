@@ -17,6 +17,7 @@
 #include "BlitHelper.h"
 
 
+
 class Renderer{
 private:
 	GameModel& model;

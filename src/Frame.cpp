@@ -12,6 +12,7 @@ Frame::Frame(std::tuple<int, int, int> color, float size, SDL_Rect textureSrc) :
 
 }
 
+
 bool Frame::operator==(const Frame& other) const{
 	return std::get<0>(color) == std::get<0>(other.color) &&
 		std::get<1>(color) == std::get<1>(other.color) &&
@@ -27,6 +28,8 @@ const std::tuple<int, int, int>& Frame::getColor() const{
 	return color;
 }
 
+
 const SDL_Rect* Frame::getSrcRect() const{
 	return &textureSrc;
 }
+

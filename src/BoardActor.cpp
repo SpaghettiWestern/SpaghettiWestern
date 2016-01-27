@@ -18,10 +18,12 @@ BoardActor::~BoardActor(){
 	BlitHelper::unloadImage(idleMoveSprites);
 }
 
+
 void BoardActor::initAnimations(){
 	animations.clear();
 	animations.push_back(Animation());
 	animations.push_back(Animation());
+
 
 	SDL_Texture* idleMoveSprites = BlitHelper::loadImage("./adude.bmp");
 
@@ -148,10 +150,10 @@ actor_type BoardActor::getType() const{
 }
 
 
+
 SDL_Texture* BoardActor::getSpriteSheet() const {
 	return idleMoveSprites;
 }
-
 
 
 

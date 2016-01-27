@@ -35,7 +35,7 @@ void Animation::reset(){
 	curr_frame = 0;
 }
 
-
 bool Animation::setSpriteSheet(SDL_Texture* newSpriteSheet){
 	spriteSheet = newSpriteSheet;
 }
+
