@@ -3,12 +3,14 @@
 
 #include <vector>
 #include "Frame.h"
+#include <SDL2/SDL.h>
 
 class Animation{
 private:
 	std::vector<Frame> frames;
 	bool repeating;
 	int curr_frame;
+	SDL_Texture* spriteSheet = NULL;
 
 public:
 	Animation();
@@ -18,6 +20,8 @@ public:
 	const Frame& getCurrFrame() const;
 	void addFrame(Frame new_frame);
 	void reset();
+
+	bool setSpriteSheet(SDL_Texture* newSpriteSheet);
 };
 
 

@@ -62,6 +62,17 @@ void Renderer::render(const BoardActor& actor){
 
 	auto color = actor.getCurrentAnimationFrame().getColor();
 	drawQuadrangle(botLeft, botRight, topLeft, topRight, color);
+
+	SDL_Rect dstRect;
+	dstRect.x = topLeft.first;
+	dstRect.y = topLeft.second;
+	dstRect.h = (topLeft.second-botLeft.second);
+	dstRect.w = (topRight.first - topLeft.first);
+
+	SDL_RenderCopy(BlitHelper::renderer,
+	               actor.getSpriteSheet(),
+	               actor.getCurrentAnimationFrame().getSrcRect(),
+	               &dstRect);
 }
 
 void Renderer::render(const Effect& effect){

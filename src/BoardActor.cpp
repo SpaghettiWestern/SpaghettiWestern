@@ -14,14 +14,33 @@ BoardActor::BoardActor(Coordinate loc, Player& owner, int hitpoints) :
 	initAnimations();
 }
 
+BoardActor::~BoardActor(){
+	BlitHelper::unloadImage(idleMoveSprites);
+}
+
 void BoardActor::initAnimations(){
 	animations.clear();
 	animations.push_back(Animation());
 	animations.push_back(Animation());
-	animations[0].addFrame(Frame(std::make_tuple(255,0,0), .04)); //idle
-	animations[0].addFrame(Frame(std::make_tuple(0,0,0), .04));
-	animations[1].addFrame(Frame(std::make_tuple(0,255,0), .04)); //moving
-	animations[1].addFrame(Frame(std::make_tuple(0,0,0), .04));
+
+	SDL_Texture* idleMoveSprites = BlitHelper::loadImage("./adude.bmp");
+
+	animations[0].setSpriteSheet(idleMoveSprites);
+	animations[1].setSpriteSheet(idleMoveSprites);
+
+	SDL_Rect srcRect;
+	srcRect.x = 0;
+	srcRect.y = 0;
+	srcRect.h = 40;
+	srcRect.w = 40;
+
+	animations[1].addFrame(Frame(std::make_tuple(0,255,0), .04, srcRect)); //moving
+	srcRect.x+=srcRect.w;
+	animations[0].addFrame(Frame(std::make_tuple(255,0,0), .04, srcRect)); //idle
+	srcRect.x+=srcRect.w;
+	animations[1].addFrame(Frame(std::make_tuple(0,0,0), .04, srcRect));
+	srcRect.x+=srcRect.w;
+	animations[0].addFrame(Frame(std::make_tuple(0,0,0), .04, srcRect));
 
 	active_animation = 0;
 }
@@ -126,6 +145,11 @@ const Player& BoardActor::getOwner() const{
 
 actor_type BoardActor::getType() const{
 	return BOARDACTOR;
+}
+
+
+SDL_Texture* BoardActor::getSpriteSheet() const {
+	return idleMoveSprites;
 }
 
 

@@ -14,6 +14,7 @@
 #include "GameBoardStructure.h"
 #include "BoardStatic.h"
 #include "BoardActor.h"
+#include "BlitHelper.h"
 
 
 class Renderer{
