@@ -9,7 +9,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_ttf.h>
+//#include <SDL2/SDL_ttf.h>
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -120,14 +120,13 @@ void startGame() {
 	SDL_GL_DeleteContext(glContext);
 }
 
-
 int main(int argc, char *argv[]) {
 	std::cout << "program begin\n";
 
-	if(TTF_Init()==-1) {
-		std::cerr << "Error in TTF_Init: " << TTF_GetError() << std::endl;
-		return 2;
-	}
+//	if(TTF_Init()==-1) {
+//		std::cerr << "Error in TTF_Init: " << TTF_GetError() << std::endl;
+//		return 2;
+//	}
 
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) < 0) {
 		std::cerr << "Error in SDL_Init: " << SDL_GetError() << std::endl;

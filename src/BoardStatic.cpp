@@ -23,7 +23,7 @@ void BoardStatic::initAnimations(){
 	std::normal_distribution<double> num_gen(0.0, 255.0);
 
 	animations.push_back(Animation());
-	for(int i = 0; i < 10; i++){
+	for(int i = 0; i < 1; i++){
 		if(traversable)
 			animations[0].addFrame(Frame(std::make_tuple(30,0,num_gen(Util::getRandomEngine())), .1));
 		else
