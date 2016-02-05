@@ -6,9 +6,6 @@
 #include "Animation.h"
 #include "Util.h"
 
-#include "BlitHelper.h"
-
-
 class Player;
 enum actor_type {BOARDACTOR, ACTIONACTOR};
 
@@ -25,9 +22,6 @@ private:
 	int move_speed;
 	void recieveDamage(int damage);
 
-	SDL_Texture* idleMoveSprites;
-
-
 protected:
 	virtual void initAnimations();
 
@@ -35,9 +29,6 @@ public:
 
 	BoardActor(Coordinate loc, Player& owner);
 	BoardActor(Coordinate loc, Player& owner, int hitpoints);
-
-	~BoardActor();
-
 
 	bool isAlive() const;
 
@@ -58,10 +49,6 @@ public:
 	virtual actor_type getType() const;
 
 	const Player& getOwner() const;
-
-
-	SDL_Texture* getSpriteSheet() const;
-
 };
 
 

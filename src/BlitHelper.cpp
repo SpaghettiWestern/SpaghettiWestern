@@ -26,9 +26,6 @@ SDL_Texture* BlitHelper::loadImage(std::string filename){
 
 		//Free the old image
 		SDL_FreeSurface(loadedImage);
-
-	} else{
-		std::cout << SDL_GetError() << "\n";
 	}
 
 	SDL_Texture* texture_image = SDL_CreateTextureFromSurface(renderer, optimizedImage);
@@ -38,8 +35,4 @@ SDL_Texture* BlitHelper::loadImage(std::string filename){
 	return texture_image;
 }
 
-void BlitHelper::unloadImage(SDL_Texture*& image){
-	SDL_DestroyTexture(image);
-	image = NULL;
-}
 

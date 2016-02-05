@@ -17,9 +17,6 @@ public:
 	static void initilize_blitter(SDL_Renderer* renderer);
 	static SDL_Texture* loadImage(std::string filename);
 
-	static void unloadImage(SDL_Texture*& image);
-
-
 
 };
 
