@@ -14,6 +14,11 @@ BoardActor::BoardActor(Coordinate loc, Player& owner, int hitpoints) :
 	initAnimations();
 }
 
+BoardActor::~BoardActor(){
+	BlitHelper::unloadImage(spriteSheet);
+	BlitHelper::unloadImageGL(glSpriteSheet);
+}
+
 void BoardActor::initAnimations(){
 	animations.clear();
 	animations.push_back(Animation());
@@ -22,6 +27,9 @@ void BoardActor::initAnimations(){
 	animations[0].addFrame(Frame(std::make_tuple(0,0,0), .04));
 	animations[1].addFrame(Frame(std::make_tuple(0,255,0), .04)); //moving
 	animations[1].addFrame(Frame(std::make_tuple(0,0,0), .04));
+
+	spriteSheet = BlitHelper::loadImage("C:\\Users\\banan\\workspace\\SpaghettiWestern\\Debug\\adude.bmp");
+	glSpriteSheet = BlitHelper::loadImageGL("C:\\Users\\banan\\workspace\\SpaghettiWestern\\Debug\\adude.bmp");
 
 	active_animation = 0;
 }
