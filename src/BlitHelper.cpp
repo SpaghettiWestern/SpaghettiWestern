@@ -51,12 +51,10 @@ void BlitHelper::unloadImage(SDL_Texture* texture){
 
 GLuint BlitHelper::loadImageGL(const std::string& name) {
 	SDL_Surface* optimizedImage = NULL;
-	SDL_Surface* loadedImage = SDL_LoadBMP(name.c_str());
+	SDL_Surface* loadedImage = IMG_Load(name.c_str());
 	if( loadedImage != NULL ) {
 		//Create an optimized image
-		optimizedImage = SDL_ConvertSurfaceFormat(loadedImage, SDL_PIXELFORMAT_RGBA8888, 0);
-
-		//Free the old image
+		optimizedImage = SDL_ConvertSurfaceFormat(loadedImage, SDL_PIXELFORMAT_ARGB8888, 0);
 		SDL_FreeSurface(loadedImage);
 	} else{
 		std::cerr <<"Error loading image: "<< SDL_GetError() << "\n";
@@ -65,18 +63,12 @@ GLuint BlitHelper::loadImageGL(const std::string& name) {
 
 	// Adapted from http://stackoverflow.com/questions/18934865/sdl2-with-opengl-texture-displaying-incorrectly
 	GLuint texture;
-	std::cerr << "Here!\n";
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	std::cerr << "There!\n";
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, optimizedImage->w, optimizedImage->h, 0, GL_BGRA_EXT , GL_UNSIGNED_BYTE, optimizedImage->pixels);
-	std::cerr << "And HERE0!!\n";
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, optimizedImage->w, optimizedImage->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, optimizedImage->pixels);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	std::cerr << "And HERE1!!\n";
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	std::cerr << "And HERE2!!\n";
 	glBindTexture(GL_TEXTURE_2D, 0);
-	std::cerr << "And HERE3!!\n";
 	SDL_FreeSurface(optimizedImage);
 
 	return texture;

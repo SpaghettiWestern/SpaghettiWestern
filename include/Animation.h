@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Frame.h"
+#include "BlitHelper.h"
 
 class Animation{
 private:
@@ -18,6 +19,8 @@ public:
 	const Frame& getCurrFrame() const;
 	void addFrame(Frame new_frame);
 	void reset();
+
+	void loadSpriteSheet(std::string& filepath);
 };
 
 

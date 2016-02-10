@@ -55,15 +55,11 @@ void Renderer::render(const BoardActor& actor){
 	float size = actor.getCurrentAnimationFrame().getSize();
 
 	ScreenCoordinate topLeft = actor.getScreenLocation();
-	topLeft = ScreenCoordinate(topLeft.first, topLeft.second);
-	ScreenCoordinate botLeft(topLeft.first, topLeft.second+size);
 	ScreenCoordinate botRight(topLeft.first+size, topLeft.second+size);
-	ScreenCoordinate topRight(topLeft.first+size, topLeft.second);
 
-	//auto color = actor.getCurrentAnimationFrame().getColor();
-	//drawQuadrangle(botLeft, botRight, topLeft, topRight, color);
-	//drawQuadrangle_textured(botLeft, botRight, topLeft, topRight, actor.spriteSheet);
-	drawQuadrangle_gltextured(botLeft, botRight, topLeft, topRight, actor.glSpriteSheet);
+	drawQuadrangle_textured(topLeft, botRight,
+			actor.getCurrentAnimationFrame().tex_topLeft, actor.getCurrentAnimationFrame().tex_botRight,
+			actor.spriteSheet);
 }
 
 void Renderer::render(const Effect& effect){
@@ -73,7 +69,6 @@ void Renderer::render(const Effect& effect){
 	ScreenCoordinate botRight(topLeft.first+0.005, topLeft.second+0.005);
 	ScreenCoordinate topRight(topLeft.first+0.005, topLeft.second);
 
-	//auto color = std::make_tuple(0.0, 0.0, 100);
 	auto color = effect.getCurrentAnimationFrame().getColor();
 
 	drawQuadrangle(botLeft, botRight, topLeft, topRight, color);
@@ -101,31 +96,31 @@ void Renderer::drawQuadrangle(const ScreenCoordinate botLeft, const ScreenCoordi
 	glEnd();
 }
 
+void Renderer::drawQuadrangle(const ScreenCoordinate& topLeft, const ScreenCoordinate& botRight,
+		const std::tuple<float, float, float> color){
 
-void Renderer::drawQuadrangle_textured(const ScreenCoordinate botLeft, const ScreenCoordinate botRight,
-							  const ScreenCoordinate topLeft, const ScreenCoordinate topRight,
-							  SDL_Texture* texture) {
-	float w, h;
-	SDL_GL_BindTexture(texture, &w, &h);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glColor3f(std::get<0>(color), std::get<1>(color), std::get<2>(color));
 
 	glBegin(GL_QUADS);
-	glTexCoord2f(0, 1); glVertex2f(botLeft.first, 1-botLeft.second);
-	glTexCoord2f(1, 1); glVertex2f(botRight.first, 1-botRight.second);
-	glTexCoord2f(1, 0); glVertex2f(topRight.first, 1-topRight.second);
-	glTexCoord2f(0, 0); glVertex2f(topLeft.first, 1-topLeft.second);
+	glVertex2f(topLeft.first, topLeft.second-1);
+	glVertex2f(topLeft.first, botRight.second-1);
+	glVertex2f(botRight.first, botRight.second-1);
+	glVertex2f(botRight.first, topLeft.second-1);
 	glEnd();
-	SDL_GL_UnbindTexture(texture);
+
 }
 
 
-void Renderer::drawQuadrangle_gltextured(const ScreenCoordinate botLeft, const ScreenCoordinate botRight,
-							  const ScreenCoordinate topLeft, const ScreenCoordinate topRight,
+void Renderer::drawQuadrangle_textured(const ScreenCoordinate& topLeft, const ScreenCoordinate& botRight,
+							  const ScreenCoordinate& tex_topLeft, const ScreenCoordinate& tex_botRight,
 							  const GLuint& texture) {
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0, 1); glVertex2f(botLeft.first, 1-botLeft.second);
-	glTexCoord2f(1, 1); glVertex2f(botRight.first, 1-botRight.second);
-	glTexCoord2f(1, 0); glVertex2f(topRight.first, 1-topRight.second);
-	glTexCoord2f(0, 0); glVertex2f(topLeft.first, 1-topLeft.second);
+	glTexCoord2f(tex_topLeft.first, tex_topLeft.second); 	 glVertex2f(topLeft.first, 1-topLeft.second);
+	glTexCoord2f(tex_topLeft.first, tex_botRight.second);	 glVertex2f(topLeft.first, 1-botRight.second);
+	glTexCoord2f(tex_botRight.first, tex_botRight.second); 	 glVertex2f(botRight.first, 1-botRight.second);
+	glTexCoord2f(tex_botRight.first, tex_topLeft.second);	 glVertex2f(botRight.first, 1-topLeft.second);
 	glEnd();
 }
+

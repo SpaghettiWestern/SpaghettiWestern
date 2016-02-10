@@ -2,7 +2,9 @@
 #define BLITHELPER_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include "GL/gl.h"
+#include "GL/glext.h"
 #include "Util.h"
 
 class BlitHelper{

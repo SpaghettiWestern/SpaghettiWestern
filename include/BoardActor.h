@@ -5,7 +5,7 @@
 #include "Attack.h"
 #include "Animation.h"
 #include "Util.h"
-#include "BlitHelper.h"
+
 
 class Player;
 enum actor_type {BOARDACTOR, ACTIONACTOR};
@@ -53,8 +53,7 @@ public:
 	const Player& getOwner() const;
 
 
-	SDL_Texture* spriteSheet;
-	GLuint glSpriteSheet;
+	GLuint spriteSheet;
 };
 
 
