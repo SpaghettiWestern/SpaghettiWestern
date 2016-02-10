@@ -14,14 +14,21 @@ BoardActor::BoardActor(Coordinate loc, Player& owner, int hitpoints) :
 	initAnimations();
 }
 
+BoardActor::~BoardActor(){
+	BlitHelper::unloadImageGL(spriteSheet);
+}
+
 void BoardActor::initAnimations(){
 	animations.clear();
 	animations.push_back(Animation());
 	animations.push_back(Animation());
-	animations[0].addFrame(Frame(std::make_tuple(255,0,0), .04)); //idle
-	animations[0].addFrame(Frame(std::make_tuple(0,0,0), .04));
-	animations[1].addFrame(Frame(std::make_tuple(0,255,0), .04)); //moving
-	animations[1].addFrame(Frame(std::make_tuple(0,0,0), .04));
+
+	animations[0].addFrame(Frame(ScreenCoordinate(.25,0), ScreenCoordinate(.5,1), .04)); //idle
+	animations[0].addFrame(Frame(ScreenCoordinate(.75,0), ScreenCoordinate(1,1), .04)); //idle
+	animations[1].addFrame(Frame(ScreenCoordinate(0,0), ScreenCoordinate(.25,1), .04)); //moving
+	animations[1].addFrame(Frame(ScreenCoordinate(.5,0), ScreenCoordinate(.75,1), .04)); //moving
+
+	spriteSheet = BlitHelper::loadImageGL("C:\\Users\\banan\\workspace\\SpaghettiWestern\\Resources\\adude.bmp");
 
 	active_animation = 0;
 }

@@ -2,6 +2,9 @@
 #define BLITHELPER_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include "GL/gl.h"
+#include "GL/glext.h"
 #include "Util.h"
 
 class BlitHelper{
@@ -16,8 +19,10 @@ public:
 
 	static void initilize_blitter(SDL_Renderer* renderer);
 	static SDL_Texture* loadImage(std::string filename);
+	static void unloadImage(SDL_Texture* texture);
 
-
+	static GLuint loadImageGL(const std::string& name);
+	static void unloadImageGL(GLuint& texture);
 };
 
 

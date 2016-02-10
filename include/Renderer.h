@@ -35,6 +35,13 @@ public:
 			  	  	  	const ScreenCoordinate topLeft, const ScreenCoordinate topRight,
 			  	  	  	const std::tuple<float, float, float> color);
 
+	void drawQuadrangle(const ScreenCoordinate& topLeft, const ScreenCoordinate& botRight,
+			const std::tuple<float, float, float> color);
+
+	void drawQuadrangle_textured(const ScreenCoordinate& topLeft, const ScreenCoordinate& botRight,
+								  const ScreenCoordinate& tex_topLeft, const ScreenCoordinate& tex_botRight,
+								  const GLuint& texture);
+
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Util.h"
 
+
 class Player;
 enum actor_type {BOARDACTOR, ACTIONACTOR};
 
@@ -29,6 +30,7 @@ public:
 
 	BoardActor(Coordinate loc, Player& owner);
 	BoardActor(Coordinate loc, Player& owner, int hitpoints);
+	~BoardActor();
 
 	bool isAlive() const;
 
@@ -49,6 +51,9 @@ public:
 	virtual actor_type getType() const;
 
 	const Player& getOwner() const;
+
+
+	GLuint spriteSheet;
 };
 
 
