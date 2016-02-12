@@ -13,10 +13,9 @@ void PathGenerator::resetSets(){
 	g_score.clear();
 	f_score.clear();
 	path.clear();
-}
-
-int PathGenerator::estimateDistance(Coordinate& start, Coordinate& end){
-	return std::abs(start.first - end.first) + std::abs(start.second-end.second);
+	pq_open_set = std::priority_queue<distanceCoordinate,
+								   	  std::vector<distanceCoordinate>,
+									  CoordinateComparison>();
 }
 
 Coordinate PathGenerator::getSmallestOpen(){
@@ -27,7 +26,12 @@ Coordinate PathGenerator::getSmallestOpen(){
 		}
 	}
 	open_set.erase(smallest);
+
 	return smallest;
+}
+
+int PathGenerator::estimateDistance(const Coordinate& start, const Coordinate& end){
+	return std::abs(start.first - end.first) + std::abs(start.second-end.second);
 }
 
 void PathGenerator::traverseNeighbors(){
@@ -35,29 +39,38 @@ void PathGenerator::traverseNeighbors(){
 	traverseNeighbor(Coordinate(curr.first-1, curr.second));
 	traverseNeighbor(Coordinate(curr.first, curr.second+1));
 	traverseNeighbor(Coordinate(curr.first, curr.second-1));
-
 }
 
-void PathGenerator::traverseNeighbor(Coordinate neighbor){
+void PathGenerator::traverseNeighbor(const Coordinate& neighbor){
 	if(closed_set.count(neighbor) > 0){
 		return;
 	}
+
 	if(!(board->openSpace(neighbor))){
 		closed_set[neighbor] = true;
 		return;
 	}
 
+	if(open_set.count(neighbor) == 0){
+		open_set[neighbor] = true;
+	}
+
+	if(!open_set[neighbor]){
+		return;
+	}
+
 	int tmp_g_score = g_score[curr] + 1;
 
-	if(open_set.count(neighbor) == 0 || g_score.count(neighbor) == 0 || tmp_g_score < g_score[neighbor]){
+	if(g_score.count(neighbor) == 0 || tmp_g_score < g_score[neighbor]){
 		came_from[neighbor] = curr;
 		g_score[neighbor] = tmp_g_score;
 		f_score[neighbor] = tmp_g_score + estimateDistance(neighbor, end);
-		open_set[neighbor] = true;
+
+		pq_open_set.push(distanceCoordinate(neighbor, g_score[neighbor], f_score[neighbor]));
 	}
 }
 
-void PathGenerator::reconstructPath(Coordinate start){
+void PathGenerator::reconstructPath(const Coordinate& start){
 	path.clear();
 	Coordinate curr_step = end;
 	while(curr_step != start){
@@ -67,22 +80,28 @@ void PathGenerator::reconstructPath(Coordinate start){
 	path.push_back(start);
 }
 
-bool PathGenerator::findPath(Coordinate start, Coordinate goal){
+bool PathGenerator::findPath(const Coordinate& start, const Coordinate& goal){
 	resetSets();
+
+	if(!board->openSpace(goal))
+		return false;
 
 	end = goal;
 
+	pq_open_set.push(distanceCoordinate(start, 0, estimateDistance(start, end)));
 	open_set[start] = true;
-	g_score[start] = 0;
-	f_score[start] = g_score[start] + estimateDistance(start, end);
 
 	while(!open_set.empty()){
-		curr = getSmallestOpen();
+		curr = pq_open_set.top().coord;
+		pq_open_set.pop();
+
+		open_set[curr] = false;
+		closed_set[curr] = true;
 		if (curr == end){
 			reconstructPath(start);
 			return true;
 		}
-		closed_set[curr] = true;
+
 		traverseNeighbors();
 	}
 	return false;
@@ -92,5 +111,19 @@ std::vector<Coordinate> PathGenerator::getPath(){
 	return path;
 }
 
+distanceCoordinate::distanceCoordinate(const Coordinate& coord, int g_score, int f_score) :
+	coord(coord), g_score(g_score), f_score(f_score){
+
+}
+
+CoordinateComparison::CoordinateComparison(){
+
+}
+
+bool CoordinateComparison::operator() (const distanceCoordinate& lhs, const distanceCoordinate &rhs) const {
+	if(lhs.f_score > rhs.f_score)
+		return true;
+	return false;
+}
 
 
