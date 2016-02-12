@@ -39,6 +39,7 @@ SUITE(PathGenerator){
 	}
 
 	TEST(find_path_simple_long){
+		std::cerr << "find path simple long\n";
 		int length = 100;
 		int width = 120;
 		std::shared_ptr<GameBoardStructure> test_board = std::make_shared<GameBoardStructure>(length,width);
@@ -51,6 +52,7 @@ SUITE(PathGenerator){
 	}
 
 	TEST(find_path_simple_short_exhaustive){
+		std::cerr << "find path simple exhaustive\n";
 		int length = 20;
 		int width = 40;
 		std::shared_ptr<GameBoardStructure> test_board = std::make_shared<GameBoardStructure>(length,width);
@@ -68,6 +70,7 @@ SUITE(PathGenerator){
 	}
 
 	TEST(find_path_zigzag){
+		std::cerr << "find path zig zag\n";
 		int length = 20;
 		int width = 2;
 
@@ -92,6 +95,7 @@ SUITE(PathGenerator){
 	}
 
 	TEST(find_path_walls){
+		std::cerr << "find path walls\n";
 		int length = 10;
 		int width = 10;
 

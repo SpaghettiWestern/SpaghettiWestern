@@ -212,17 +212,18 @@ SUITE(boardactor){
 		Coordinate startloc(4,3);
 		BoardActor testactor(startloc, testplayer);
 
-		Frame black(std::make_tuple<int,int,int>(0,0,0), .04);
-		Frame red(std::make_tuple<int,int,int>(255,0,0), .04);
-		Frame green(std::make_tuple<int,int,int>(0,255,0), .04);
+		Frame idle1(ScreenCoordinate(.25,0), ScreenCoordinate(.5,1), .04);
+		Frame idle2(Frame(ScreenCoordinate(.75,0), ScreenCoordinate(1,1), .04));
+		Frame move1(Frame(ScreenCoordinate(0,0), ScreenCoordinate(.25,1), .04));
+		Frame move2(Frame(ScreenCoordinate(.5,0), ScreenCoordinate(.75,1), .04));
 
-		CHECK(testactor.getCurrentAnimationFrame() == red);
+		CHECK(testactor.getCurrentAnimationFrame() == idle1);
 		CHECK(testactor.getLocation() == startloc);
 		testactor.update();
-		CHECK(testactor.getCurrentAnimationFrame() == black);
+		CHECK(testactor.getCurrentAnimationFrame() == idle2);
 		CHECK(testactor.getLocation() == startloc);
 		testactor.update();
-		CHECK(testactor.getCurrentAnimationFrame() == red);
+		CHECK(testactor.getCurrentAnimationFrame() == idle1);
 		CHECK(testactor.getLocation() == startloc);
 
 		std::vector<Coordinate> test_path;
@@ -249,12 +250,16 @@ SUITE(boardactor){
 			for(int j = 0; j < speed; j++){
 				if(evenstep){
 					if(i == 0){
-						CHECK(testactor.getCurrentAnimationFrame() == red);
+						CHECK(testactor.getCurrentAnimationFrame() == idle1);
 					}else{
-						CHECK(testactor.getCurrentAnimationFrame() == green);
+						CHECK(testactor.getCurrentAnimationFrame() == move1);
 					}
 				}else{
-					CHECK(testactor.getCurrentAnimationFrame() == black);
+					if(i == 0){
+						CHECK(testactor.getCurrentAnimationFrame() == idle2);
+					}else{
+						CHECK(testactor.getCurrentAnimationFrame() == move2);
+					}
 				}
 				testactor.update();
 				evenstep = !evenstep;
