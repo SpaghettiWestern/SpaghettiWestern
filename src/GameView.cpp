@@ -8,5 +8,5 @@ GameView::GameView(GameModel& model) : model(model), renderer(Renderer(model)){
 
 void GameView::render(){
 	model.update();
-	renderer.render(model);
+	renderer.render();
 }
