@@ -59,6 +59,7 @@ GLuint BlitHelper::loadImageGL(const std::string& name) {
 	} else{
 		std::cerr <<"Error loading image: "<< SDL_GetError() << "\n";
 		SDL_ClearError();
+		return 0;
 	}
 
 	// Adapted from http://stackoverflow.com/questions/18934865/sdl2-with-opengl-texture-displaying-incorrectly

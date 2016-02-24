@@ -8,7 +8,7 @@ BoardPiece::BoardPiece(){
 	curr_hitpoints = -1;
 }
 
-BoardPiece::BoardPiece(Coordinate loc){
+BoardPiece::BoardPiece(const BoardCoordinate& loc){
 	location = loc;
 	resetScreenLocation();
 	initAnimations();
@@ -25,7 +25,7 @@ BoardPiece::BoardPiece(int hitpoints){
 
 }
 
-BoardPiece::BoardPiece(Coordinate loc, int hitpoints){
+BoardPiece::BoardPiece(const BoardCoordinate& loc, int hitpoints){
 	location = loc;
 	resetScreenLocation();
 	initAnimations();
@@ -39,6 +39,19 @@ void BoardPiece::initAnimations(){
 	animations.push_back(Animation());
 
 	active_animation = 0;
+}
+
+bool BoardPiece::setSpriteSheet(std::string spriteSheetFilepath){
+	GLuint newSheet = BlitHelper::loadImageGL(spriteSheetFilepath);
+	if(newSheet == 0){
+		return false;
+	}
+	spriteSheet = newSheet;
+	return true;
+}
+
+const GLuint& BoardPiece::getSpriteSheet() const{
+	return spriteSheet;
 }
 
 void BoardPiece::setAnimation(const Animation& new_animation){
@@ -87,7 +100,7 @@ void BoardPiece::resetScreenLocation(){
 	screen_location = Util::coordToScreen(location);
 }
 
-const Coordinate& BoardPiece::getLocation() const{
+const BoardCoordinate& BoardPiece::getLocation() const{
 	return location;
 }
 

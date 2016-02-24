@@ -51,9 +51,6 @@ public:
 	virtual actor_type getType() const;
 
 	const Player& getOwner() const;
-
-
-	GLuint spriteSheet;
 };
 
 

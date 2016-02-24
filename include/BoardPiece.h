@@ -5,13 +5,17 @@
 #include "Animation.h"
 #include "Attack.h"
 
+#include "GL/gl.h"
+
+#include <string>
+
 class GameBoard;
 
 class BoardPiece{
 private:
 
 protected:
-	Coordinate location;
+	BoardCoordinate location;
 	ScreenCoordinate screen_location;
 
 	std::vector<Animation> animations;
@@ -24,14 +28,19 @@ protected:
 	void resetScreenLocation();
 	void recieveDamage(int damage);
 
+	GLuint spriteSheet;
+
 public:
 	BoardPiece();
-	BoardPiece(Coordinate loc);
+	BoardPiece(const BoardCoordinate& loc);
 	BoardPiece(int hitpoints);
-	BoardPiece(Coordinate loc, int hitpoints);
+	BoardPiece(const BoardCoordinate& loc, int hitpoints);
 
-	const Coordinate& getLocation() const;
-	void setLocation(Coordinate new_location);
+	bool setSpriteSheet(std::string spriteSheetFilepath);
+	const GLuint& getSpriteSheet() const;
+
+	const BoardCoordinate& getLocation() const;
+	void setLocation(BoardCoordinate new_location);
 
 
 	int getCurrentHealth() const;
@@ -46,7 +55,6 @@ public:
 	const ScreenCoordinate& getScreenLocation() const;
 
 	virtual bool update();
-
 };
 
 #endif
