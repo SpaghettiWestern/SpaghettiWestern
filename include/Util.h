@@ -8,13 +8,6 @@
 
 typedef std::pair<int, int> Coordinate;
 typedef std::pair<double, double> ScreenCoordinate;
-typedef struct BoardCoordinate{
-	BoardCoordinate(int x, int y, int z) : x(x), y(y), z(z){};
-	int x;
-	int y;
-	int z;
-};
-
 
 class Util{
 private:

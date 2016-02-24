@@ -3,12 +3,16 @@
 
 #include "BoardStatic.h"
 
+enum WallEdge{ NORTHWEST, SOUTHWEST, NORTHEAST, SOUTHEAST};
+
 class BoardWall : BoardStatic{
 public:
 
 
-private:
+	WallEdge getEdge();
 
+private:
+	WallEdge cellEdge;
 
 
 };
