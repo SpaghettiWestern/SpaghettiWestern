@@ -13,11 +13,13 @@
 
 #include "Util.h"
 #include "GameModel.h"
+#include "GameView.h"
 #include "GameBoardStructure.h"
 
 class GameController{
 private:
-	GameModel& model;
+	GameModel &model;
+	GameView &view;
 	ScreenCoordinate inputToScreen(int x, int y);
 	std::shared_ptr<BoardActor> selected;
 
@@ -26,7 +28,7 @@ private:
 	bool handleLClick(ScreenCoordinate loc);
 
 public:
-	GameController(GameModel& model);
+	GameController(GameModel &model, GameView &view);
 	bool handleInput(SDL_Event& event);
 
 };

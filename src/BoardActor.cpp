@@ -28,7 +28,7 @@ void BoardActor::initAnimations(){
 	animations[1].addFrame(Frame(ScreenCoordinate(0,0), ScreenCoordinate(.25,1), .04)); //moving
 	animations[1].addFrame(Frame(ScreenCoordinate(.5,0), ScreenCoordinate(.75,1), .04)); //moving
 
-	spriteSheet = BlitHelper::loadImageGL("C:\\Users\\banan\\workspace\\SpaghettiWestern\\Resources\\adude.bmp");
+	spriteSheet = BlitHelper::loadImageGL("C:\\workspace\\SpaghettiWestern\\Resources\\adude.bmp");
 
 	active_animation = 0;
 }

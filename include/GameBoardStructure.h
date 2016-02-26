@@ -31,6 +31,17 @@ private:
 	void updateEffects();
 
 public:
+
+	//demo only
+	GLuint spriteSheet;
+	int numTiers;
+	ScreenCoordinate lookAtCoord;
+	double s;
+	double h;
+	double hSize;
+	double vSize;
+
+
 	GameBoardStructure(int length, int width);
 	GameBoardStructure(const GameBoardStructure& other);
 	GameBoardStructure& operator=(const GameBoardStructure& other);
@@ -65,6 +76,7 @@ public:
 	int getWidth() const;
 
 	void update();
+
 };
 
 

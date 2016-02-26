@@ -7,9 +7,9 @@
 #include <memory>
 #include <stdexcept>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_image.h>
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_opengl.h"
+#include "SDL2/SDL_image.h"
 //#include <SDL2/SDL_ttf.h>
 
 #include "GL/gl.h"
@@ -19,6 +19,7 @@
 #include "GameModel.h"
 #include "GameView.h"
 #include "GameController.h"
+#include "Renderer.h"
 #include "BlitHelper.h"
 
 /**
@@ -51,7 +52,9 @@ void updateViewport(int width, int height) {
  * @param displayWindow The window the game is being drawn in.
  * @param view The view of the game being drawn.
  */
-void gameLoop(SDL_Window& displayWindow, GameView& view, GameController& controller) {
+void gameLoop(SDL_Window& displayWindow, GameView& view, GameModel& model, GameController& controller) {
+	Renderer renderer(model, view);
+
 	bool running = true;
 	while(running) {
 		SDL_Event event;
@@ -59,7 +62,8 @@ void gameLoop(SDL_Window& displayWindow, GameView& view, GameController& control
 			running = controller.handleInput(event);
 		}
 
-		view.render();
+		model.update();
+		renderer.render();
 
 		SDL_GL_SwapWindow(&displayWindow);
 		//To keep my computer from running at maximum
@@ -103,18 +107,18 @@ void startGame() {
 
 	BlitHelper::initilize_blitter(displayRenderer);
 
-	GameModel model(20,20, {std::make_pair("P1", true), std::make_pair("P2", true)});
+	GameModel model(8,5, {std::make_pair("P1", true), std::make_pair("P2", true)});
 	model.createActor(Coordinate(0,0), 0, 28, Attack(28, 1.0, .05, .003));
 	model.createActor(Coordinate(2,2), 1, 42, Attack(42, .85, .1, .001));
-	model.createWall(Coordinate(5,5), -1);
-	model.createWall(Coordinate(5,6), -1);
-	model.playMovingEffect(ScreenCoordinate(0,0), ScreenCoordinate(1,1), true);
-	model.playMovingEffect(ScreenCoordinate(0,.95), ScreenCoordinate(.95,0), false);
+	//model.createWall(Coordinate(5,5), -1);
+	//model.createWall(Coordinate(5,6), -1);
+	//model.playMovingEffect(ScreenCoordinate(0,0), ScreenCoordinate(1,1), true);
+	//model.playMovingEffect(ScreenCoordinate(0,.95), ScreenCoordinate(.95,0), false);
 
-	GameView view(model);
-	GameController controller(model);
+	GameView view;
+	GameController controller(model, view);
 
-	gameLoop(*displayWindow, view, controller);
+	gameLoop(*displayWindow, view, model, controller);
 
 	SDL_DestroyWindow(displayWindow);
 	SDL_DestroyRenderer(displayRenderer);

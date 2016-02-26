@@ -1,6 +1,7 @@
 #include "GameController.h"
 
-GameController::GameController(GameModel& model) : model(model){
+GameController::GameController(GameModel& model, GameView& view)
+	: model(model), view(view) {
 	selected.reset();
 }
 
@@ -17,6 +18,29 @@ bool GameController::handleInput(SDL_Event& event){
 
 	if(event.type == SDL_KEYUP){
 		std::cout << "Key:" << event.key.keysym.sym << "\n";
+		switch (event.key.keysym.sym)
+		{
+		case SDLK_w:
+			view.scrollUp(0.2);
+			break;
+		case SDLK_a:
+			view.scrollLeft(0.2);
+			break;
+		case SDLK_s:
+			view.scrollDown(0.2);
+			break;
+		case SDLK_d:
+			view.scrollRight(0.2);
+			break;
+		case SDLK_q:
+			view.zoomIn(0.2);
+			break;
+		case SDLK_e:
+			view.zoomOut(0.2);
+			break;
+		default:
+			break;
+		}
 	}
 
 	return true;
@@ -58,7 +82,8 @@ bool GameController::handleLClick(ScreenCoordinate loc){
 
 bool GameController::handleRClick(ScreenCoordinate loc){
 	std::cout << "Right Click\n";
-	GameBoard& board = model.getGameBoard();
+	/*
+	const GameBoard& board = model.getGameBoard();
 	Coordinate boardloc = Util::screenToCoord(loc);
 	if (selected && board.openSpace(boardloc)){
 		std::cout << "moving actor\n";
@@ -69,5 +94,6 @@ bool GameController::handleRClick(ScreenCoordinate loc){
 		model.sendAttack(selected->getLocation(), boardloc);
 		return true;
 	}
+	*/
 	return false;
 }
