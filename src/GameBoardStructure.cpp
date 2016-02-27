@@ -10,17 +10,8 @@ GameBoardStructure::GameBoardStructure(int length, int width){
 	initEnvironment();
 	initActors();
 
-	this->numTiers = 1;
-	this->spriteSheet = BlitHelper::loadImageGL("C:\\workspace\\SpaghettiWestern\\Resources\\floor_wood1.png");
-
-	hSize = .10;
-	vSize = .10;
-	double theta = 80;
-	double pi = 3.14159265358;
-	h = vSize / (cos(theta/180*pi) + 1);
-	s = h * cos(theta/180*pi);
-	lookAtCoord.first = 0;
-	lookAtCoord.second = 0;
+	this->spriteSheet = BlitHelper::loadImageGL("C:\\workspace\\SpaghettiWestern\\Resources\\floor_grass1.png");
+	this->spriteSheet2 = BlitHelper::loadImageGL("C:\\workspace\\SpaghettiWestern\\Resources\\object_tree_evergreen1.png");
 }
 
 void GameBoardStructure::initEnvironment(){

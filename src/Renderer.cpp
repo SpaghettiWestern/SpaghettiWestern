@@ -17,7 +17,7 @@ void Renderer::render(){
 	//dy = 1;
 	dx = traverseVector.x;
 	dy = traverseVector.y;
-	Coordinate startCoord(startColumn.x * board.getWidth(), startColumn.y * board.getLength());
+	Coordinate startCoord(startColumn.x * (board.getWidth() - 1), startColumn.y * (board.getLength() - 1));
 
 	for (; board.inBounds(startCoord); startCoord.first -= dx)
 	{
@@ -72,6 +72,8 @@ void Renderer::renderBoardCoordinate(const GameBoardStructure& board, Coordinate
 	ScreenCoordinate scrCoordTex2(1,1);
 
 	drawQuadrangle_textured(scrCoord, scrCoordBotRight, scrCoordTex1, scrCoordTex2, board.spriteSheet);
+	if ((u+v)%5 == 0)
+		drawQuadrangle_textured(scrCoord, scrCoordBotRight, scrCoordTex1, scrCoordTex2, board.spriteSheet2);
 }
 
 void Renderer::render(const BoardStatic& piece){

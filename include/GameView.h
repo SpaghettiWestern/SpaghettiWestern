@@ -24,9 +24,15 @@ public:
 	void scrollLeft(double amount);
 	void scrollUp(double amount);
 	void scrollDown(double amount);
+	void resetScroll();
 
 	void zoomIn(double amount);
 	void zoomOut(double amount);
+	void resetZoom();
+
+	void rotateViewAngleClockwise();
+	void rotateViewAngleCounterClockwise();
+	void resetViewAngle();
 
 	// rendering info
 	Coordinate2D<int> getRearColumn() const;

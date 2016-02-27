@@ -34,13 +34,7 @@ public:
 
 	//demo only
 	GLuint spriteSheet;
-	int numTiers;
-	ScreenCoordinate lookAtCoord;
-	double s;
-	double h;
-	double hSize;
-	double vSize;
-
+	GLuint spriteSheet2;
 
 	GameBoardStructure(int length, int width);
 	GameBoardStructure(const GameBoardStructure& other);

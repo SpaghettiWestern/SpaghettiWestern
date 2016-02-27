@@ -87,6 +87,13 @@ void GameView::scrollDown(double amount)
 }
 
 
+void GameView::resetScroll()
+{
+	lookAtCoordinate.x = 0;
+	lookAtCoordinate.y = 0;
+}
+
+
 void GameView::zoomIn(double amount)
 {
 	if (zoom + amount < ZOOM_MAX)
@@ -98,4 +105,28 @@ void GameView::zoomOut(double amount)
 {
 	if (zoom - amount > ZOOM_MIN)
 		zoom -= amount;
+}
+
+
+void GameView::resetZoom()
+{
+	zoom = 1.;
+}
+
+
+void GameView::rotateViewAngleClockwise()
+{
+	viewAngleOrientation.rotateClockwise();
+}
+
+
+void GameView::rotateViewAngleCounterClockwise()
+{
+	viewAngleOrientation.rotateCounterClockwise();
+}
+
+
+void GameView::resetViewAngle()
+{
+	viewAngleOrientation.reset();
 }

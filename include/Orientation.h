@@ -18,6 +18,7 @@ public:
 	inline void rotateClockwise() { orientation = (orientation + 1)%4; }
 	inline void rotateCounterClockwise() { orientation = (orientation - 1)%4; }
 	inline void rotate(int rotation) { orientation = (orientation + rotation)%4; }
+	inline void reset() { orientation = 0; }
 
 private:
 	int orientation;

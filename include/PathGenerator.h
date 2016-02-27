@@ -9,9 +9,25 @@
 #include "Util.h"
 #include "GameBoardStructure.h"
 
+struct distanceCoordinate{
+	distanceCoordinate(const Coordinate& coord, int g_score, int f_score);
+
+	Coordinate coord;
+	int g_score;
+	int f_score;
+};
+
+class CoordinateComparison{
+	public:
+	CoordinateComparison();
+	bool operator() (const distanceCoordinate& lhs, const distanceCoordinate &rhs) const;
+};
+
 class PathGenerator{
 private:
 	std::shared_ptr<GameBoardStructure>& board;
+
+	std::priority_queue<distanceCoordinate, std::vector<distanceCoordinate>, CoordinateComparison> pq_open_set;
 
 	std::map<Coordinate, bool> closed_set;
 	std::map<Coordinate, bool> open_set;
@@ -27,15 +43,15 @@ private:
 	void resetSets();
 	Coordinate getSmallestOpen();
 	void traverseNeighbors();
-	void traverseNeighbor(Coordinate neighbor);
+	void traverseNeighbor(const Coordinate& neighbor);
 
-	void reconstructPath(Coordinate start);
+	void reconstructPath(const Coordinate& start);
 
 public:
 	PathGenerator(std::shared_ptr<GameBoardStructure>& board);
-	int estimateDistance(Coordinate& start, Coordinate& end);
+	int estimateDistance(const Coordinate& start, const Coordinate& end);
 
-	bool findPath(Coordinate start, Coordinate end);
+	bool findPath(const Coordinate& start, const Coordinate& end);
 	std::vector<Coordinate> getPath();
 };
 

@@ -62,6 +62,7 @@ void gameLoop(SDL_Window& displayWindow, GameView& view, GameModel& model, GameC
 			running = controller.handleInput(event);
 		}
 
+		controller.processDownKeys();
 		model.update();
 		renderer.render();
 

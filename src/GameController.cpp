@@ -12,35 +12,22 @@ bool GameController::handleInput(SDL_Event& event){
 		return false;
 	}
 
-	if(event.type == SDL_MOUSEBUTTONUP){
+	switch(event.type)
+	{
+	case SDL_MOUSEBUTTONUP:
 		handleClick(event);
-	}
+		break;
 
-	if(event.type == SDL_KEYUP){
-		std::cout << "Key:" << event.key.keysym.sym << "\n";
-		switch (event.key.keysym.sym)
-		{
-		case SDLK_w:
-			view.scrollUp(0.2);
-			break;
-		case SDLK_a:
-			view.scrollLeft(0.2);
-			break;
-		case SDLK_s:
-			view.scrollDown(0.2);
-			break;
-		case SDLK_d:
-			view.scrollRight(0.2);
-			break;
-		case SDLK_q:
-			view.zoomIn(0.2);
-			break;
-		case SDLK_e:
-			view.zoomOut(0.2);
-			break;
-		default:
-			break;
-		}
+	case SDL_KEYDOWN:
+		handleKeyDown(event);
+		break;
+
+	case SDL_KEYUP:
+		handleKeyUp(event);
+		break;
+
+	default:
+		break;
 	}
 
 	return true;
@@ -96,4 +83,61 @@ bool GameController::handleRClick(ScreenCoordinate loc){
 	}
 	*/
 	return false;
+}
+
+
+void GameController::handleKeyUp(SDL_Event &keyUpEvent)
+{
+	SDL_Keycode keycode = keyUpEvent.key.keysym.sym;
+	keyDownMap[keycode] = false;
+}
+
+
+void GameController::handleKeyDown(SDL_Event &keyDownEvent)
+{
+	SDL_Keycode keycode = keyDownEvent.key.keysym.sym;
+	keyDownMap[keycode] = true;
+
+	// handle any non-hold keys
+	switch(keycode)
+	{
+	case 'z':
+		view.rotateViewAngleCounterClockwise();
+		break;
+
+	case 'c':
+		view.rotateViewAngleClockwise();
+		break;
+
+	case 'x':
+		view.resetScroll();
+		view.resetZoom();
+		view.resetViewAngle();
+		break;
+
+	default:
+		break;
+	}
+}
+
+
+void GameController::processDownKeys()
+{
+	if (keyDownMap['a'])
+		view.scrollLeft(SCROLL_SPEED_HORIZ);
+
+	if (keyDownMap['d'])
+			view.scrollRight(SCROLL_SPEED_HORIZ);
+
+	if (keyDownMap['w'])
+			view.scrollUp(SCROLL_SPEED_VERT);
+
+	if (keyDownMap['s'])
+			view.scrollDown(SCROLL_SPEED_VERT);
+
+	if (keyDownMap['q'])
+			view.zoomOut(ZOOM_SPEED);
+
+	if (keyDownMap['e'])
+			view.zoomIn(ZOOM_SPEED);
 }
