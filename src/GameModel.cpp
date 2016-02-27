@@ -28,7 +28,7 @@ const Player& GameModel::getPlayer(int index) const{
 	return players[index];
 }
 
-bool GameModel::createActor(Coordinate loc, int owner_index, int hitpoints){
+bool GameModel::createActor(Coordinate3D<int> loc, int owner_index, int hitpoints){
 	if(playerExists(owner_index) && board.openSpace(loc)){
 		Player& owner = players[owner_index];
 		std::shared_ptr<BoardActor> new_actor(new BoardActor(loc, owner, hitpoints));
@@ -39,7 +39,7 @@ bool GameModel::createActor(Coordinate loc, int owner_index, int hitpoints){
 	return false;
 }
 
-bool GameModel::createActor(Coordinate loc, int owner_index, int hitpoints, Attack attack){
+bool GameModel::createActor(Coordinate3D<int> loc, int owner_index, int hitpoints, Attack attack){
 	if(playerExists(owner_index) && board.openSpace(loc)){
 		Player& owner = players[owner_index];
 		std::shared_ptr<BoardActor> new_actor(new ActionActor(loc, owner, hitpoints, attack));
@@ -50,12 +50,12 @@ bool GameModel::createActor(Coordinate loc, int owner_index, int hitpoints, Atta
 	return false;
 }
 
-bool GameModel::createWall(Coordinate loc, int hitpoints){
+bool GameModel::createWall(Coordinate3D<int> loc, int hitpoints){
 	board.addStaticCoverPiece(loc, false, hitpoints, 1000);
 	return true;
 }
 
-bool GameModel::sendAttack(Coordinate attacker_loc, Coordinate attack_loc){
+bool GameModel::sendAttack(Coordinate3D<int> attacker_loc, Coordinate3D<int> attack_loc){
 	if(board.canAttack(attacker_loc, attack_loc)){
 		return sendAttack((ActionActor&)board.getActor(attacker_loc), board.getActor(attack_loc));
 	}
@@ -71,7 +71,7 @@ bool GameModel::sendAttack(ActionActor& attacker, BoardActor& receiver){
 	return true;
 }
 
-bool GameModel::playStaticEffect(const ScreenCoordinate& loc, bool surface_level){
+bool GameModel::playStaticEffect(const Coordinate2D<double>& loc, bool surface_level){
 	std::unique_ptr<Effect> new_effect_ptr(new Effect(loc));
 	if(surface_level)
 		board.addSurfaceEffect(new_effect_ptr);
@@ -81,7 +81,7 @@ bool GameModel::playStaticEffect(const ScreenCoordinate& loc, bool surface_level
 	return true;
 }
 
-bool GameModel::playMovingEffect(const ScreenCoordinate& start, const ScreenCoordinate& dest, bool surface_level){
+bool GameModel::playMovingEffect(const Coordinate2D<double>& start, const Coordinate2D<double>& dest, bool surface_level){
 	std::unique_ptr<Effect> new_effect_ptr(new MovingEffect(start));
 	MovingEffect& new_effect = (MovingEffect&)(*new_effect_ptr);
 	new_effect.generatePath(dest, .001);

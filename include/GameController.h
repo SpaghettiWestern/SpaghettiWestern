@@ -18,12 +18,12 @@
 class GameController{
 private:
 	GameModel& model;
-	ScreenCoordinate inputToScreen(int x, int y);
+	Coordinate2D<double> inputToScreen(int x, int y);
 	std::shared_ptr<BoardActor> selected;
 
 	bool handleClick(SDL_Event& click);
-	bool handleRClick(ScreenCoordinate loc);
-	bool handleLClick(ScreenCoordinate loc);
+	bool handleRClick(Coordinate2D<double> loc);
+	bool handleLClick(Coordinate2D<double> loc);
 
 public:
 	GameController(GameModel& model);

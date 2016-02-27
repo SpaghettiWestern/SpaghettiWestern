@@ -16,7 +16,7 @@
 
 class GameBoardStructure{
 private:
-	std::map<Coordinate3D<int>, std::unique_ptr<BoardCell>> environmentCells;
+	std::map<Coordinate3D<int>, std::shared_ptr<BoardCell>> environmentCells;
 	std::map<Coordinate2D<int>, GLuint> groundTexture;
 	std::map<Coordinate3D<int>, std::vector<std::unique_ptr<Effect>>> effects;
 
@@ -38,6 +38,8 @@ public:
 	GameBoardStructure(const GameBoardStructure& other);
 	GameBoardStructure& operator=(const GameBoardStructure& other);
 
+	std::map<Coordinate3D<int>, std::shared_ptr<BoardCell>>& getCells();
+	std::shared_ptr<BoardCell>& getCell(Coordinate3D<int> loc);
 	const BoardCell& getEnvironmentCell(int x, int y, int z) const;
 	const BoardCell& getEnvironmentCell(const Coordinate3D<int>& loc) const;
 
@@ -69,6 +71,8 @@ public:
 	int numEffects(const Coordinate3D<int>& loc) const;
 	bool effectsExist(const Coordinate3D<int>& loc) const;
 	const Effect& getEffect(const Coordinate3D<int>& loc) const;
+
+
 
 	int getLength() const;
 	int getWidth() const;

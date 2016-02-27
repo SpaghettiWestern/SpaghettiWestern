@@ -33,32 +33,32 @@ public:
 
 	const GameBoardStructure& getBoard() const;
 
-	bool openSpace(const Coordinate& loc);
+	bool openSpace(const Coordinate3D<int>& loc);
 
-	bool canAttack(const Coordinate& attacker_loc, const Coordinate& attack_loc);
+	bool canAttack(const Coordinate3D<int>& attacker_loc, const Coordinate3D<int>& attack_loc);
 
-	bool actorExists(const Coordinate& loc);
-	BoardActor& getActor(const Coordinate& loc);
+	bool actorExists(const Coordinate3D<int>& loc);
+	BoardActor& getActor(const Coordinate3D<int>& loc);
 	bool addActor(std::shared_ptr<BoardActor> new_actor);
 
-	bool addStaticCoverPiece(Coordinate loc, bool traversable, int hitpoints, int deflection_chance);
+	bool addStaticCoverPiece(Coordinate3D<int> loc, bool traversable, int hitpoints, int deflection_chance);
 
-	bool removeActor(const Coordinate& loc);
+	bool removeActor(const Coordinate3D<int>& loc);
 
-	bool moveActor(Coordinate start, Coordinate end);
-	bool moveActor(BoardActor& actor, Coordinate goal);
+	bool moveActor(Coordinate3D<int> start, Coordinate3D<int> end);
+	bool moveActor(BoardActor& actor, Coordinate3D<int> goal);
 
-	const std::map<Coordinate, std::vector<std::unique_ptr<Effect>>>& getBoardEffects() const;
-	bool addBoardEffect(const ScreenCoordinate& loc);
-	bool addBoardEffect(const ScreenCoordinate& loc, const Animation& animation);
+	const std::map<Coordinate3D<int>, std::vector<std::unique_ptr<Effect>>>& getBoardEffects() const;
+	bool addBoardEffect(const Coordinate2D<double>& loc);
+	bool addBoardEffect(const Coordinate2D<double>& loc, const Animation& animation);
 	bool addBoardEffect(std::unique_ptr<Effect>& new_effect);
-	bool addMovingBoardEffect(const ScreenCoordinate& loc, const std::vector<ScreenCoordinate>& path);
+	bool addMovingBoardEffect(const Coordinate2D<double>& loc, const std::vector<Coordinate2D<double>>& path);
 
 	const std::vector<std::unique_ptr<Effect>>& getSurfaceEffects() const;
-	bool addSurfaceEffect(const ScreenCoordinate& loc);
-	bool addSurfaceEffect(const ScreenCoordinate& loc, const Animation& animation);
+	bool addSurfaceEffect(const Coordinate2D<double>& loc);
+	bool addSurfaceEffect(const Coordinate2D<double>& loc, const Animation& animation);
 	bool addSurfaceEffect(std::unique_ptr<Effect>& new_effect);
-	bool addMovingSurfaceEffect(const ScreenCoordinate& loc, const std::vector<ScreenCoordinate>& path);
+	bool addMovingSurfaceEffect(const Coordinate2D<double>& loc, const std::vector<Coordinate2D<double>>& path);
 
 	void update();
 };

@@ -1,11 +1,11 @@
 #include "ActionActor.h"
 
-ActionActor::ActionActor(Coordinate loc, Player& owner, int hitpoints, Attack attack) :
+ActionActor::ActionActor(Coordinate3D<int> loc, Player& owner, int hitpoints, Attack attack) :
 	BoardActor(loc, owner, hitpoints), attack(attack){
 
 }
 
-ActionActor::ActionActor(Coordinate loc, Player& owner, Attack attack) :
+ActionActor::ActionActor(Coordinate3D<int> loc, Player& owner, Attack attack) :
 	BoardActor(loc, owner, -1), attack(attack){
 }
 

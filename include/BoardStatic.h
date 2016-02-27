@@ -15,9 +15,9 @@ protected:
 
 public:
 	BoardStatic(bool isTraversable);
-	BoardStatic(Coordinate loc, bool isTraversable);
+	BoardStatic(Coordinate3D<int> loc, bool isTraversable);
 	BoardStatic(bool isTraversable, int hitpoints);
-	BoardStatic(Coordinate loc, bool isTraversable, int hitpoints);
+	BoardStatic(Coordinate3D<int> loc, bool isTraversable, int hitpoints);
 
 	void setTraversable(bool traversable);
 	bool isTraversable() const;

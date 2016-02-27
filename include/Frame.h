@@ -10,12 +10,12 @@ private:
 	float size;
 
 public:
-	ScreenCoordinate tex_topLeft;
-	ScreenCoordinate tex_botRight;
+	Coordinate2D<double> tex_topLeft;
+	Coordinate2D<double> tex_botRight;
 
 	Frame();
 	Frame(std::tuple<int, int, int> color, float size);
-	Frame(ScreenCoordinate topLeft, ScreenCoordinate botRight, float size);
+	Frame(Coordinate2D<double> topLeft, Coordinate2D<double> botRight, float size);
 
 	bool operator==(const Frame& other) const;
 

@@ -55,6 +55,38 @@ std::shared_ptr<BoardActor>& BoardCell::getActor(){
 	return actor;
 }
 
+std::vector<std::unique_ptr<BoardStatic>>& BoardCell::getObjects(){
+	return objects;
+}
+
+std::vector<std::shared_ptr<BoardCell>>& BoardCell::getNeighbors(){
+	return neighbors;
+}
+
+std::unique_ptr<BoardFloor>& BoardCell::getFloor(){
+	return floor;
+}
+
+std::unique_ptr<BoardWall>& BoardCell::getWall(WallEdge edge){
+	return walls[edge];
+}
+
+std::vector<std::unique_ptr<Effect>>& BoardCell::getEffects(){
+	return effects;
+}
+
+std::vector<std::unique_ptr<BoardStatic>>& BoardCell::getObjects(){
+	return objects;
+}
+
+std::vector<std::unique_ptr<BoardDecoration>>& BoardCell::getDecorations(){
+	return decorations;
+}
+
+Coordinate3D<int> BoardCell::getLocation(){
+	return location;
+}
+
 
 bool BoardCell::update(){
 	actor->update();

@@ -1,13 +1,13 @@
 #include "BoardActor.h"
 
-BoardActor::BoardActor(Coordinate loc, Player& owner) :
+BoardActor::BoardActor(Coordinate3D<int> loc, Player& owner) :
 		BoardPiece(loc, -1), owner(owner){
 	move_speed = 5;
 	destination = Coordinate(-1,-1);
 	initAnimations();
 }
 
-BoardActor::BoardActor(Coordinate loc, Player& owner, int hitpoints) :
+BoardActor::BoardActor(Coordinate3D<int> loc, Player& owner, int hitpoints) :
 		BoardPiece(loc, hitpoints), owner(owner){
 	move_speed = 5;
 	destination = Coordinate(-1,-1);
@@ -38,22 +38,22 @@ bool BoardActor::isMoving() const{
 }
 
 void BoardActor::generateMovePath(Coordinate start, Coordinate end){
-	ScreenCoordinate final_pos = Util::coordToScreen(end);
-	ScreenCoordinate start_pos = Util::coordToScreen(start);
-	double x_step = (final_pos.first - start_pos.first)/(float)move_speed;
-	double y_step = (final_pos.second - start_pos.second)/(float)move_speed;
+	Coordinate2D<double> final_pos = Util::coordToScreen(end);
+	Coordinate2D<double> start_pos = Util::coordToScreen(start);
+	double x_step = (final_pos.x - start_pos.x)/(float)move_speed;
+	double y_step = (final_pos.y - start_pos.y)/(float)move_speed;
 
 	//move_path.push_back(final_pos); Handled in the larger path wrapper
-	ScreenCoordinate next_pos = final_pos;
+	Coordinate2D<double> next_pos = final_pos;
 	for(int i = 0; i < move_speed-1; i++){
-		next_pos.first-=x_step;
-		next_pos.second-=y_step;
+		next_pos.x-=x_step;
+		next_pos.y-=y_step;
 		move_path.push_back(next_pos);
 	}
 	move_path.push_back(start_pos);
 }
 
-void BoardActor::generateMovePath(std::vector<Coordinate> path){
+void BoardActor::generateMovePath(std::vector<Coordinate3D<int>> path){
 	move_path.clear();
 	if(path.size() > 1){
 		destination = path[0];
@@ -84,7 +84,7 @@ void BoardActor::setAnimation_Idle(){
 	}
 }
 
-void BoardActor::startMove(std::vector<Coordinate> path){
+void BoardActor::startMove(std::vector<Coordinate3D<int>> path){
 	setAnimation_Moving();	//start moving
 	generateMovePath(path);
 }
@@ -106,14 +106,14 @@ void BoardActor::moveStep(){
 	}
 }
 
-Coordinate BoardActor::getNextStep() const{
+Coordinate3D<int> BoardActor::getNextStep() const{
 	if(!move_path.empty() && isMoving()){
 		return Util::screenToCoord(move_path.back());
 	}
-	return Coordinate(-1,-1);
+	return Coordinate3D<int>(-1,-1);
 }
 
-const Coordinate& BoardActor::getDestination() const{
+const Coordinate3D<int>& BoardActor::getDestination() const{
 	return destination;
 }
 

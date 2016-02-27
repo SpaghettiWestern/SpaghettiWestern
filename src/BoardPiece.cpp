@@ -8,7 +8,7 @@ BoardPiece::BoardPiece(){
 	curr_hitpoints = -1;
 }
 
-BoardPiece::BoardPiece(const BoardCoordinate& loc){
+BoardPiece::BoardPiece(const Coordinate3D<int>& loc){
 	location = loc;
 	resetScreenLocation();
 	initAnimations();
@@ -25,7 +25,7 @@ BoardPiece::BoardPiece(int hitpoints){
 
 }
 
-BoardPiece::BoardPiece(const BoardCoordinate& loc, int hitpoints){
+BoardPiece::BoardPiece(const Coordinate3D<int>& loc, int hitpoints){
 	location = loc;
 	resetScreenLocation();
 	initAnimations();
@@ -100,11 +100,11 @@ void BoardPiece::resetScreenLocation(){
 	screen_location = Util::coordToScreen(location);
 }
 
-const BoardCoordinate& BoardPiece::getLocation() const{
+const Coordinate3D<int>& BoardPiece::getLocation() const{
 	return location;
 }
 
-void BoardPiece::setLocation(Coordinate new_location){
+void BoardPiece::setLocation(Coordinate3D<int> new_location){
 	if(new_location != location){
 		location = new_location;
 		if(Util::screenToCoord(screen_location) != location){
@@ -113,7 +113,7 @@ void BoardPiece::setLocation(Coordinate new_location){
 	}
 }
 
-const ScreenCoordinate& BoardPiece::getScreenLocation() const{
+const Coordinate2D<double>& BoardPiece::getScreenLocation() const{
 	return screen_location;
 }
 

@@ -18,30 +18,19 @@ void PathGenerator::resetSets(){
 									  CoordinateComparison>();
 }
 
-Coordinate PathGenerator::getSmallestOpen(){
-	Coordinate smallest = open_set.begin()->first;
-	for(auto it = open_set.begin(); it != open_set.end(); ++it){
-		if(f_score[smallest] > f_score[it->first]){
-			smallest = it->first;
-		}
-	}
-	open_set.erase(smallest);
-
-	return smallest;
-}
-
-int PathGenerator::estimateDistance(const Coordinate& start, const Coordinate& end){
-	return std::abs(start.first - end.first) + std::abs(start.second-end.second);
+int PathGenerator::estimateDistance(const Coordinate3D<int>& start, const Coordinate3D<int>& end){
+	return std::abs(start.x - end.x) + std::abs(start.y-end.y) + std::abs(start.z-end.z);
 }
 
 void PathGenerator::traverseNeighbors(){
-	traverseNeighbor(Coordinate(curr.first+1, curr.second));
-	traverseNeighbor(Coordinate(curr.first-1, curr.second));
-	traverseNeighbor(Coordinate(curr.first, curr.second+1));
-	traverseNeighbor(Coordinate(curr.first, curr.second-1));
+	std::vector<std::unique_ptr<BoardCell>>& neighbors = board->getCell(curr)->getNeighbors();
+
+	for(unsigned int i = 0; i < neighbors.size(); i++){
+		traverseNeighbor(neighbors[i]->getLocation());
+	}
 }
 
-void PathGenerator::traverseNeighbor(const Coordinate& neighbor){
+void PathGenerator::traverseNeighbor(const Coordinate3D<int>& neighbor){
 	if(closed_set.count(neighbor) > 0){
 		return;
 	}
@@ -70,9 +59,9 @@ void PathGenerator::traverseNeighbor(const Coordinate& neighbor){
 	}
 }
 
-void PathGenerator::reconstructPath(const Coordinate& start){
+void PathGenerator::reconstructPath(const Coordinate3D<int>& start){
 	path.clear();
-	Coordinate curr_step = end;
+	Coordinate3D<int> curr_step = end;
 	while(curr_step != start){
 		path.push_back(curr_step);
 		curr_step = came_from[curr_step];
@@ -80,7 +69,7 @@ void PathGenerator::reconstructPath(const Coordinate& start){
 	path.push_back(start);
 }
 
-bool PathGenerator::findPath(const Coordinate& start, const Coordinate& goal){
+bool PathGenerator::findPath(const Coordinate3D<int>& start, const Coordinate3D<int>& goal){
 	resetSets();
 
 	if(!board->openSpace(goal))
@@ -107,11 +96,11 @@ bool PathGenerator::findPath(const Coordinate& start, const Coordinate& goal){
 	return false;
 }
 
-std::vector<Coordinate> PathGenerator::getPath(){
+std::vector<Coordinate3D<int>> PathGenerator::getPath(){
 	return path;
 }
 
-distanceCoordinate::distanceCoordinate(const Coordinate& coord, int g_score, int f_score) :
+distanceCoordinate::distanceCoordinate(const Coordinate3D<int>& coord, int g_score, int f_score) :
 	coord(coord), g_score(g_score), f_score(f_score){
 
 }

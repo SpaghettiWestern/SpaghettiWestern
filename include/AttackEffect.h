@@ -12,12 +12,12 @@ private:
 
 public:
 	AttackEffect(const Attack& attack);
-	AttackEffect(ScreenCoordinate loc, const Attack& attack);
-	AttackEffect(ScreenCoordinate loc, const std::vector<ScreenCoordinate>& path, const Attack& attack);
-	AttackEffect(ScreenCoordinate loc, const Animation& anim, const Attack& attack);
-	AttackEffect(ScreenCoordinate loc, const Animation& anim, const std::vector<ScreenCoordinate>& path, const Attack& attack);
+	AttackEffect(Coordinate2D<double> loc, const Attack& attack);
+	AttackEffect(Coordinate2D<double> loc, const std::vector<Coordinate2D<double>>& path, const Attack& attack);
+	AttackEffect(Coordinate2D<double> loc, const Animation& anim, const Attack& attack);
+	AttackEffect(Coordinate2D<double> loc, const Animation& anim, const std::vector<Coordinate2D<double>>& path, const Attack& attack);
 
-	void generatePath(ScreenCoordinate dest);
+	void generatePath(Coordinate2D<double> dest);
 
 	const Attack& getAttack() const;
 	virtual effect_type getType() const;

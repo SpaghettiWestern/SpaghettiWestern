@@ -23,16 +23,16 @@ bool GameController::handleInput(SDL_Event& event){
 
 }
 
-ScreenCoordinate GameController::inputToScreen(int x, int y){
-	return ScreenCoordinate((float)x/800.0, (float)y/600.0);
+Coordinate2D<double> GameController::inputToScreen(int x, int y){
+	return Coordinate2D<double>((float)x/800.0, (float)y/600.0);
 }
 
 bool GameController::handleClick(SDL_Event& click){
 	std::cout << "X :" << click.button.x << "  Y :" << click.button.y << "\n";
-	ScreenCoordinate s = inputToScreen(click.button.x, click.button.y);
-	std::cout << "Xs:" << s.first << "  Ys:" << s.second << "\n";
-	Coordinate c = Util::screenToCoord(s);
-	std::cout << "Xc:" << c.first << "  Yc:" << c.second << "\n";
+	Coordinate2D<double> s = inputToScreen(click.button.x, click.button.y);
+	std::cout << "Xs:" << s.x << "  Ys:" << s.y << "\n";
+	Coordinate3D<int> c = Util::screenToCoord(s);
+	std::cout << "Xc:" << c.x << "  Yc:" << c.y << "\n";
 	if((int)click.button.button == SDL_BUTTON_LEFT){
 		return handleLClick(s);
 	}
@@ -42,9 +42,9 @@ bool GameController::handleClick(SDL_Event& click){
 	return false;
 }
 
-bool GameController::handleLClick(ScreenCoordinate loc){
+bool GameController::handleLClick(Coordinate2D<double> loc){
 	const GameBoardStructure& board = model.getGameBoard().getBoard();
-	Coordinate boardloc = Util::screenToCoord(loc);
+	Coordinate3D<int> boardloc = Util::screenToCoord(loc);
 	std::cout << "Left Click\n";
 	if (board.actorExists(boardloc)){
 		selected = board.getActor(boardloc);
@@ -56,10 +56,10 @@ bool GameController::handleLClick(ScreenCoordinate loc){
 	return false;
 }
 
-bool GameController::handleRClick(ScreenCoordinate loc){
+bool GameController::handleRClick(Coordinate2D<double> loc){
 	std::cout << "Right Click\n";
 	GameBoard& board = model.getGameBoard();
-	Coordinate boardloc = Util::screenToCoord(loc);
+	Coordinate3D<int> boardloc = Util::screenToCoord(loc);
 	if (selected && board.openSpace(boardloc)){
 		std::cout << "moving actor\n";
 		return board.moveActor(*selected, boardloc);

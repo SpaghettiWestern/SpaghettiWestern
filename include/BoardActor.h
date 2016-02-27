@@ -14,11 +14,11 @@ class BoardActor : public BoardPiece{
 private:
 	Player& owner;
 
-	std::vector<ScreenCoordinate> move_path;
-	void generateMovePath(Coordinate start, Coordinate end);
-	void generateMovePath(std::vector<Coordinate> path);
+	std::vector<Coordinate2D<double>> move_path;
+	void generateMovePath(Coordinate3D<int> start, Coordinate3D<int> end);
+	void generateMovePath(std::vector<Coordinate3D<int>> path);
 	int move_path_index;
-	Coordinate destination;
+	Coordinate3D<int> destination;
 
 	int move_speed;
 	void recieveDamage(int damage);
@@ -28,8 +28,8 @@ protected:
 
 public:
 
-	BoardActor(Coordinate loc, Player& owner);
-	BoardActor(Coordinate loc, Player& owner, int hitpoints);
+	BoardActor(Coordinate3D<int> loc, Player& owner);
+	BoardActor(Coordinate3D<int> loc, Player& owner, int hitpoints);
 	~BoardActor();
 
 	bool isAlive() const;
@@ -39,11 +39,11 @@ public:
 	void resetAnimation();
 
 	bool isMoving() const;
-	void startMove(std::vector<Coordinate> path);
+	void startMove(std::vector<Coordinate3D<int>> path);
 	void stopMove();
 	void moveStep();
-	Coordinate getNextStep() const;
-	const Coordinate& getDestination() const;
+	Coordinate3D<int> getNextStep() const;
+	const Coordinate3D<int>& getDestination() const;
 	int getMoveSpeed() const;
 
 	virtual bool update();

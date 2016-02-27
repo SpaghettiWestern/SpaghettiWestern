@@ -18,8 +18,8 @@ public:
 
 	std::string getName() const;
 	bool isHuman() const;
-	void createActor(Coordinate loc);
-	void createActor(Coordinate loc, int hitpoints);
+	void createActor(Coordinate3D<int> loc);
+	void createActor(Coordinate3D<int> loc, int hitpoints);
 	void addActor(std::shared_ptr<BoardActor> actor);
 
 	int getNumActors() const;

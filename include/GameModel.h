@@ -26,16 +26,16 @@ public:
 	bool playerExists(int index) const;
 	const Player& getPlayer(int index) const;
 
-	bool createActor(Coordinate loc, int owner_index, int hitpoints);
-	bool createActor(Coordinate loc, int owner_index, int hitpoints, Attack attack);
+	bool createActor(Coordinate3D<int> loc, int owner_index, int hitpoints);
+	bool createActor(Coordinate3D<int> loc, int owner_index, int hitpoints, Attack attack);
 
-	bool createWall(Coordinate loc, int hitpoints);
+	bool createWall(Coordinate3D<int> loc, int hitpoints);
 
-	bool sendAttack(Coordinate attacker_loc, Coordinate attack_loc);
+	bool sendAttack(Coordinate3D<int> attacker_loc, Coordinate3D<int> attack_loc);
 	bool sendAttack(ActionActor& attacker, BoardActor& receiver);
 
-	bool playStaticEffect(const ScreenCoordinate& loc, bool surface_level);
-	bool playMovingEffect(const ScreenCoordinate& start, const ScreenCoordinate& dest, bool surface_level);
+	bool playStaticEffect(const Coordinate2D<double>& loc, bool surface_level);
+	bool playMovingEffect(const Coordinate2D<double>& start, const Coordinate2D<double>& dest, bool surface_level);
 
 	void update();
 };

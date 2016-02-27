@@ -226,7 +226,15 @@ int GameBoardStructure::getWidth() const{
 }
 
 int GameBoardStructure::getHeight() const{
+	return height;
+}
 
+std::map<Coordinate3D<int>, std::shared_ptr<BoardCell>>& GameBoardStructure::getCells(){
+	return environmentCells;
+}
+
+std::shared_ptr<BoardCell>& GameBoardStructure::getCell(Coordinate3D<int> loc){
+	return environmentCells[loc];
 }
 
 bool GameBoardStructure::handleEffect(const std::unique_ptr<Effect>& effect, const Coordinate3D<int>& loc){
@@ -240,9 +248,12 @@ bool GameBoardStructure::handleEffect(const std::unique_ptr<Effect>& effect, con
 		if(actorExists(loc)){
 			return getActor(loc)->recieveAttack(attack_effect.getAttack());
 		}
-		BoardCell& setpiece = *(this->environmentCells.find(loc)->second);
-		if(setpiece.getType() == STATICCOVER){
-			return setpiece.recieveAttack(attack_effect.getAttack());
+		BoardCell& cell = *(this->environmentCells.find(loc)->second);
+		for(unsigned int i = 0; i < cell.getObjects().size(); i++){
+			BoardStatic& setpiece = cell.getObjects()[i];
+			if(setpiece.getType() == STATICCOVER){
+				return setpiece.recieveAttack(attack_effect.getAttack());
+			}
 		}
 	}
 		break;

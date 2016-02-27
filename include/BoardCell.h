@@ -27,6 +27,19 @@ public:
 	bool removeActor();
 	std::shared_ptr<BoardActor>& getActor();
 
+	std::vector<std::unique_ptr<BoardStatic>>& getObjects();
+	std::vector<std::shared_ptr<BoardCell>>& getNeighbors();
+
+	std::unique_ptr<BoardFloor>& getFloor();
+	std::shared_ptr<BoardActor>& getActor();
+	std::unique_ptr<BoardWall>& getWall(WallEdge edge);
+
+	std::vector<std::unique_ptr<Effect>>& getEffects();
+	std::vector<std::unique_ptr<BoardStatic>>& getObjects();
+	std::vector<std::unique_ptr<BoardDecoration>>& getDecorations();
+
+	Coordinate3D<int> getLocation();
+
 	bool update();
 
 private:

@@ -11,8 +11,8 @@ private:
 	Attack attack;
 
 public:
-	ActionActor(Coordinate loc, Player& owner, int hitpoints, Attack attack);
-	ActionActor(Coordinate loc, Player&owner, Attack attack);
+	ActionActor(Coordinate3D<int> loc, Player& owner, int hitpoints, Attack attack);
+	ActionActor(Coordinate3D<int> loc, Player&owner, Attack attack);
 	const Attack& getAttack() const;
 	actor_type getType() const;
 };
