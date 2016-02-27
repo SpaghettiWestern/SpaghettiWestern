@@ -5,7 +5,7 @@ StaticCover::StaticCover(bool isTraversable, int deflection_chance) :
 
 }
 
-StaticCover::StaticCover(Coordinate loc, bool isTraversable, int deflection_chance) :
+StaticCover::StaticCover(Coordinate3D<int> loc, bool isTraversable, int deflection_chance) :
 	BoardStatic(loc, isTraversable, -1), deflection_chance(deflection_chance){
 
 }
@@ -15,7 +15,7 @@ StaticCover::StaticCover(bool isTraversable, int hitpoints, int deflection_chanc
 
 }
 
-StaticCover::StaticCover(Coordinate loc, bool isTraversable, int hitpoints, int deflection_chance) :
+StaticCover::StaticCover(Coordinate3D<int> loc, bool isTraversable, int hitpoints, int deflection_chance) :
 	BoardStatic(loc, isTraversable, hitpoints), deflection_chance(deflection_chance){
 
 }

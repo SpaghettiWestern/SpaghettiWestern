@@ -33,13 +33,17 @@ void Renderer::render(const GameBoardStructure& board){
 }
 
 void Renderer::render(const BoardCell& cell){
-	render(*(cell.getFloor()));
+	BoardFloor& floor = *(cell.getFloor());
+	render(floor);
+
 	for(int i = 0; i < 4; i++){
-		render(cell.getWall(i));
+		BoardWall& wall = *(cell.getWall(i));
+		render((BoardStatic&) wall);
 	}
 
 	for(unsigned int i = 0; i < cell.getEffects().size(); i++){
-		render(*(cell.getEffects()[i]));
+		Effect& effect = *(cell.getEffects()[i]);
+		render(effect);
 	}
 
 	if (cell.actorExists()){
