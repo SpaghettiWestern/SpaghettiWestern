@@ -1,7 +1,7 @@
 #include "GameBoard.h"
 
 GameBoard::GameBoard() : pathgen(PathGenerator(board)){
-	auto tmp = std::make_shared<GameBoardStructure>(20,20);
+	auto tmp = std::make_shared<GameBoardStructure>(20,20,20);
 	board.swap(tmp);
 }
 

@@ -11,8 +11,8 @@ SUITE(boardactor){
 		std::cerr << "Testing BoardActor\n";
 
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer);
-		CHECK(testactor.getLocation() == Coordinate(1,2));
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer);
+		CHECK(testactor.getLocation() == Coordinate3D<int>(1,2,1));
 		CHECK(testactor.getCurrentHealth() == -1);
 		CHECK(testactor.getMaxHealth() == -1);
 		CHECK(testactor.getOwner().getName().compare("tester1") == 0);
@@ -20,8 +20,8 @@ SUITE(boardactor){
 
 	TEST(healthconstructor){
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer, 28);
-		CHECK(testactor.getLocation() == Coordinate(1,2));
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer, 28);
+		CHECK(testactor.getLocation() == Coordinate3D<int>(1,2,1));
 		CHECK(testactor.getCurrentHealth() == 28);
 		CHECK(testactor.getMaxHealth() == 28);
 		CHECK(testactor.getOwner().getName().compare("tester1") == 0);
@@ -30,7 +30,7 @@ SUITE(boardactor){
 
 	TEST(gethealth){
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer, 28);
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer, 28);
 
 		CHECK(testactor.getCurrentHealth() == 28);
 		CHECK(testactor.getMaxHealth() == 28);
@@ -39,7 +39,7 @@ SUITE(boardactor){
 	TEST(receiveAttack_mortal){
 		int max_health = 28;
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer, max_health);
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer, max_health);
 		Attack testattack(max_health/2);
 		CHECK(testactor.getCurrentHealth() == max_health);
 
@@ -62,7 +62,7 @@ SUITE(boardactor){
 	TEST(receiveAttack_immortal){
 		int damage = 28;
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer);
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer);
 		Attack testattack(damage);
 		CHECK(testactor.getCurrentHealth() == -1);
 		CHECK(testactor.getMaxHealth() == -1);
@@ -75,7 +75,7 @@ SUITE(boardactor){
 	TEST(isalive_mortal){
 		int max_health = 28;
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer, max_health);
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer, max_health);
 		Attack testattack(max_health);
 
 		CHECK(testactor.isAlive() == true);
@@ -86,7 +86,7 @@ SUITE(boardactor){
 	TEST(isalive_immortal){
 		int damage = 28;
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer);
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer);
 		Attack testattack(damage);
 
 		CHECK(testactor.isAlive() == true);
@@ -96,7 +96,7 @@ SUITE(boardactor){
 
 	TEST(getType){
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer);
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer);
 		CHECK(testactor.getType() == BOARDACTOR);
 	}
 
@@ -104,7 +104,7 @@ SUITE(boardactor){
 //	void setAnimation_Idle();
 	TEST(setAnimation){
 		Player testplayer("tester1", true);
-		BoardActor testactor(Coordinate(1,2), testplayer);
+		BoardActor testactor(Coordinate3D<int>(1,2,1), testplayer);
 
 		CHECK(testactor.isMoving() == false);
 		testactor.setAnimation_Moving();
@@ -128,10 +128,10 @@ SUITE(boardactor){
 
 	TEST(movepath_generation_toosmall){
 		Player testplayer("tester1", true);
-		Coordinate startloc(1,2);
+		Coordinate3D<int> startloc(1,2,1);
 		BoardActor testactor(startloc, testplayer);
 
-		std::vector<Coordinate> test_path;
+		std::vector<Coordinate3D<int>> test_path;
 		test_path.clear();
 
 		testactor.startMove(test_path);
@@ -140,7 +140,7 @@ SUITE(boardactor){
 		CHECK(testactor.isMoving() == false);
 		CHECK(testactor.getLocation() == startloc);
 
-		test_path.push_back(Coordinate(1,3));
+		test_path.push_back(Coordinate3D<int>(1,3,1));
 		testactor.startMove(test_path);
 		CHECK(testactor.isMoving() == false);
 		testactor.moveStep();
@@ -150,13 +150,13 @@ SUITE(boardactor){
 
 	TEST(movepath_generation_small){
 		Player testplayer("tester1", true);
-		Coordinate startloc(1,2);
+		Coordinate3D<int> startloc(1,2,1);
 		BoardActor testactor(startloc, testplayer);
 
-		std::vector<Coordinate> test_path;
+		std::vector<Coordinate3D<int>> test_path;
 		test_path.clear();
 
-		test_path.push_back(Coordinate(1,3));
+		test_path.push_back(Coordinate3D<int>(1,3,1));
 		test_path.push_back(startloc);
 
 		CHECK(testactor.getLocation() == startloc);
@@ -175,21 +175,21 @@ SUITE(boardactor){
 
 	TEST(movepath_generation_long){
 		Player testplayer("tester1", true);
-		Coordinate startloc(4,3);
+		Coordinate3D<int> startloc(4,3,1);
 		BoardActor testactor(startloc, testplayer);
 
 		std::vector<Coordinate> test_path;
 		test_path.clear();
 
-		test_path.push_back(Coordinate(0,0));
-		test_path.push_back(Coordinate(60,4000));
-		test_path.push_back(Coordinate(5,200));
-		test_path.push_back(Coordinate(0,4));
-		test_path.push_back(Coordinate(1,3));
-		test_path.push_back(Coordinate(1,2));
-		test_path.push_back(Coordinate(1,3));
-		test_path.push_back(Coordinate(2,3));
-		test_path.push_back(Coordinate(3,3));
+		test_path.push_back(Coordinate3D<int>(0,0,1));
+		test_path.push_back(Coordinate3D<int>(60,4000,1));
+		test_path.push_back(Coordinate3D<int>(5,200,1));
+		test_path.push_back(Coordinate3D<int>(0,4,1));
+		test_path.push_back(Coordinate3D<int>(1,3,1));
+		test_path.push_back(Coordinate3D<int>(1,2,1));
+		test_path.push_back(Coordinate3D<int>(1,3,1));
+		test_path.push_back(Coordinate3D<int>(2,3,1));
+		test_path.push_back(Coordinate3D<int>(3,3,1));
 		test_path.push_back(startloc);
 
 		CHECK(testactor.getLocation() == startloc);
@@ -209,13 +209,13 @@ SUITE(boardactor){
 //	void update();
 	TEST(update){
 		Player testplayer("tester1", true);
-		Coordinate startloc(4,3);
+		Coordinate3D<int> startloc(4,3,1);
 		BoardActor testactor(startloc, testplayer);
 
-		Frame idle1(ScreenCoordinate(.25,0), ScreenCoordinate(.5,1), .04);
-		Frame idle2(Frame(ScreenCoordinate(.75,0), ScreenCoordinate(1,1), .04));
-		Frame move1(Frame(ScreenCoordinate(0,0), ScreenCoordinate(.25,1), .04));
-		Frame move2(Frame(ScreenCoordinate(.5,0), ScreenCoordinate(.75,1), .04));
+		Frame idle1(Coordinate2D<double>(.25,0), Coordinate2D<double>(.5,1), .04);
+		Frame idle2(Frame(Coordinate2D<double>(.75,0), Coordinate2D<double>(1,1), .04));
+		Frame move1(Frame(Coordinate2D<double>(0,0), Coordinate2D<double>(.25,1), .04));
+		Frame move2(Frame(Coordinate2D<double>(.5,0), Coordinate2D<double>(.75,1), .04));
 
 		CHECK(testactor.getCurrentAnimationFrame() == idle1);
 		CHECK(testactor.getLocation() == startloc);
@@ -229,15 +229,15 @@ SUITE(boardactor){
 		std::vector<Coordinate> test_path;
 		test_path.clear();
 
-		test_path.push_back(Coordinate(0,0));
-		test_path.push_back(Coordinate(60,4000));
-		test_path.push_back(Coordinate(5,200));
-		test_path.push_back(Coordinate(1,4));
-		test_path.push_back(Coordinate(1,3));
-		test_path.push_back(Coordinate(1,1));
-		test_path.push_back(Coordinate(777777,1000000));
-		test_path.push_back(Coordinate(0,0));
-		test_path.push_back(Coordinate(99,0));
+		test_path.push_back(Coordinate3D<int>(0,0,1));
+		test_path.push_back(Coordinate3D<int>(60,4000,1));
+		test_path.push_back(Coordinate3D<int>(5,200,1));
+		test_path.push_back(Coordinate3D<int>(1,4,1));
+		test_path.push_back(Coordinate3D<int>(1,3,1));
+		test_path.push_back(Coordinate3D<int>(1,1,1));
+		test_path.push_back(Coordinate3D<int>(777777,1000000,1));
+		test_path.push_back(Coordinate3D<int>(0,0,1));
+		test_path.push_back(Coordinate3D<int>(99,0,1));
 		test_path.push_back(startloc);
 
 		CHECK(testactor.getLocation() == startloc);

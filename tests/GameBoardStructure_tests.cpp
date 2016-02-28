@@ -10,124 +10,132 @@ SUITE(GameBoardStructure){
 		std::cerr << "Testing GameBoardStructure\n";
 		int length = 20;
 		int width = 20;
+		int height = 20;
 
-		GameBoardStructure testboard(length, width);
+		GameBoardStructure testboard(length, width, height);
 		for(int i = 0; i < width; i++){
 			for(int j = 0; j < length; j++){
-				CHECK(testboard.getEnvironmentPiece(i,j).getLocation() == Coordinate(i,j));
+				for(int k = 0; k < height; k++){
+					CHECK(testboard.getEnvironmentPiece(i,j,k).getLocation() == Coordinate3D<int>(i,j,k));
+				}
 			}
 		}
 
 		CHECK(testboard.getLength() == length);
 		CHECK(testboard.getWidth() == width);
+		CHECK(testboard.getHeight() == height);
 	}
 
 	TEST(constructor_dimensions){
 		int length = 40;
 		int width = 30;
+		int height = 5;
 
 		GameBoardStructure testboard(length, width);
 		for(int i = 0; i < width; i++){
 			for(int j = 0; j < length; j++){
-				CHECK(testboard.getEnvironmentPiece(i,j).getLocation() == Coordinate(i,j));
+				for(int k =0; k < height; k++){
+					CHECK(testboard.getEnvironmentPiece(i,j,k).getLocation() == Coordinate3D<int>(i,j,k));
+				}
 			}
 		}
 
 		CHECK(testboard.getLength() == length);
 		CHECK(testboard.getWidth() == width);
+		CHECK(testboard.getHeight() == height);
 	}
 
 	TEST(openSpace){
-		GameBoardStructure testboard(3,3);
+		GameBoardStructure testboard(3,3,1);
 		Player testplayer("tester1", true);
-		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate(0,0), testplayer));
+		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate3D<int>(0,0,0), testplayer));
 
 		testboard.addActor(testact);
 
-		CHECK(testboard.openSpace(Coordinate(0,0)) == false);
-		testboard.removeActor(Coordinate(1,1));
-		CHECK(testboard.openSpace(Coordinate(1,1)) == true);
+		CHECK(testboard.openSpace(Coordinate3D<int>(0,0,0)) == false);
+		testboard.removeActor(Coordinate3D<int>(1,1,0));
+		CHECK(testboard.openSpace(Coordinate3D<int>(1,1,0)) == true);
 	}
 
 	TEST(inBounds){
 		//(length, width)
-		GameBoardStructure testboard(3,4);
+		GameBoardStructure testboard(3,4,2);
 		//(x,y)
-		CHECK(testboard.inBounds(Coordinate(0,0)) == true);
-		CHECK(testboard.inBounds(Coordinate(3,2)) == true);
-		CHECK(testboard.inBounds(Coordinate(1,1)) == true);
-		CHECK(testboard.inBounds(Coordinate(-1,-1)) == false);
-		CHECK(testboard.inBounds(Coordinate(4,3)) == false);
-		CHECK(testboard.inBounds(Coordinate(-1,2)) == false);
-		CHECK(testboard.inBounds(Coordinate(2,-1)) == false);
-		CHECK(testboard.inBounds(Coordinate(2,3)) == false);
-		CHECK(testboard.inBounds(Coordinate(4,2)) == false);
+		CHECK(testboard.inBounds(Coordinate3D<int>(0,0,1)) == true);
+		CHECK(testboard.inBounds(Coordinate3D<int>(3,2,1)) == true);
+		CHECK(testboard.inBounds(Coordinate3D<int>(1,1,1)) == true);
+		CHECK(testboard.inBounds(Coordinate3D<int>(-1,-1,1)) == false);
+		CHECK(testboard.inBounds(Coordinate3D<int>(4,3,1)) == false);
+		CHECK(testboard.inBounds(Coordinate3D<int>(-1,2,1)) == false);
+		CHECK(testboard.inBounds(Coordinate3D<int>(2,-1,1)) == false);
+		CHECK(testboard.inBounds(Coordinate3D<int>(2,3,1)) == false);
+		CHECK(testboard.inBounds(Coordinate3D<int>(4,2,1)) == false);
 	}
 
 	TEST(actorExists){
-		GameBoardStructure testboard(3,3);
+		GameBoardStructure testboard(3,3,1);
 		Player testplayer("tester1", true);
-		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate(1,0), testplayer));
+		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate3D<int>(1,0,0), testplayer));
 		testboard.addActor(testact);
 
-		CHECK(testboard.actorExists(Coordinate(1,0)) == true);
-		CHECK(testboard.actorExists(Coordinate(0,1)) == false);
+		CHECK(testboard.actorExists(Coordinate3D<int>(1,0,0)) == true);
+		CHECK(testboard.actorExists(Coordinate3D<int>(0,1,0)) == false);
 	}
 
 	TEST(addActor){
-		GameBoardStructure testboard(3,3);
+		GameBoardStructure testboard(3,3,1);
 		Player testplayer("tester1", true);
-		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate(1,0), testplayer));
+		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate3D<int>(1,0,0), testplayer));
 		CHECK(testboard.addActor(testact) == true);
 		CHECK(testboard.addActor(testact) == false);
 
 	}
 
 	TEST(removeActor){
-		GameBoardStructure testboard(3,3);
+		GameBoardStructure testboard(3,3,1);
 		Player testplayer("tester1", true);
-		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate(0,0), testplayer));
+		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate3D<int>(0,0,0), testplayer));
 		testboard.addActor(testact);
-		CHECK(testboard.actorExists(Coordinate(0,0)) == true);
-		testboard.removeActor(Coordinate(0,0));
-		CHECK(testboard.actorExists(Coordinate(0,0)) == false);
+		CHECK(testboard.actorExists(Coordinate3D<int>(0,0,0)) == true);
+		testboard.removeActor(Coordinate3D<int>(0,0,0));
+		CHECK(testboard.actorExists(Coordinate3D<int>(0,0,0)) == false);
 	}
 
 	TEST(moveActor){
-		GameBoardStructure testboard(3,3);
+		GameBoardStructure testboard(3,3,1);
 		Player testplayer("tester1", true);
-		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate(0,0), testplayer));
+		std::shared_ptr<BoardActor> testact(new BoardActor(Coordinate3D<int>(0,0,0), testplayer));
 		testboard.addActor(testact);
-		CHECK(testboard.actorExists(Coordinate(0,0)) == true);
-		CHECK(testboard.actorExists(Coordinate(1,1)) == false);
-		CHECK(testboard.getActor(0,0)->getLocation() == Coordinate(0,0));
+		CHECK(testboard.actorExists(Coordinate3D<int>(0,0,0)) == true);
+		CHECK(testboard.actorExists(Coordinate3D<int>(1,1,0)) == false);
+		CHECK(testboard.getActor(0,0)->getLocation() == Coordinate3D<int>(0,0,0));
 
-		CHECK(testboard.moveActor(Coordinate(0,0), Coordinate(1,1)) == true);
-		CHECK(testboard.actorExists(Coordinate(0,0)) == false);
-		CHECK(testboard.actorExists(Coordinate(1,1)) == true);
-		CHECK(testboard.getActor(1,1)->getLocation() == Coordinate(1,1));
+		CHECK(testboard.moveActor(Coordinate3D<int>(0,0,0), Coordinate3D<int>(1,1,0)) == true);
+		CHECK(testboard.actorExists(Coordinate3D<int>(0,0,0)) == false);
+		CHECK(testboard.actorExists(Coordinate3D<int>(1,1,0)) == true);
+		CHECK(testboard.getActor(1,1)->getLocation() == Coordinate3D<int>(1,1,0));
 
-		CHECK(testboard.moveActor(Coordinate(1,1), Coordinate(1,2)) == true);
-		CHECK(testboard.actorExists(Coordinate(1,1)) == false);
-		CHECK(testboard.actorExists(Coordinate(1,2)) == true);
-		CHECK(testboard.getActor(1,2)->getLocation() == Coordinate(1,2));
+		CHECK(testboard.moveActor(Coordinate3D<int>(1,1,0), Coordinate3D<int>(1,2,0)) == true);
+		CHECK(testboard.actorExists(Coordinate3D<int>(1,1,0)) == false);
+		CHECK(testboard.actorExists(Coordinate3D<int>(1,2,0)) == true);
+		CHECK(testboard.getActor(1,2,0)->getLocation() == Coordinate3D<int>(1,2,0));
 
-		CHECK(testboard.moveActor(Coordinate(1,2), Coordinate(1,1)) == true);
-		CHECK(testboard.actorExists(Coordinate(1,2)) == false);
-		CHECK(testboard.actorExists(Coordinate(1,1)) == true);
-		CHECK(testboard.getActor(1,1)->getLocation() == Coordinate(1,1));
+		CHECK(testboard.moveActor(Coordinate3D<int>(1,2,0), Coordinate3D<int>(1,1,0)) == true);
+		CHECK(testboard.actorExists(Coordinate3D<int>(1,2,0)) == false);
+		CHECK(testboard.actorExists(Coordinate3D<int>(1,1,0)) == true);
+		CHECK(testboard.getActor(1,1)->getLocation() == Coordinate3D<int>(1,1,0));
 
-		CHECK(testboard.moveActor(Coordinate(0,1), Coordinate(1,0)) == false);
+		CHECK(testboard.moveActor(Coordinate3D<int>(0,1,0), Coordinate3D<int>(1,0,0)) == false);
 	}
 
-	bool test_addEffect(const Coordinate& s_loc, std::unique_ptr<Effect>& effect, GameBoardStructure& test_board, int curr_effect_num){
+	bool test_addEffect(const Coordinate3D<int>& s_loc, std::unique_ptr<Effect>& effect, GameBoardStructure& test_board, int curr_effect_num){
 		CHECK(test_board.numEffects(s_loc) == curr_effect_num);
 		if(curr_effect_num > 0){
 			CHECK(test_board.effectsExist(s_loc) == true);
 		}else{
 			CHECK(test_board.effectsExist(s_loc) == false);
 		}
-		test_board.addEffect(effect);
+		test_board.addBoardEffect(effect);
 		CHECK(test_board.effectsExist(s_loc) == true);
 		CHECK(test_board.numEffects(s_loc) == curr_effect_num+1);
 		if(test_board.numEffects(s_loc) == curr_effect_num+1){
@@ -144,8 +152,9 @@ SUITE(GameBoardStructure){
 //	bool effectsExist(const Coordinate& loc) const;
 //	bool addEffect(std::unique_ptr<Effect>& new_effect);
 	TEST(add_get_move_effects){
-		GameBoardStructure test_board(3,3);
-		std::vector<Coordinate> s_loc = {Coordinate(1,2), Coordinate(0,2), Coordinate(0,2), Coordinate(-1,3)};
+		GameBoardStructure test_board(3,3,1);
+		std::vector<Coordinate3D<int>> s_loc = {Coordinate3D<int>(1,2,0), Coordinate3D<int>(0,2,0),
+				Coordinate3D<int>(0,2,0), Coordinate3D<int>(-1,3,0)};
 
 		CHECK(test_board.getEffects().size() == 0);
 
@@ -164,7 +173,7 @@ SUITE(GameBoardStructure){
 		tmp_effect.reset(new Effect(Util::coordToScreen(s_loc[3])));
 		CHECK(test_board.effectsExist(s_loc[3]) == false);
 		CHECK(test_board.numEffects(s_loc[3]) == 0);
-		test_board.addEffect(tmp_effect);
+		test_board.addBoardEffect(tmp_effect);
 		CHECK(test_board.effectsExist(s_loc[3]) == false);
 		CHECK(test_board.numEffects(s_loc[3]) == 0);
 
@@ -182,15 +191,16 @@ SUITE(GameBoardStructure){
 	}
 
 	TEST(update_movingeffect){
-		GameBoardStructure test_board(3,3);
-		std::vector<Coordinate> path = {Coordinate(0,0), Coordinate(0,1), Coordinate(0,2), Coordinate(1,2), Coordinate(0,1)};
+		GameBoardStructure test_board(3,3,1);
+		std::vector<Coordinate3D<int>> path = {Coordinate3D<int>(0,0,0), Coordinate3D<int>(0,1,0),
+				Coordinate3D<int>(0,2,0), Coordinate3D<int>(1,2,0), Coordinate3D<int>(0,1,0)};
 
 		std::vector<ScreenCoordinate> test_path = {Util::coordToScreen(path[4]), Util::coordToScreen(path[3]),
 				Util::coordToScreen(path[2]), Util::coordToScreen(path[1])};
 
 		std::unique_ptr<Effect> tmp_effect(new MovingEffect(Util::coordToScreen(path[0]), test_path));
 		MovingEffect& test_effect = (MovingEffect&)(*tmp_effect);
-		test_board.addEffect(tmp_effect);
+		test_board.addBoardEffect(tmp_effect);
 
 
 		test_effect.startMove();

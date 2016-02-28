@@ -8,22 +8,22 @@ SUITE(BoardPiece){
 	{
 		std::cerr << "Testing BoardPiece\n";
 		BoardPiece testpiece;
-		CHECK(testpiece.getLocation() == Coordinate(-1,-1));
+		CHECK(testpiece.getLocation() == Coordinate3D<int>(-1,-1,-1));
 	}
 
 	TEST(boardpiece_constructor_coord){
-		BoardPiece testpiece(Coordinate(1,2));
-		CHECK(testpiece.getLocation() == Coordinate(1,2));
+		BoardPiece testpiece(Coordinate3D<int>(1,2,1));
+		CHECK(testpiece.getLocation() == Coordinate3D<int>(1,2,1));
 	}
 
 	TEST(boardpiece_hitpoint_constructors){
-		BoardPiece testpiece(Coordinate(1,2), 100);
-		CHECK(testpiece.getLocation() == Coordinate(1,2));
+		BoardPiece testpiece(Coordinate3D<int>(1,2,1), 100);
+		CHECK(testpiece.getLocation() == Coordinate3D<int>(1,2,1));
 		CHECK(testpiece.getMaxHealth() == 100);
 		CHECK(testpiece.getCurrentHealth() == 100);
 
 		BoardPiece testpiece_2(100);
-		CHECK(testpiece_2.getLocation() == Coordinate(-1,-1));
+		CHECK(testpiece_2.getLocation() == Coordinate3D<int>(-1,-1,-1));
 		CHECK(testpiece_2.getMaxHealth() == 100);
 		CHECK(testpiece_2.getCurrentHealth() == 100);
 	}
@@ -62,7 +62,7 @@ SUITE(BoardPiece){
 		g_b.addFrame(green);
 		g_b.addFrame(black);
 
-		BoardPiece testpiece(Coordinate(1,2));
+		BoardPiece testpiece(Coordinate3D<int>(1,2,1));
 
 		testpiece.setAnimation(r_b);
 		CHECK(testpiece.getCurrentAnimationFrame() == red);
@@ -99,7 +99,7 @@ SUITE(BoardPiece){
 		r_b.addFrame(red);
 		r_b.addFrame(black);
 
-		BoardPiece testpiece(Coordinate(1,2));
+		BoardPiece testpiece(Coordinate3D<int>(1,2,1));
 
 		testpiece.setAnimation(r_b);
 		CHECK(testpiece.getCurrentAnimationFrame() == red);

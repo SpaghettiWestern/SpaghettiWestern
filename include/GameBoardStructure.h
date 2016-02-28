@@ -34,7 +34,7 @@ private:
 	void updateEffects();
 
 public:
-	GameBoardStructure(int length, int width);
+	GameBoardStructure(int length, int width, int height);
 	GameBoardStructure(const GameBoardStructure& other);
 	GameBoardStructure& operator=(const GameBoardStructure& other);
 

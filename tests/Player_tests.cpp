@@ -22,9 +22,9 @@ SUITE(Player){
 		CHECK(testplayer.getName().compare("tester1") == 0);
 		CHECK(testplayer.isHuman() == true);
 
-		testplayer.createActor(Coordinate(0,0));
+		testplayer.createActor(Coordinate3D<int>(0,0,0));
 		const BoardActor& testact = testplayer.getActor(0);
-		CHECK(testact.getLocation() == Coordinate(0,0));
+		CHECK(testact.getLocation() == Coordinate3D<int>(0,0,0));
 		CHECK(testact.getCurrentHealth() == -1);
 		CHECK(testact.getMaxHealth() == -1);
 	}
@@ -34,9 +34,9 @@ SUITE(Player){
 		CHECK(testplayer.getName().compare("tester1") == 0);
 		CHECK(testplayer.isHuman() == true);
 
-		testplayer.createActor(Coordinate(0,0), 28);
+		testplayer.createActor(Coordinate3D<int>(0,0,0), 28);
 		const BoardActor& testact = testplayer.getActor(0);
-		CHECK(testact.getLocation() == Coordinate(0,0));
+		CHECK(testact.getLocation() == Coordinate3D<int>(0,0,0));
 		CHECK(testact.getCurrentHealth() == 28);
 		CHECK(testact.getMaxHealth() == 28);
 	}
@@ -47,11 +47,11 @@ SUITE(Player){
 		CHECK(testplayer.isHuman() == true);
 
 		CHECK(testplayer.actorExists(0) == false);
-		testplayer.createActor(Coordinate(0,0), 28);
+		testplayer.createActor(Coordinate3D<int>(0,0,0), 28);
 		CHECK(testplayer.actorExists(0) == true);
 
 		CHECK(testplayer.actorExists(1) == false);
-		testplayer.createActor(Coordinate(0,0), 28);
+		testplayer.createActor(Coordinate3D<int>(0,0,0), 28);
 		CHECK(testplayer.actorExists(1) == true);
 		CHECK(testplayer.actorExists(0) == true);
 	}
@@ -63,13 +63,13 @@ SUITE(Player){
 
 		CHECK(testplayer.deleteActor(0) == false);
 		CHECK(testplayer.deleteActor(-1) == false);
-		testplayer.createActor(Coordinate(0,0), 28);
+		testplayer.createActor(Coordinate3D<int>(0,0,0), 28);
 		CHECK(testplayer.actorExists(0) == true);
 		CHECK(testplayer.deleteActor(0) == true);
 		CHECK(testplayer.actorExists(0) == false);
 
-		testplayer.createActor(Coordinate(0,0), 28);
-		testplayer.createActor(Coordinate(0,0), 28);
+		testplayer.createActor(Coordinate3D<int>(0,0,0), 28);
+		testplayer.createActor(Coordinate3D<int>(0,0,0), 28);
 		CHECK(testplayer.actorExists(1) == true);
 		CHECK(testplayer.deleteActor(1) == true);
 		CHECK(testplayer.actorExists(1) == false);

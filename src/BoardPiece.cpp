@@ -1,7 +1,7 @@
 #include "BoardPiece.h"
 
 BoardPiece::BoardPiece(){
-	location = Coordinate(-1,-1);
+	location = Coordinate3D<int>(-1,-1,-1);
 	resetScreenLocation();
 	initAnimations();
 	max_hitpoints = -1;

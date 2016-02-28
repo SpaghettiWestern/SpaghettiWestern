@@ -1,13 +1,13 @@
 #include "GameBoardStructure.h"
 
-GameBoardStructure::GameBoardStructure(int length, int width){
+GameBoardStructure::GameBoardStructure(int length, int width, int height){
 	if(length < 0 || width < 0){
 		length = 0;
 		width = 0;
 	}
 	this->length = length;
 	this->width = width;
-	this->height = 1;
+	this->height = height;
 	initEnvironment();
 	initActors();
 }

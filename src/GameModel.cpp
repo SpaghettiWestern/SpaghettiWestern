@@ -1,11 +1,13 @@
 #include "GameModel.h"
 
-GameModel::GameModel(int board_length, int board_width) : board(GameBoard(board_length, board_width)){
+GameModel::GameModel(int board_length, int board_width,int board_height) :
+	board(GameBoard(board_length, board_width, board_height)){
+
 	players.clear();
 }
 
-GameModel::GameModel(int board_length, int board_width, std::vector<std::pair<std::string,bool>> init_players) :
-		board(GameBoard(board_length, board_width)){
+GameModel::GameModel(int board_length, int board_width, int board_height, std::vector<std::pair<std::string,bool>> init_players) :
+		board(GameBoard(board_length, board_width, board_height)){
 
 	players.clear();
 	for (unsigned int i = 0; i < init_players.size(); i++){
