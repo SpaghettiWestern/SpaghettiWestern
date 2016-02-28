@@ -19,23 +19,33 @@ Coordinate3D<double> GameView::getLookAtCoordinate() const
 }
 
 
-Coordinate2D<int> GameView::getRearColumn() const
+Coordinate2D<int> GameView::getRearColumn(int width, int length) const
 {
+	Coordinate2D<int> rearColumn;
+
 	switch(viewAngleOrientation.getOrientation())
 	{
 	case 0:
-		return Coordinate2D<int>(0, 0);
+		rearColumn.set(0,0);
+		break;
 	case 1:
-		return Coordinate2D<int>(0, 1);
+		rearColumn.set(0, 1);
+		break;
 	case 2:
-		return Coordinate2D<int>(1, 1);
+		rearColumn.set(1, 1);
+		break;
 	case 3:
-		return Coordinate2D<int>(1, 0);
+		rearColumn.set(1, 0);
+		break;
 	default:
 		// Serious error!
 		break;
 	};
-	return Coordinate2D<int>();
+
+	rearColumn.x *= width - 1;
+	rearColumn.y *= length - 1;
+
+	return rearColumn;
 }
 
 
@@ -61,29 +71,29 @@ Coordinate2D<int> GameView::getDiagonalTraversalVector() const
 
 void GameView::scrollRight(double amount)
 {
-	lookAtCoordinate.x -= amount;
-	lookAtCoordinate.y += amount;
+	lookAtCoordinate.x += amount;
+	lookAtCoordinate.y -= amount;
 }
 
 
 void GameView::scrollLeft(double amount)
 {
-	lookAtCoordinate.x += amount;
-	lookAtCoordinate.y -= amount;
+	lookAtCoordinate.x -= amount;
+	lookAtCoordinate.y += amount;
 }
 
 
 void GameView::scrollUp(double amount)
 {
-	lookAtCoordinate.x += amount;
-	lookAtCoordinate.y += amount;
+	lookAtCoordinate.x -= amount;
+	lookAtCoordinate.y -= amount;
 }
 
 
 void GameView::scrollDown(double amount)
 {
-	lookAtCoordinate.x -= amount;
-	lookAtCoordinate.y -= amount;
+	lookAtCoordinate.x += amount;
+	lookAtCoordinate.y += amount;
 }
 
 

@@ -7,7 +7,7 @@
 
 class GameView{
 private:
-	double ZOOM_MAX = 4.;
+	double ZOOM_MAX = 6.;
 	double ZOOM_MIN = 0.10;
 
 	Coordinate3D<double> lookAtCoordinate;
@@ -19,7 +19,7 @@ public:
 	double getZoom() const;
 	Coordinate3D<double> getLookAtCoordinate() const;
 
-	// methods that change the view
+	// functions that change the view
 	void scrollRight(double amount);
 	void scrollLeft(double amount);
 	void scrollUp(double amount);
@@ -34,8 +34,8 @@ public:
 	void rotateViewAngleCounterClockwise();
 	void resetViewAngle();
 
-	// rendering info
-	Coordinate2D<int> getRearColumn() const;
+	// rendering functions
+	Coordinate2D<int> getRearColumn(int width, int length) const;
 	Coordinate2D<int> getDiagonalTraversalVector() const;
 };
 

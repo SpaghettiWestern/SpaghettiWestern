@@ -16,7 +16,7 @@ public:
 		: orientation(0) {}
 	inline int getOrientation() const { return orientation; }
 	inline void rotateClockwise() { orientation = (orientation + 1)%4; }
-	inline void rotateCounterClockwise() { orientation = (orientation - 1)%4; }
+	inline void rotateCounterClockwise() { orientation = (orientation == 0)? 3 : (orientation - 1)%4; }
 	inline void rotate(int rotation) { orientation = (orientation + rotation)%4; }
 	inline void reset() { orientation = 0; }
 

@@ -20,6 +20,12 @@ public:
 		: x(u), y(v) {}
 	Coordinate2D(const Coordinate2D &other)
 		: x(other.x), y(other.y){}
+
+	void set(T x, T y)
+	{
+		this->x = x;
+		this->y = y;
+	}
 };
 
 
@@ -36,6 +42,13 @@ public:
 		: x(other.x), y(other.y), z(other.z) {}
 	Coordinate3D(const Coordinate2D<T> &other, T w)
 		: x(other.x), y(other.y), z(w) {}
+
+	void set(T x, T y, T z)
+		{
+			this->x = x;
+			this->y = y;
+			this->z = z;
+		}
 };
 
 

@@ -11,13 +11,11 @@ void Renderer::render(){
 
 	int dx, dy;
 	const GameBoardStructure &board = model.getGameBoard().getBoard();
-	Coordinate2D<int> startColumn = view.getRearColumn();
+	Coordinate2D<int> startColumn = view.getRearColumn(board.getWidth(), board.getLength());
 	Coordinate2D<int> traverseVector = view.getDiagonalTraversalVector();
-	//dx = -1;
-	//dy = 1;
 	dx = traverseVector.x;
 	dy = traverseVector.y;
-	Coordinate startCoord(startColumn.x * (board.getWidth() - 1), startColumn.y * (board.getLength() - 1));
+	Coordinate startCoord(startColumn.x, startColumn.y);
 
 	for (; board.inBounds(startCoord); startCoord.first -= dx)
 	{
