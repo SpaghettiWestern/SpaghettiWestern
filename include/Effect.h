@@ -9,6 +9,7 @@ enum effect_type {EFFECT, MOVINGEFFECT, ATTACKEFFECT};
 class Effect {
 private:
 	void initAnimation();
+	void deepCopy(const Effect& other);
 
 protected:
 	Coordinate2D<double> loc;
@@ -18,6 +19,9 @@ public:
 	Effect();
 	Effect(Coordinate2D<double> loc);
 	Effect(Coordinate2D<double> loc, Animation animation);
+	Effect(const Effect& other);
+
+	Effect& operator=(const Effect& other);
 
 	Coordinate2D<double> getScreenLocation() const;
 	void setScreenLocation(const Coordinate2D<double>& new_loc);

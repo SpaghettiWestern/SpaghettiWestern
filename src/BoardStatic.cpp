@@ -16,6 +16,19 @@ BoardStatic::BoardStatic(Coordinate3D<int> loc, bool traversable, int hitpoints)
 	initAnimations();
 }
 
+BoardStatic::BoardStatic(const BoardStatic& other) : BoardPiece((const BoardPiece&) other){
+	deepCopy(other);
+}
+
+BoardStatic& BoardStatic::operator=(const BoardStatic& other){
+	BoardPiece::operator=((const BoardPiece&) other);
+	deepCopy(other);
+	return *this;
+}
+
+void BoardStatic::deepCopy(const BoardStatic& other){
+	traversable = other.traversable;
+}
 
 void BoardStatic::initAnimations(){
 	animations.clear();

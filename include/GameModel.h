@@ -26,6 +26,7 @@ public:
 	bool playerExists(int index) const;
 	const Player& getPlayer(int index) const;
 
+
 	bool createActor(Coordinate3D<int> loc, int owner_index, int hitpoints);
 	bool createActor(Coordinate3D<int> loc, int owner_index, int hitpoints, Attack attack);
 

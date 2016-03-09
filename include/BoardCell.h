@@ -1,7 +1,6 @@
 #ifndef BOARDSPACE_H
 #define BOARDSPACE_H
 #include "Coordinate.h"
-#include "BoardCell.h"
 #include "BoardPiece.h"
 #include "BoardActor.h"
 #include "BoardStatic.h"
@@ -10,9 +9,13 @@
 #include "BoardDecoration.h"
 #include "Effect.h"
 
+#include <memory>
+
 class BoardCell {
 public:
 	BoardCell(Coordinate3D<int> location);
+	BoardCell(const BoardCell& other);
+	BoardCell& operator=(const BoardCell& other);
 
 	bool isTraversable() const;
 	bool actorExists() const;
@@ -20,34 +23,42 @@ public:
 	bool addEffect(std::unique_ptr<Effect>& effect);
 	bool setActor(std::shared_ptr<BoardActor>& actor);
 	bool setFloor(std::unique_ptr<BoardFloor>& floor);
-	bool setWall(std::unique_ptr<BoardWall>& wall, WallEdge edge);
+	bool setWall(std::unique_ptr<BoardWall>& wall, BoardWall::WallEdge edge);
 	bool addObject(std::unique_ptr<BoardStatic>& objects);
 	bool addDecoration(std::unique_ptr<BoardDecoration>& decoration);
 
 	bool removeActor();
-	std::shared_ptr<BoardActor>& getActor();
 
-	std::vector<std::unique_ptr<BoardStatic>>& getObjects();
-	std::vector<std::shared_ptr<BoardCell>>& getNeighbors();
+	unsigned int getNumNeighbors() const;
+	unsigned int getNumEffects() const;
+	unsigned int getNumObjects() const;
+	unsigned int getNumDecorations() const;
 
-	std::unique_ptr<BoardFloor>& getFloor();
-	std::shared_ptr<BoardActor>& getActor();
-	std::unique_ptr<BoardWall>& getWall(WallEdge edge);
+	const BoardActor& getActor() const;
+	const BoardCell& getNeighbor(int index) const;
+	const BoardFloor& getFloor() const;
+	const BoardWall& getWall(BoardWall::WallEdge edge) const;
+	const Effect& getEffect(int index) const;
+	const BoardStatic& getObject(int index) const;
+	const BoardDecoration& getDecoration(int index) const;
+	int getRoomTag() const;
 
-	std::vector<std::unique_ptr<Effect>>& getEffects();
-	std::vector<std::unique_ptr<BoardStatic>>& getObjects();
-	std::vector<std::unique_ptr<BoardDecoration>>& getDecorations();
+	std::shared_ptr<BoardActor> getActorPointer();
 
-	Coordinate3D<int> getLocation();
+	bool receiveAttack(const Attack& attack);
+
+	Coordinate3D<int> getLocation() const;
 
 	bool update();
 
 private:
+	void deepCopy(const BoardCell& other);
+
 	Coordinate3D<int> location;
 
 	std::vector<std::shared_ptr<BoardCell>> neighbors;
 
-	std::unique_ptr<BoardFloor> floor;
+	std::unique_ptr<BoardFloor> boardfloor;
 	std::shared_ptr<BoardActor> actor;
 	std::unique_ptr<BoardWall> walls[4];
 

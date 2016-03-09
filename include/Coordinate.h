@@ -20,6 +20,22 @@ public:
 		: x(u), y(v), z(w) {}
 	Coordinate3D(const Coordinate3D<T> &other)
 		: x(other.x), y(other.y), z(other.z) {}
+	Coordinate3D<T>& operator=(const Coordinate3D<T> &other){
+		x = other.x;
+		y = other.y;
+		z = other.z;
+		return *this;
+	}
+	bool operator==(const Coordinate3D<T>& rhs) const{
+		return x == rhs.x && y == rhs.y && z == rhs.z;
+	}
+	bool operator!=(const Coordinate3D<T>& rhs) const{
+		return !(*this == rhs);
+	}
+
+	bool operator<(const Coordinate3D<T> &rhs) const{
+		return x+y+z < rhs.x+rhs.y+rhs.z;
+	}
 };
 
 
@@ -34,6 +50,20 @@ public:
 		: x(u), y(v) {}
 	Coordinate2D(const Coordinate2D &other)
 		: x(other.x), y(other.y){}
+	Coordinate2D<T>& operator=(const Coordinate2D<T> &other){
+		x = other.x;
+		y = other.y;
+		return *this;
+	}
+	bool operator==(const Coordinate2D<T>& rhs) const{
+		return x == rhs.x && y == rhs.y;
+	}
+	bool operator!=(const Coordinate2D<T>& rhs) const{
+		return !(*this == rhs);
+	}
+	bool operator<(const Coordinate2D<T> &rhs) const{
+		return x+y < rhs.x+rhs.y;
+	}
 };
 
 

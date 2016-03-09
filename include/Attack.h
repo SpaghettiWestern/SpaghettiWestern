@@ -8,8 +8,14 @@ private:
 	double spread;
 	double speed;
 
+	void deepCopy(const Attack& other);
+
 public:
 	Attack(int damage = 0, double accuracy = 0.0, double spread = 0.0, double speed = 0.01);
+	Attack(const Attack& other);
+
+	Attack& operator=(const Attack& other);
+
 	int getDamage() const;
 	double getAccuracy() const;
 	double getSpread() const;

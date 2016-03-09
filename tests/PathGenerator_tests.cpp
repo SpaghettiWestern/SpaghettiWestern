@@ -85,7 +85,8 @@ SUITE(PathGenerator){
 
 		int x = 0;
 		for(int y = 1; y < length-1; y+=2){
-			test_board->addActor(std::make_shared<BoardActor>(Coordinate3D<int>(x, y,0), test_player));
+			std::shared_ptr<BoardActor> actor = std::make_shared<BoardActor>(Coordinate3D<int>(x,y,0), test_player);
+			test_board->addActor(actor);
 			if(x)
 				x--;
 			else
@@ -110,10 +111,12 @@ SUITE(PathGenerator){
 		CHECK(test_pathgen.findPath(Coordinate3D<int>(0,0,0), Coordinate3D<int>(-1,-1,0)) == false);
 
 		for(int x = 1, y = 8; x < width && y > -1; x++, y--){
-			test_board->addActor(std::make_shared<BoardActor>(Coordinate3D<int>(x,y,0), test_player));
+			std::shared_ptr<BoardActor> actor = std::make_shared<BoardActor>(Coordinate3D<int>(x,y,0), test_player);
+			test_board->addActor(actor);
 		}
 		for(int y = 9; y > 5; y--){
-			test_board->addActor(std::make_shared<BoardActor>(Coordinate3D<int>(8,y,0), test_player));
+			std::shared_ptr<BoardActor> actor = std::make_shared<BoardActor>(Coordinate3D<int>(8,y,0), test_player);
+			test_board->addActor(actor);
 		}
 		Coordinate3D<int> start(0,0,0);
 		Coordinate3D<int> end(9,9,0);

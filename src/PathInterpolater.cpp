@@ -4,6 +4,20 @@ PathInterpolater::PathInterpolater(){
 	out_path.clear();
 }
 
+PathInterpolater::PathInterpolater(const PathInterpolater& other){
+	deepCopy(other);
+}
+
+PathInterpolater& PathInterpolater::operator=(const PathInterpolater& other){
+	deepCopy(other);
+	return *this;
+}
+
+void PathInterpolater::deepCopy(const PathInterpolater& other){
+	out_path = other.out_path;
+}
+
+
 void PathInterpolater::generatePath(const Coordinate2D<double>& start, const Coordinate2D<double>& dest, double speed){
 	out_path.clear();
 
@@ -19,7 +33,7 @@ void PathInterpolater::generatePath(const Coordinate2D<double>& start, const Coo
 
 	out_path.push_back(dest);
 	for(double dist_traveled = 0; dist_traveled < dist-speed; dist_traveled+=speed){
-		ScreenCoordinate loc(out_path.back().x-x_step, out_path.back().y-y_step);
+		Coordinate2D<double> loc(out_path.back().x-x_step, out_path.back().y-y_step);
 		out_path.push_back(loc);
 	}
 	out_path.push_back(start);

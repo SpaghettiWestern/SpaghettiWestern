@@ -1,16 +1,17 @@
 #include "BoardActor.h"
+#include "Player.h"
 
 BoardActor::BoardActor(Coordinate3D<int> loc, Player& owner) :
 		BoardPiece(loc, -1), owner(owner){
 	move_speed = 5;
-	destination = Coordinate(-1,-1);
+	destination = Coordinate3D<int>(-1,-1,-1);
 	initAnimations();
 }
 
 BoardActor::BoardActor(Coordinate3D<int> loc, Player& owner, int hitpoints) :
 		BoardPiece(loc, hitpoints), owner(owner){
 	move_speed = 5;
-	destination = Coordinate(-1,-1);
+	destination = Coordinate3D<int>(-1,-1,-1);
 	initAnimations();
 }
 
@@ -18,15 +19,30 @@ BoardActor::~BoardActor(){
 	BlitHelper::unloadImageGL(spriteSheet);
 }
 
+BoardActor& BoardActor::operator=(const BoardActor& other){
+	BoardPiece::operator=((const BoardPiece&) other);
+	deepCopy(other);
+}
+
+void BoardActor::deepCopy(const BoardActor& other){
+	owner = other.owner;
+
+	move_path = other.move_path;
+	move_path_index = other.move_path_index;
+	destination = other.destination;
+
+	move_speed = other.move_speed;
+}
+
 void BoardActor::initAnimations(){
 	animations.clear();
 	animations.push_back(Animation());
 	animations.push_back(Animation());
 
-	animations[0].addFrame(Frame(ScreenCoordinate(.25,0), ScreenCoordinate(.5,1), .04)); //idle
-	animations[0].addFrame(Frame(ScreenCoordinate(.75,0), ScreenCoordinate(1,1), .04)); //idle
-	animations[1].addFrame(Frame(ScreenCoordinate(0,0), ScreenCoordinate(.25,1), .04)); //moving
-	animations[1].addFrame(Frame(ScreenCoordinate(.5,0), ScreenCoordinate(.75,1), .04)); //moving
+	animations[0].addFrame(Frame(Coordinate2D<double>(.25,0), Coordinate2D<double>(.5,1), .04)); //idle
+	animations[0].addFrame(Frame(Coordinate2D<double>(.75,0), Coordinate2D<double>(1,1), .04)); //idle
+	animations[1].addFrame(Frame(Coordinate2D<double>(0,0), Coordinate2D<double>(.25,1), .04)); //moving
+	animations[1].addFrame(Frame(Coordinate2D<double>(.5,0), Coordinate2D<double>(.75,1), .04)); //moving
 
 	spriteSheet = BlitHelper::loadImageGL("C:\\Users\\banan\\workspace\\SpaghettiWestern\\Resources\\adude.bmp");
 
@@ -37,7 +53,7 @@ bool BoardActor::isMoving() const{
 	return active_animation == 1;
 }
 
-void BoardActor::generateMovePath(Coordinate start, Coordinate end){
+void BoardActor::generateMovePath(Coordinate3D<int> start, Coordinate3D<int> end){
 	Coordinate2D<double> final_pos = Util::coordToScreen(end);
 	Coordinate2D<double> start_pos = Util::coordToScreen(start);
 	double x_step = (final_pos.x - start_pos.x)/(float)move_speed;
@@ -84,7 +100,7 @@ void BoardActor::setAnimation_Idle(){
 	}
 }
 
-void BoardActor::startMove(std::vector<Coordinate3D<int>> path){
+void BoardActor::startMove(std::vector<Coordinate3D<int>>& path){
 	setAnimation_Moving();	//start moving
 	generateMovePath(path);
 }
@@ -110,7 +126,7 @@ Coordinate3D<int> BoardActor::getNextStep() const{
 	if(!move_path.empty() && isMoving()){
 		return Util::screenToCoord(move_path.back());
 	}
-	return Coordinate3D<int>(-1,-1);
+	return Coordinate3D<int>(-1,-1,-1);
 }
 
 const Coordinate3D<int>& BoardActor::getDestination() const{

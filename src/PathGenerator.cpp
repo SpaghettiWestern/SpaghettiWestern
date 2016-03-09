@@ -2,8 +2,8 @@
 
 PathGenerator::PathGenerator(std::shared_ptr<GameBoardStructure>& board) : board(board){
 	resetSets();
-	curr = Coordinate(-1,-1);
-	end = Coordinate(-1,-1);
+	curr = Coordinate3D<int>(-1,-1,-1);
+	end = Coordinate3D<int>(-1,-1,-1);
 }
 
 void PathGenerator::resetSets(){
@@ -23,10 +23,9 @@ int PathGenerator::estimateDistance(const Coordinate3D<int>& start, const Coordi
 }
 
 void PathGenerator::traverseNeighbors(){
-	std::vector<std::unique_ptr<BoardCell>>& neighbors = board->getCell(curr)->getNeighbors();
-
-	for(unsigned int i = 0; i < neighbors.size(); i++){
-		traverseNeighbor(neighbors[i]->getLocation());
+	const BoardCell& currCell =  board->getEnvironmentCell(curr);
+	for(unsigned int i = 0; i < currCell.getNumNeighbors(); i++){
+		traverseNeighbor(currCell.getNeighbor(i).getLocation());
 	}
 }
 
@@ -109,7 +108,7 @@ CoordinateComparison::CoordinateComparison(){
 
 }
 
-bool CoordinateComparison::operator() (const distanceCoordinate& lhs, const distanceCoordinate &rhs) const {
+bool CoordinateComparison::operator() (const distanceCoordinate& lhs, const distanceCoordinate& rhs) const {
 	if(lhs.f_score > rhs.f_score)
 		return true;
 	return false;

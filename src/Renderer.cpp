@@ -33,22 +33,18 @@ void Renderer::render(const GameBoardStructure& board){
 }
 
 void Renderer::render(const BoardCell& cell){
-	BoardFloor& floor = *(cell.getFloor());
-	render(floor);
+	render(cell.getFloor());
 
 	for(int i = 0; i < 4; i++){
-		BoardWall& wall = *(cell.getWall(i));
-		render((BoardStatic&) wall);
+		render(cell.getWall((BoardWall::WallEdge)i));
 	}
 
-	for(unsigned int i = 0; i < cell.getEffects().size(); i++){
-		Effect& effect = *(cell.getEffects()[i]);
-		render(effect);
+	for(unsigned int i = 0; i < cell.getNumEffects(); i++){
+		render(cell.getEffect(i));
 	}
 
 	if (cell.actorExists()){
-		BoardActor& actor = *(cell.getActor());
-		render(actor);
+		render(cell.getActor());
 	}
 
 }
@@ -57,7 +53,7 @@ void Renderer::render(const BoardStatic& piece){
 	double size = piece.getCurrentAnimationFrame().getSize()/2.0;
 
 	Coordinate2D<double> topLeft = piece.getScreenLocation();
-	topLeft = ScreenCoordinate(topLeft.x, topLeft.y);
+	topLeft = Coordinate2D<double>(topLeft.x, topLeft.y);
 	Coordinate2D<double> botLeft(topLeft.x, topLeft.y+size);
 	Coordinate2D<double> botRight(topLeft.x+size, topLeft.y+size);
 	Coordinate2D<double> topRight(topLeft.x+size, topLeft.y);
@@ -74,7 +70,7 @@ void Renderer::render(const BoardActor& actor){
 
 	drawQuadrangle_textured(topLeft, botRight,
 			actor.getCurrentAnimationFrame().tex_topLeft, actor.getCurrentAnimationFrame().tex_botRight,
-			actor.spriteSheet);
+			actor.getSpriteSheet());
 }
 
 void Renderer::render(const Effect& effect){

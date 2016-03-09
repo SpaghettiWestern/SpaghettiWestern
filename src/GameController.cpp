@@ -43,11 +43,11 @@ bool GameController::handleClick(SDL_Event& click){
 }
 
 bool GameController::handleLClick(Coordinate2D<double> loc){
-	const GameBoardStructure& board = model.getGameBoard().getBoard();
+	GameBoard& board = model.getGameBoard();//.getBoard();
 	Coordinate3D<int> boardloc = Util::screenToCoord(loc);
 	std::cout << "Left Click\n";
 	if (board.actorExists(boardloc)){
-		selected = board.getActor(boardloc);
+		selected = board.getActorPointer(boardloc);
 		std::cout << "selected actor\n";
 		std::cout << "curr_hp: " << selected->getCurrentHealth() << "\n";
 		return true;

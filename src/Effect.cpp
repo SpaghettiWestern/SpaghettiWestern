@@ -19,6 +19,20 @@ Effect::Effect(Coordinate2D<double> loc, Animation animation) : loc(loc), animat
 
 }
 
+Effect::Effect(const Effect& other){
+	deepCopy(other);
+}
+
+Effect& Effect::operator=(const Effect& other){
+	deepCopy(other);
+	return *this;
+}
+
+void Effect::deepCopy(const Effect& other){
+	loc = other.loc;
+	animation = other.animation;
+}
+
 Coordinate2D<double> Effect::getScreenLocation() const{
 	return loc;
 }

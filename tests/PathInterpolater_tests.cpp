@@ -94,8 +94,8 @@ SUITE(PathInterpolater){
 		Coordinate2D<double> end(-4.3, 9.3333);
 		double speed = 0.345;
 
-		double x_dist = end.first - start.first;
-		double y_dist = end.second - start.second;
+		double x_dist = end.x - start.x;
+		double y_dist = end.y - start.y;
 		double dist = sqrt(x_dist*x_dist + y_dist*y_dist);
 
 		double x_step = speed * (x_dist/dist);

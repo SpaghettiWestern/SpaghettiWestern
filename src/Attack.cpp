@@ -5,6 +5,22 @@ Attack::Attack(int damage, double accuracy, double spread, double speed) : damag
 
 }
 
+Attack::Attack(const Attack& other){
+	deepCopy(other);
+}
+
+Attack& Attack::operator=(const Attack& other){
+	deepCopy(other);
+	return *this;
+}
+
+void Attack::deepCopy(const Attack& other){
+	damage = other.damage;
+	accuracy = other.accuracy;
+	spread = other.spread;
+	speed = other.speed;
+}
+
 int Attack::getDamage() const{
 	return damage;
 }

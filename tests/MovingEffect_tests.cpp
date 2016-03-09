@@ -96,7 +96,7 @@ SUITE(MovingEffect){
 		Coordinate2D<double> s_loc(1.1,2.2);
 		MovingEffect test_effect(s_loc);
 		std::vector<Coordinate2D<double>> test_path;
-		ScreenCoordinate path0(3.3, 4.4);
+		Coordinate2D<double> path0(3.3, 4.4);
 		test_path.push_back(path0);
 
 		CHECK(test_effect.getScreenLocation() == s_loc);

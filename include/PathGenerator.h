@@ -31,7 +31,7 @@ private:
 
 	std::map<Coordinate3D<int>, bool> closed_set;
 	std::map<Coordinate3D<int>, bool> open_set;
-	std::map<Coordinate3D<int>, Coordinate> came_from;
+	std::map<Coordinate3D<int>, Coordinate3D<int>> came_from;
 	std::map<Coordinate3D<int>, int> g_score;
 	std::map<Coordinate3D<int>, int> f_score;
 

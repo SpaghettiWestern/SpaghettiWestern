@@ -39,7 +39,7 @@ public:
 	GameBoardStructure& operator=(const GameBoardStructure& other);
 
 	std::map<Coordinate3D<int>, std::shared_ptr<BoardCell>>& getCells();
-	std::shared_ptr<BoardCell>& getCell(Coordinate3D<int> loc);
+	std::shared_ptr<BoardCell>& getEnvironmentCellPointer(Coordinate3D<int> loc);
 	const BoardCell& getEnvironmentCell(int x, int y, int z) const;
 	const BoardCell& getEnvironmentCell(const Coordinate3D<int>& loc) const;
 
@@ -48,7 +48,7 @@ public:
 
 	bool addEnvironmentPiece(std::unique_ptr<BoardStatic>& newpiece);
 	bool addBoardEffect(std::unique_ptr<Effect>& effect);
-	bool addActor(std::shared_ptr<BoardActor>& actor);
+	bool addActor(std::shared_ptr<BoardActor> actor);
 	bool addFloor(std::unique_ptr<BoardFloor>& floor);
 	bool addWall(std::unique_ptr<BoardWall>& wall);
 	bool addObject(std::unique_ptr<BoardStatic>& object);
@@ -61,8 +61,9 @@ public:
 	bool actorExists(int x, int y, int z) const;
 	bool actorExists(const Coordinate3D<int>& loc) const;
 
-	const std::shared_ptr<BoardActor>& getActor(int x, int y, int z) const;
-	const std::shared_ptr<BoardActor>& getActor(const Coordinate3D<int>& loc) const;
+	std::shared_ptr<BoardActor> getBoardActorPointer(const Coordinate3D<int>& loc);
+	const BoardActor& getActor(int x, int y, int z) const;
+	const BoardActor& getActor(const Coordinate3D<int>& loc) const;
 	bool removeActor(const Coordinate3D<int>& loc);
 	bool moveActor(const Coordinate3D<int>& curr_loc, const Coordinate3D<int>& new_loc);
 

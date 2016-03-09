@@ -22,6 +22,21 @@ MovingEffect::MovingEffect(Coordinate2D<double> loc, const Animation& anim, cons
 	moving = false;
 }
 
+MovingEffect::MovingEffect(const MovingEffect& other) : Effect((const Effect&) other){
+	deepCopy(other);
+}
+
+MovingEffect& MovingEffect::operator=(const MovingEffect& other){
+	Effect::operator=((const Effect&) other);
+	deepCopy(other);
+	return *this;
+}
+
+void MovingEffect::deepCopy(const MovingEffect& other){
+	move_path = other.move_path;
+	moving = other.moving;
+	pathgen = other.pathgen;
+}
 
 void MovingEffect::setPath(const std::vector<Coordinate2D<double>>& new_path){
 	move_path = new_path;

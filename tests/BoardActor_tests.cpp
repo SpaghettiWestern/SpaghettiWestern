@@ -178,7 +178,7 @@ SUITE(boardactor){
 		Coordinate3D<int> startloc(4,3,1);
 		BoardActor testactor(startloc, testplayer);
 
-		std::vector<Coordinate> test_path;
+		std::vector<Coordinate3D<int>> test_path;
 		test_path.clear();
 
 		test_path.push_back(Coordinate3D<int>(0,0,1));
@@ -226,7 +226,7 @@ SUITE(boardactor){
 		CHECK(testactor.getCurrentAnimationFrame() == idle1);
 		CHECK(testactor.getLocation() == startloc);
 
-		std::vector<Coordinate> test_path;
+		std::vector<Coordinate3D<int>> test_path;
 		test_path.clear();
 
 		test_path.push_back(Coordinate3D<int>(0,0,1));

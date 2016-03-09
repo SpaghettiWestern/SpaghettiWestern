@@ -15,6 +15,20 @@ AttackEffect::AttackEffect(Coordinate2D<double> loc, const Animation& anim, cons
 AttackEffect::AttackEffect(Coordinate2D<double> loc, const Animation& anim, const std::vector<Coordinate2D<double>>& path, const Attack& attack) : MovingEffect(loc, anim, path), attack(attack){
 }
 
+AttackEffect::AttackEffect(const AttackEffect& other) : MovingEffect((const MovingEffect&) other){
+	deepCopy(other);
+}
+
+AttackEffect& AttackEffect::operator=(const AttackEffect& other){
+	MovingEffect::operator=((const MovingEffect&) other);
+	deepCopy(other);
+	return *this;
+}
+
+void AttackEffect::deepCopy(const AttackEffect& other){
+	attack = other.attack;
+}
+
 void AttackEffect::generatePath(Coordinate2D<double> dest){
 	double x_dist = dest.x - loc.x;
 	double y_dist = dest.y - loc.y;

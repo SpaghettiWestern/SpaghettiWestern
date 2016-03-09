@@ -8,8 +8,6 @@
 
 #include "Coordinate.h"
 
-typedef std::pair<int, int> Coordinate;
-typedef std::pair<double, double> ScreenCoordinate;
 
 class Util{
 private:
@@ -18,7 +16,7 @@ private:
 
 public:
 	static Coordinate2D<double> coordToScreen(Coordinate3D<int> loc);
-	static Coordinate screenToCoord(Coordinate2D<double> scr);
+	static Coordinate3D<int> screenToCoord(Coordinate2D<double> scr);
 	static void printErrCoordinate(const Coordinate3D<int> loc);
 	static void printErrScreenCoordinate(const Coordinate2D<double> scr);
 	static bool almostEquals_ScreenCoordinate(const Coordinate2D<double>& s1, const Coordinate2D<double>& s2);

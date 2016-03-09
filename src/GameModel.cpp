@@ -59,7 +59,7 @@ bool GameModel::createWall(Coordinate3D<int> loc, int hitpoints){
 
 bool GameModel::sendAttack(Coordinate3D<int> attacker_loc, Coordinate3D<int> attack_loc){
 	if(board.canAttack(attacker_loc, attack_loc)){
-		return sendAttack((ActionActor&)board.getActor(attacker_loc), board.getActor(attack_loc));
+		return sendAttack((ActionActor&)*(board.getActorPointer(attacker_loc)), *(board.getActorPointer(attack_loc)));
 	}
 	return false;
 }

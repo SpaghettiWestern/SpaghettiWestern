@@ -19,6 +19,8 @@ private:
 
 	std::vector<std::unique_ptr<Effect>> surface_effects;
 
+	void updateActor(BoardActor& curr_actor, const Coordinate3D<int>& curr_location);
+
 	void updateActors();
 	void updateEffects();
 	void updateBoard();
@@ -26,7 +28,7 @@ private:
 
 public:
 	GameBoard();
-	GameBoard(int length, int width);
+	GameBoard(int length, int width, int height);
 	GameBoard(const GameBoard& other_board);
 
 	GameBoard& operator=(const GameBoard& other);
@@ -38,7 +40,8 @@ public:
 	bool canAttack(const Coordinate3D<int>& attacker_loc, const Coordinate3D<int>& attack_loc);
 
 	bool actorExists(const Coordinate3D<int>& loc);
-	BoardActor& getActor(const Coordinate3D<int>& loc);
+	const BoardActor& getActor(const Coordinate3D<int>& loc) const;
+	std::shared_ptr<BoardActor> getActorPointer(const Coordinate3D<int>& loc);
 	bool addActor(std::shared_ptr<BoardActor> new_actor);
 
 	bool addStaticCoverPiece(Coordinate3D<int> loc, bool traversable, int hitpoints, int deflection_chance);

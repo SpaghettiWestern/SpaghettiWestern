@@ -13,6 +13,7 @@ class GameBoard;
 
 class BoardPiece{
 private:
+	void deepCopy(const BoardPiece& other);
 
 protected:
 	Coordinate3D<int> location;
@@ -36,12 +37,15 @@ public:
 	BoardPiece(int hitpoints);
 	BoardPiece(const Coordinate3D<int>& loc, int hitpoints);
 
+	BoardPiece& operator=(const BoardPiece& other);
+
 	bool setSpriteSheet(std::string spriteSheetFilepath);
 	const GLuint& getSpriteSheet() const;
 
 	const Coordinate3D<int>& getLocation() const;
 	void setLocation(Coordinate3D<int> new_location);
 
+	const GLuint& getSpriteSheet();
 
 	int getCurrentHealth() const;
 	int getMaxHealth() const;

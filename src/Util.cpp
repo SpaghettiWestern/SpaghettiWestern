@@ -7,11 +7,11 @@ double Util::epsilon(){
 }
 
 Coordinate2D<double> Util::coordToScreen(Coordinate3D<int> loc){
-	return ScreenCoordinate(loc.x/20.0, loc.y/20.0);
+	return Coordinate2D<double>(loc.x/20.0, loc.y/20.0);
 }
 
-Coordinate Util::screenToCoord(Coordinate2D<double> scr){
-	return Coordinate((int)(scr.x*20.0+epsilon()), (int)(scr.y*20.0+epsilon()));
+Coordinate3D<int> Util::screenToCoord(Coordinate2D<double> scr){
+	return Coordinate3D<int>((int)(scr.x*20.0+epsilon()), (int)(scr.y*20.0+epsilon()), 0);
 }
 
 void Util::printErrCoordinate(const Coordinate3D<int> loc){

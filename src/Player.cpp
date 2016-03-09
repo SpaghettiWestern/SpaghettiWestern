@@ -5,6 +5,21 @@ Player::Player(std::string name, bool is_human) : name(name), human(is_human){
 	actors.clear();
 }
 
+Player::Player(const Player& other){
+	deepCopy(other);
+}
+
+Player& Player::operator=(const Player& other){
+	deepCopy(other);
+	return *this;
+}
+
+void Player::deepCopy(const Player& other){
+	actors = other.actors;
+	name = other.name;
+	human = other.human;
+}
+
 std::string Player::getName() const{
 	return name;
 }

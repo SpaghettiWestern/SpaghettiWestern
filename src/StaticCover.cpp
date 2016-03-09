@@ -20,6 +20,20 @@ StaticCover::StaticCover(Coordinate3D<int> loc, bool isTraversable, int hitpoint
 
 }
 
+StaticCover::StaticCover(const StaticCover& other) : BoardStatic((const BoardStatic&) other){
+	deepCopy(other);
+}
+
+StaticCover& StaticCover::operator=(const StaticCover& other){
+	BoardStatic::operator=((const BoardStatic&) other);
+	deepCopy(other);
+	return *this;
+}
+
+void StaticCover::deepCopy(const StaticCover& other){
+	deflection_chance = other.deflection_chance;
+}
+
 bool StaticCover::receiveAttack(Attack& attack){
 	BoardStatic::recieveAttack(attack);
 	int hit_roll = std::rand() % 1000;

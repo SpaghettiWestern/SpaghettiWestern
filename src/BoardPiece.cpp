@@ -17,7 +17,7 @@ BoardPiece::BoardPiece(const Coordinate3D<int>& loc){
 }
 
 BoardPiece::BoardPiece(int hitpoints){
-	location = Coordinate(-1,-1);
+	location = Coordinate3D<int>(-1,-1,-1);
 	resetScreenLocation();
 	initAnimations();
 	max_hitpoints = hitpoints;
@@ -32,6 +32,24 @@ BoardPiece::BoardPiece(const Coordinate3D<int>& loc, int hitpoints){
 	max_hitpoints = hitpoints;
 	curr_hitpoints = hitpoints;
 
+}
+
+BoardPiece& BoardPiece::operator=(const BoardPiece& other){
+	deepCopy(other);
+	return *this;
+}
+
+void BoardPiece::deepCopy(const BoardPiece& other){
+	location = other.location;
+	screen_location = other.screen_location;
+
+	animations = other.animations;
+	active_animation = other.active_animation;
+
+	max_hitpoints = other.max_hitpoints;
+	curr_hitpoints = other.curr_hitpoints;
+
+	spriteSheet = other.spriteSheet;
 }
 
 void BoardPiece::initAnimations(){
@@ -111,6 +129,10 @@ void BoardPiece::setLocation(Coordinate3D<int> new_location){
 			resetScreenLocation();
 		}
 	}
+}
+
+const GLuint& BoardPiece::getSpriteSheet(){
+	return spriteSheet;
 }
 
 const Coordinate2D<double>& BoardPiece::getScreenLocation() const{

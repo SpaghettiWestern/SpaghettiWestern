@@ -103,13 +103,13 @@ void startGame() {
 
 	BlitHelper::initilize_blitter(displayRenderer);
 
-	GameModel model(20,20, {std::make_pair("P1", true), std::make_pair("P2", true)});
-	model.createActor(Coordinate(0,0), 0, 28, Attack(28, 1.0, .05, .003));
-	model.createActor(Coordinate(2,2), 1, 42, Attack(42, .85, .1, .001));
-	model.createWall(Coordinate(5,5), -1);
-	model.createWall(Coordinate(5,6), -1);
-	model.playMovingEffect(ScreenCoordinate(0,0), ScreenCoordinate(1,1), true);
-	model.playMovingEffect(ScreenCoordinate(0,.95), ScreenCoordinate(.95,0), false);
+	GameModel model(20,20,20, {std::make_pair("P1", true), std::make_pair("P2", true)});
+	model.createActor(Coordinate3D<int>(0,0,0), 0, 28, Attack(28, 1.0, .05, .003));
+	model.createActor(Coordinate3D<int>(2,2,0), 1, 42, Attack(42, .85, .1, .001));
+	model.createWall(Coordinate3D<int>(5,5,0), -1);
+	model.createWall(Coordinate3D<int>(5,6,0), -1);
+	model.playMovingEffect(Coordinate2D<double>(0,0), Coordinate2D<double>(1,1), true);
+	model.playMovingEffect(Coordinate2D<double>(0,.95), Coordinate2D<double>(.95,0), false);
 
 	GameView view(model);
 	GameController controller(model);

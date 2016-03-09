@@ -6,12 +6,13 @@
 #include "Animation.h"
 #include "Util.h"
 
-
 class Player;
 enum actor_type {BOARDACTOR, ACTIONACTOR};
 
 class BoardActor : public BoardPiece{
 private:
+	void deepCopy(const BoardActor& other);
+
 	Player& owner;
 
 	std::vector<Coordinate2D<double>> move_path;
@@ -32,6 +33,8 @@ public:
 	BoardActor(Coordinate3D<int> loc, Player& owner, int hitpoints);
 	~BoardActor();
 
+	BoardActor& operator=(const BoardActor& other);
+
 	bool isAlive() const;
 
 	void setAnimation_Moving();
@@ -39,7 +42,7 @@ public:
 	void resetAnimation();
 
 	bool isMoving() const;
-	void startMove(std::vector<Coordinate3D<int>> path);
+	void startMove(std::vector<Coordinate3D<int>>& path);
 	void stopMove();
 	void moveStep();
 	Coordinate3D<int> getNextStep() const;

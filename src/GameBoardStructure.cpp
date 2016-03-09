@@ -9,7 +9,6 @@ GameBoardStructure::GameBoardStructure(int length, int width, int height){
 	this->width = width;
 	this->height = height;
 	initEnvironment();
-	initActors();
 }
 
 void GameBoardStructure::initEnvironment(){
@@ -43,7 +42,7 @@ GameBoardStructure& GameBoardStructure::operator=(const GameBoardStructure& othe
 				groundTexture[Coordinate2D<int>(x,y)] = other.getGroundTexture(Coordinate2D<int>(x,y));
 				for(int z = 0; z < height; z++){
 					Coordinate3D<int> loc(x,y,z);
-					environmentCells[loc] = std::unique_ptr<BoardCell>(new BoardCell(other.getEnvironmentCell(loc)));
+					environmentCells[loc].reset(new BoardCell(other.getEnvironmentCell(loc)));
 				}
 			}
 		}
@@ -59,19 +58,19 @@ GameBoardStructure& GameBoardStructure::operator=(const GameBoardStructure& othe
 }
 
 const BoardCell& GameBoardStructure::getEnvironmentCell(int x, int y, int z) const{
-	return *(environmentCells[Coordinate3D<int>(x,y,z)]);
+	return *(environmentCells.at(Coordinate3D<int>(x,y,z)));
 }
 
 const BoardCell& GameBoardStructure::getEnvironmentCell(const Coordinate3D<int>& loc) const{
-	return *(environmentCells[loc]);
+	return *(environmentCells.at(loc));
 }
 
 GLuint GameBoardStructure::getGroundTexture(int x, int y) const{
-	return groundTexture[Coordinate2D<int>(x,y)];
+	return groundTexture.at(Coordinate2D<int>(x,y));
 }
 
 GLuint GameBoardStructure::getGroundTexture(const Coordinate2D<int>& loc) const{
-	return groundTexture[loc];
+	return groundTexture.at(loc);
 }
 
 bool GameBoardStructure::addEnvironmentPiece(std::unique_ptr<BoardStatic>& newpiece){
@@ -81,8 +80,7 @@ bool GameBoardStructure::addEnvironmentPiece(std::unique_ptr<BoardStatic>& newpi
 
 	Coordinate3D<int> loc = newpiece->getLocation();
 	if (inBounds(loc)){
-		std::unique_ptr<BoardStatic>& curr_ptr = this->environmentCells.find(loc)->second;
-		curr_ptr.swap(newpiece);
+		environmentCells[loc]->addObject(newpiece);
 		return true;
 	}
 	return false;
@@ -97,7 +95,7 @@ bool GameBoardStructure::addBoardEffect(std::unique_ptr<Effect>& effect){
 	}
 	return false;
 }
-bool GameBoardStructure::addActor(std::shared_ptr<BoardActor>& actor){
+bool GameBoardStructure::addActor(std::shared_ptr<BoardActor> actor){
 	const Coordinate3D<int>& actorloc = actor->getLocation();
 	if(openSpace(actorloc)){
 		environmentCells[actorloc]->setActor(actor);
@@ -116,7 +114,7 @@ bool GameBoardStructure::addFloor(std::unique_ptr<BoardFloor>& floor){
 }
 bool GameBoardStructure::addWall(std::unique_ptr<BoardWall>& wall){
 	const Coordinate3D<int>& loc = wall->getLocation();
-	WallEdge edge = wall->getEdge();
+	BoardWall::WallEdge edge = wall->getEdge();
 
 	if(inBounds(loc)){
 		environmentCells[loc]->setWall(wall, edge);
@@ -148,7 +146,7 @@ bool GameBoardStructure::openSpace(const Coordinate3D<int>& loc) const{
 }
 
 bool GameBoardStructure::traversableSpace(const Coordinate3D<int>& loc) const{
-	BoardCell& cell = *environmentCells[loc];
+	BoardCell& cell = *environmentCells.at(loc);
 	return cell.isTraversable();
 }
 
@@ -157,20 +155,24 @@ bool GameBoardStructure::inBounds(const Coordinate3D<int>& loc) const{
 }
 
 bool GameBoardStructure::actorExists(int x, int y, int z) const{
-	BoardCell& cell = *environmentCells[Coordinate3D<int>(x,y,z)];
+	BoardCell& cell = *environmentCells.at(Coordinate3D<int>(x,y,z));
 	return cell.actorExists();
 }
 bool GameBoardStructure::actorExists(const Coordinate3D<int>& loc) const{
-	BoardCell& cell = *environmentCells[loc];
+	BoardCell& cell = *environmentCells.at(loc);
 	return cell.actorExists();
 }
 
-const std::shared_ptr<BoardActor>& GameBoardStructure::getActor(int x, int y, int z) const{
+const BoardActor& GameBoardStructure::getActor(int x, int y, int z) const{
 	return getActor(Coordinate3D<int>(x,y,z));
 }
-const std::shared_ptr<BoardActor>& GameBoardStructure::getActor(const Coordinate3D<int>& loc) const{
-	BoardCell& cell = *environmentCells[loc];
+const BoardActor& GameBoardStructure::getActor(const Coordinate3D<int>& loc) const{
+	BoardCell& cell = *environmentCells.at(loc);
 	return cell.getActor();
+}
+
+std::shared_ptr<BoardActor> GameBoardStructure::getBoardActorPointer(const Coordinate3D<int>& loc){
+	return environmentCells[loc]->getActorPointer();
 }
 
 bool GameBoardStructure::removeActor(const Coordinate3D<int>& loc){
@@ -183,7 +185,7 @@ bool GameBoardStructure::removeActor(const Coordinate3D<int>& loc){
 
 bool GameBoardStructure::moveActor(const Coordinate3D<int>& curr_loc, const Coordinate3D<int>& new_loc){
 	if(openSpace(new_loc) && actorExists(curr_loc)){
-		std::shared_ptr<BoardActor> actor = environmentCells[curr_loc]->getActor();
+		std::shared_ptr<BoardActor> actor = environmentCells[curr_loc]->getActorPointer();
 		environmentCells[new_loc]->setActor(actor);
 		environmentCells[curr_loc]->removeActor();
 		return true;
@@ -233,7 +235,7 @@ std::map<Coordinate3D<int>, std::shared_ptr<BoardCell>>& GameBoardStructure::get
 	return environmentCells;
 }
 
-std::shared_ptr<BoardCell>& GameBoardStructure::getCell(Coordinate3D<int> loc){
+std::shared_ptr<BoardCell>& GameBoardStructure::getEnvironmentCellPointer(Coordinate3D<int> loc){
 	return environmentCells[loc];
 }
 
@@ -245,16 +247,8 @@ bool GameBoardStructure::handleEffect(const std::unique_ptr<Effect>& effect, con
 	case ATTACKEFFECT:
 	{
 		AttackEffect& attack_effect = (AttackEffect&)(*effect);
-		if(actorExists(loc)){
-			return getActor(loc)->recieveAttack(attack_effect.getAttack());
-		}
 		BoardCell& cell = *(this->environmentCells.find(loc)->second);
-		for(unsigned int i = 0; i < cell.getObjects().size(); i++){
-			BoardStatic& setpiece = cell.getObjects()[i];
-			if(setpiece.getType() == STATICCOVER){
-				return setpiece.recieveAttack(attack_effect.getAttack());
-			}
-		}
+		return cell.receiveAttack(attack_effect.getAttack());
 	}
 		break;
 	default:

@@ -16,7 +16,7 @@ SUITE(GameBoardStructure){
 		for(int i = 0; i < width; i++){
 			for(int j = 0; j < length; j++){
 				for(int k = 0; k < height; k++){
-					CHECK(testboard.getEnvironmentPiece(i,j,k).getLocation() == Coordinate3D<int>(i,j,k));
+					CHECK((testboard.getEnvironmentCell(i,j,k).getLocation() == Coordinate3D<int>(i,j,k)));
 				}
 			}
 		}
@@ -31,11 +31,11 @@ SUITE(GameBoardStructure){
 		int width = 30;
 		int height = 5;
 
-		GameBoardStructure testboard(length, width);
+		GameBoardStructure testboard(length, width, height);
 		for(int i = 0; i < width; i++){
 			for(int j = 0; j < length; j++){
 				for(int k =0; k < height; k++){
-					CHECK(testboard.getEnvironmentPiece(i,j,k).getLocation() == Coordinate3D<int>(i,j,k));
+					CHECK(testboard.getEnvironmentCell(i,j,k).getLocation() == Coordinate3D<int>(i,j,k));
 				}
 			}
 		}
@@ -108,22 +108,22 @@ SUITE(GameBoardStructure){
 		testboard.addActor(testact);
 		CHECK(testboard.actorExists(Coordinate3D<int>(0,0,0)) == true);
 		CHECK(testboard.actorExists(Coordinate3D<int>(1,1,0)) == false);
-		CHECK(testboard.getActor(0,0)->getLocation() == Coordinate3D<int>(0,0,0));
+		CHECK(testboard.getActor(0,0,0).getLocation() == Coordinate3D<int>(0,0,0));
 
 		CHECK(testboard.moveActor(Coordinate3D<int>(0,0,0), Coordinate3D<int>(1,1,0)) == true);
 		CHECK(testboard.actorExists(Coordinate3D<int>(0,0,0)) == false);
 		CHECK(testboard.actorExists(Coordinate3D<int>(1,1,0)) == true);
-		CHECK(testboard.getActor(1,1)->getLocation() == Coordinate3D<int>(1,1,0));
+		CHECK(testboard.getActor(1,1,0).getLocation() == Coordinate3D<int>(1,1,0));
 
 		CHECK(testboard.moveActor(Coordinate3D<int>(1,1,0), Coordinate3D<int>(1,2,0)) == true);
 		CHECK(testboard.actorExists(Coordinate3D<int>(1,1,0)) == false);
 		CHECK(testboard.actorExists(Coordinate3D<int>(1,2,0)) == true);
-		CHECK(testboard.getActor(1,2,0)->getLocation() == Coordinate3D<int>(1,2,0));
+		CHECK(testboard.getActor(1,2,0).getLocation() == Coordinate3D<int>(1,2,0));
 
 		CHECK(testboard.moveActor(Coordinate3D<int>(1,2,0), Coordinate3D<int>(1,1,0)) == true);
 		CHECK(testboard.actorExists(Coordinate3D<int>(1,2,0)) == false);
 		CHECK(testboard.actorExists(Coordinate3D<int>(1,1,0)) == true);
-		CHECK(testboard.getActor(1,1)->getLocation() == Coordinate3D<int>(1,1,0));
+		CHECK(testboard.getActor(1,1,0).getLocation() == Coordinate3D<int>(1,1,0));
 
 		CHECK(testboard.moveActor(Coordinate3D<int>(0,1,0), Coordinate3D<int>(1,0,0)) == false);
 	}
@@ -195,7 +195,7 @@ SUITE(GameBoardStructure){
 		std::vector<Coordinate3D<int>> path = {Coordinate3D<int>(0,0,0), Coordinate3D<int>(0,1,0),
 				Coordinate3D<int>(0,2,0), Coordinate3D<int>(1,2,0), Coordinate3D<int>(0,1,0)};
 
-		std::vector<ScreenCoordinate> test_path = {Util::coordToScreen(path[4]), Util::coordToScreen(path[3]),
+		std::vector<Coordinate2D<double>> test_path = {Util::coordToScreen(path[4]), Util::coordToScreen(path[3]),
 				Util::coordToScreen(path[2]), Util::coordToScreen(path[1])};
 
 		std::unique_ptr<Effect> tmp_effect(new MovingEffect(Util::coordToScreen(path[0]), test_path));
