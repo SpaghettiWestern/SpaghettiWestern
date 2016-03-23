@@ -135,7 +135,7 @@ SUITE(GameBoardStructure){
 		}else{
 			CHECK(test_board.effectsExist(s_loc) == false);
 		}
-		test_board.addBoardEffect(effect);
+		test_board.addEffect(effect);
 		CHECK(test_board.effectsExist(s_loc) == true);
 		CHECK(test_board.numEffects(s_loc) == curr_effect_num+1);
 		if(test_board.numEffects(s_loc) == curr_effect_num+1){
@@ -200,7 +200,7 @@ SUITE(GameBoardStructure){
 
 		std::unique_ptr<Effect> tmp_effect(new MovingEffect(Util::coordToScreen(path[0]), test_path));
 		MovingEffect& test_effect = (MovingEffect&)(*tmp_effect);
-		test_board.addBoardEffect(tmp_effect);
+		test_board.addEffect(tmp_effect);
 
 
 		test_effect.startMove();
@@ -210,6 +210,7 @@ SUITE(GameBoardStructure){
 			CHECK(test_board.numEffects(path[i]) == 1);
 			CHECK(Util::screenToCoord(test_effect.getScreenLocation()) == path[i]);
 			test_board.update();
+
 			CHECK(test_board.numEffects(path[i]) == 0);
 		}
 		CHECK(test_board.numEffects(path[4]) == 0);

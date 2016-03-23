@@ -25,6 +25,8 @@ private:
 	int height;
 
 	void initEnvironment();
+	void addNeighbors(int x, int y, int z);
+	void addNeighbor(const Coordinate3D<int> & currLoc, const Coordinate3D<int> & neighborLoc);
 	void initActors();
 
 	bool handleEffect(const std::unique_ptr<Effect>& effect, const Coordinate3D<int>& loc);
@@ -39,6 +41,7 @@ public:
 	GameBoardStructure& operator=(const GameBoardStructure& other);
 
 	std::map<Coordinate3D<int>, std::shared_ptr<BoardCell>>& getCells();
+	std::shared_ptr<BoardCell>& getEnvironmentCellPointer(int x, int y, int z);
 	std::shared_ptr<BoardCell>& getEnvironmentCellPointer(Coordinate3D<int> loc);
 	const BoardCell& getEnvironmentCell(int x, int y, int z) const;
 	const BoardCell& getEnvironmentCell(const Coordinate3D<int>& loc) const;
@@ -72,6 +75,7 @@ public:
 	int numEffects(const Coordinate3D<int>& loc) const;
 	bool effectsExist(const Coordinate3D<int>& loc) const;
 	const Effect& getEffect(const Coordinate3D<int>& loc) const;
+	bool addEffect(std::unique_ptr<Effect>& effect);
 
 
 

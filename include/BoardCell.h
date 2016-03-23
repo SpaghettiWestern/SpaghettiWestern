@@ -26,6 +26,7 @@ public:
 	bool setWall(std::unique_ptr<BoardWall>& wall, BoardWall::WallEdge edge);
 	bool addObject(std::unique_ptr<BoardStatic>& objects);
 	bool addDecoration(std::unique_ptr<BoardDecoration>& decoration);
+	bool addNeighbor(const std::shared_ptr<BoardCell>& neighbor);
 
 	bool removeActor();
 

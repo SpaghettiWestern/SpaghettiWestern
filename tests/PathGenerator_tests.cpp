@@ -8,7 +8,7 @@ SUITE(PathGenerator){
 	TEST(constructor){
 		std::cerr << "Testing PathGenerator\n";
 
-		std::shared_ptr<GameBoardStructure> test_board = std::make_shared<GameBoardStructure>(3,3,3);
+		std::shared_ptr<GameBoardStructure> test_board(new GameBoardStructure(3,3,3));
 		PathGenerator test_pathgen(test_board);
 		CHECK(test_pathgen.getPath().size() == 0);
 	}
@@ -34,7 +34,14 @@ SUITE(PathGenerator){
 	}
 
 	void check_simple_findpath(PathGenerator& testgen, Coordinate3D<int> start, Coordinate3D<int> end){
-		unsigned int expected_length = testgen.estimateDistance(start, end) +1;
+		int xDiff = std::abs(start.x - end.x);
+		int yDiff = std::abs(start.y-end.y);
+		int zDiff = std::abs(start.z-end.z);
+
+		int distance = std::max(xDiff, yDiff);
+		distance = std::max(distance, zDiff);
+
+		unsigned int expected_length = distance+1;
 		check_findpath(testgen, start, end, expected_length);
 	}
 
@@ -94,7 +101,7 @@ SUITE(PathGenerator){
 		}
 		Coordinate3D<int> start(0,0,0);
 		Coordinate3D<int> end(0,19,0);
-		check_findpath(test_pathgen, start, end, 30);
+		check_findpath(test_pathgen, start, end, 25);
 
 	}
 
@@ -120,7 +127,7 @@ SUITE(PathGenerator){
 		}
 		Coordinate3D<int> start(0,0,0);
 		Coordinate3D<int> end(9,9,0);
-		check_findpath(test_pathgen, start, end, 27);
+		check_findpath(test_pathgen, start, end, 13);
 	}
 
 

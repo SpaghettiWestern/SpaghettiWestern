@@ -93,6 +93,10 @@ bool BoardCell::addDecoration(std::unique_ptr<BoardDecoration>& decoration){
 	return true;
 }
 
+bool BoardCell::addNeighbor(const std::shared_ptr<BoardCell>& neighbor){
+	neighbors.push_back(neighbor);
+}
+
 bool BoardCell::removeActor(){
 	actor.reset();
 	return true;

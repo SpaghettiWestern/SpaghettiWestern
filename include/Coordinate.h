@@ -7,7 +7,7 @@
 
 #ifndef INCLUDE_COORDINATE_H_
 #define INCLUDE_COORDINATE_H_
-
+#include <iostream>
 
 template <class T> class Coordinate3D
 {
@@ -34,8 +34,22 @@ public:
 	}
 
 	bool operator<(const Coordinate3D<T> &rhs) const{
-		return x+y+z < rhs.x+rhs.y+rhs.z;
+		if (z == rhs.z)
+		{
+			if (y == rhs.y)
+				return x < rhs.x;
+			else
+				return y < rhs.y;
+		}
+		else
+			return z < rhs.z;
 	}
+
+	friend std::ostream& operator<< (std::ostream& stream, const Coordinate3D<T>& rhs) {
+		stream << "(" << rhs.x << ", " << rhs.y << ", " << rhs.z << ")";
+		return stream;
+	}
+
 };
 
 
@@ -61,8 +75,17 @@ public:
 	bool operator!=(const Coordinate2D<T>& rhs) const{
 		return !(*this == rhs);
 	}
+
 	bool operator<(const Coordinate2D<T> &rhs) const{
-		return x+y < rhs.x+rhs.y;
+		if (y == rhs.y)
+			return x < rhs.x;
+		else
+			return y < rhs.y;
+	}
+
+	friend std::ostream& operator<< (std::ostream& stream, const Coordinate2D<T>& rhs) {
+		stream << "(" << rhs.x << ", " << rhs.y << ")";
+		return stream;
 	}
 };
 

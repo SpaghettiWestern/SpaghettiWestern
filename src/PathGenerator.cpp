@@ -24,6 +24,7 @@ int PathGenerator::estimateDistance(const Coordinate3D<int>& start, const Coordi
 
 void PathGenerator::traverseNeighbors(){
 	const BoardCell& currCell =  board->getEnvironmentCell(curr);
+
 	for(unsigned int i = 0; i < currCell.getNumNeighbors(); i++){
 		traverseNeighbor(currCell.getNeighbor(i).getLocation());
 	}
@@ -62,6 +63,12 @@ void PathGenerator::reconstructPath(const Coordinate3D<int>& start){
 	path.clear();
 	Coordinate3D<int> curr_step = end;
 	while(curr_step != start){
+		Coordinate3D<int> next_step = came_from[curr_step];
+		int distanceChange = estimateDistance(curr_step, next_step);
+		if(std::abs(curr_step.x - next_step.x) >= 2 || std::abs(curr_step.y - next_step.y) >= 2 || std::abs(curr_step.z - next_step.z) >= 2){
+			int what = 0;
+		}
+
 		path.push_back(curr_step);
 		curr_step = came_from[curr_step];
 	}
@@ -80,6 +87,10 @@ bool PathGenerator::findPath(const Coordinate3D<int>& start, const Coordinate3D<
 	open_set[start] = true;
 
 	while(!open_set.empty()){
+		if(pq_open_set.size() == 0){
+			return false;
+		}
+
 		curr = pq_open_set.top().coord;
 		pq_open_set.pop();
 

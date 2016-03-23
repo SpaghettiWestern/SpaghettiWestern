@@ -103,7 +103,7 @@ void startGame() {
 
 	BlitHelper::initilize_blitter(displayRenderer);
 
-	GameModel model(20,20,20, {std::make_pair("P1", true), std::make_pair("P2", true)});
+	GameModel model(20,20,1, {std::make_pair("P1", true), std::make_pair("P2", true)});
 	model.createActor(Coordinate3D<int>(0,0,0), 0, 28, Attack(28, 1.0, .05, .003));
 	model.createActor(Coordinate3D<int>(2,2,0), 1, 42, Attack(42, .85, .1, .001));
 	model.createWall(Coordinate3D<int>(5,5,0), -1);

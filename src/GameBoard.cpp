@@ -178,7 +178,7 @@ void GameBoard::updateEffects(){
 }
 
 void GameBoard::updateBoard(){
-	updateActors();
+	//updateActors();
 	board->update();
 }
 
