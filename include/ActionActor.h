@@ -9,10 +9,14 @@
 class ActionActor : public BoardActor{
 private:
 	Attack attack;
+	void deepCopy(const ActionActor other);
 
 public:
-	ActionActor(Coordinate loc, Player& owner, int hitpoints, Attack attack);
-	ActionActor(Coordinate loc, Player&owner, Attack attack);
+	ActionActor(Coordinate3D<int> loc, Player& owner, int hitpoints, Attack attack);
+	ActionActor(Coordinate3D<int> loc, Player&owner, Attack attack);
+	ActionActor(const ActionActor& other);
+	ActionActor& operator=(const ActionActor& other);
+
 	const Attack& getAttack() const;
 	actor_type getType() const;
 };

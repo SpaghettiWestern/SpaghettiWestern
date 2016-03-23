@@ -11,6 +11,22 @@ Animation::Animation(bool repeating) : repeating(repeating){
 	curr_frame = 0;
 }
 
+Animation::Animation(const Animation& other){
+	deepCopy(other);
+}
+
+Animation& Animation::operator=(const Animation& other){
+	deepCopy(other);
+	return *this;
+}
+
+void Animation::deepCopy(const Animation& other){
+	frames = other.frames;
+	repeating = other.repeating;
+	curr_frame = other.curr_frame;
+}
+
+
 bool Animation::update(){
 	if(curr_frame < frames.size()-1){
 		curr_frame++;

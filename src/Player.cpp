@@ -5,6 +5,21 @@ Player::Player(std::string name, bool is_human) : name(name), human(is_human){
 	actors.clear();
 }
 
+Player::Player(const Player& other){
+	deepCopy(other);
+}
+
+Player& Player::operator=(const Player& other){
+	deepCopy(other);
+	return *this;
+}
+
+void Player::deepCopy(const Player& other){
+	actors = other.actors;
+	name = other.name;
+	human = other.human;
+}
+
 std::string Player::getName() const{
 	return name;
 }
@@ -13,11 +28,11 @@ bool Player::isHuman() const{
 	return human;
 }
 
-void Player::createActor(Coordinate loc){
+void Player::createActor(Coordinate3D<int> loc){
 	addActor(std::shared_ptr<BoardActor>(new BoardActor(loc, *this)));
 }
 
-void Player::createActor(Coordinate loc, int hitpoints){
+void Player::createActor(Coordinate3D<int> loc, int hitpoints){
 	addActor(std::shared_ptr<BoardActor>(new BoardActor(loc, *this, hitpoints)));
 }
 

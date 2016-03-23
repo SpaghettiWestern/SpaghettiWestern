@@ -1,8 +1,8 @@
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 //#include <SDL2/SDL_ttf.h>
 
 #include <GL/gl.h>
@@ -20,7 +20,7 @@ class GameController{
 private:
 	GameModel &model;
 	GameView &view;
-	ScreenCoordinate inputToScreen(int x, int y);
+	Coordinate2D<double> inputToScreen(int x, int y);
 	std::shared_ptr<BoardActor> selected;
 
 	const double SCROLL_SPEED_HORIZ = 0.1;
@@ -30,8 +30,8 @@ private:
 	std::map<SDL_Keycode, bool> keyDownMap;
 
 	bool handleClick(SDL_Event& click);
-	bool handleRClick(ScreenCoordinate loc);
-	bool handleLClick(ScreenCoordinate loc);
+	bool handleRClick(Coordinate2D<double> loc);
+	bool handleLClick(Coordinate2D<double> loc);
 
 	void handleKeyUp(SDL_Event &keyUpEvent);
 	void handleKeyDown(SDL_Event &keyDownEvent);

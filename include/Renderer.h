@@ -15,6 +15,8 @@
 #include "GameBoardStructure.h"
 #include "BoardStatic.h"
 #include "BoardActor.h"
+#include "BoardCell.h"
+
 
 class Renderer{
 private:
@@ -22,24 +24,28 @@ private:
 	const GameView &view;
 
 public:
-
 	Renderer(const GameModel &model, const GameView &view);
+
 	void render();
+	void render(GameModel& model);
+	void render(const GameBoard& gameboard);
+	void render(const GameBoardStructure& board);
+	void render(const BoardCell& cell);
 	void render(const BoardStatic& piece);
 	void render(const BoardActor& actor);
 	void render(const Effect& effect);
-	void renderBoardDiagonal(const GameBoardStructure& board, Coordinate startCoord, int dx, int dy);
-	void renderBoardCoordinate(const GameBoardStructure& board, Coordinate coord);
+	void renderBoardDiagonal(const GameBoardStructure& board, Coordinate3D<int> startCoord, int dx, int dy);
+	void renderBoardCoordinate(const GameBoardStructure& board, Coordinate3D<int> coord);
 
-	void drawQuadrangle(const ScreenCoordinate botLeft, const ScreenCoordinate botRight,
-			  	  	  	const ScreenCoordinate topLeft, const ScreenCoordinate topRight,
+	void drawQuadrangle(const Coordinate2D<double> botLeft, const Coordinate2D<double> botRight,
+			  	  	  	const Coordinate2D<double> topLeft, const Coordinate2D<double> topRight,
 			  	  	  	const std::tuple<float, float, float> color);
 
-	void drawQuadrangle(const ScreenCoordinate& topLeft, const ScreenCoordinate& botRight,
+	void drawQuadrangle(const Coordinate2D<double>& topLeft, const Coordinate2D<double>& botRight,
 			const std::tuple<float, float, float> color);
 
-	void drawQuadrangle_textured(const ScreenCoordinate& topLeft, const ScreenCoordinate& botRight,
-								  const ScreenCoordinate& tex_topLeft, const ScreenCoordinate& tex_botRight,
+	void drawQuadrangle_textured(const Coordinate2D<double>& topLeft, const Coordinate2D<double>& botRight,
+								  const Coordinate2D<double>& tex_topLeft, const Coordinate2D<double>& tex_botRight,
 								  const GLuint& texture);
 
 };

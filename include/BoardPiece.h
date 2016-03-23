@@ -5,14 +5,19 @@
 #include "Animation.h"
 #include "Attack.h"
 
+#include "GL/gl.h"
+
+#include <string>
+
 class GameBoard;
 
 class BoardPiece{
 private:
+	void deepCopy(const BoardPiece& other);
 
 protected:
-	Coordinate location;
-	ScreenCoordinate screen_location;
+	Coordinate3D<int> location;
+	Coordinate2D<double> screen_location;
 
 	std::vector<Animation> animations;
 	int active_animation;
@@ -24,15 +29,23 @@ protected:
 	void resetScreenLocation();
 	void recieveDamage(int damage);
 
+	GLuint spriteSheet;
+
 public:
 	BoardPiece();
-	BoardPiece(Coordinate loc);
+	BoardPiece(const Coordinate3D<int>& loc);
 	BoardPiece(int hitpoints);
-	BoardPiece(Coordinate loc, int hitpoints);
+	BoardPiece(const Coordinate3D<int>& loc, int hitpoints);
 
-	const Coordinate& getLocation() const;
-	void setLocation(Coordinate new_location);
+	BoardPiece& operator=(const BoardPiece& other);
 
+	bool setSpriteSheet(std::string spriteSheetFilepath);
+	const GLuint& getSpriteSheet() const;
+
+	const Coordinate3D<int>& getLocation() const;
+	void setLocation(Coordinate3D<int> new_location);
+
+	const GLuint& getSpriteSheet();
 
 	int getCurrentHealth() const;
 	int getMaxHealth() const;
@@ -43,10 +56,9 @@ public:
 	bool updateAnimation();
 	const Frame& getCurrentAnimationFrame() const;
 
-	const ScreenCoordinate& getScreenLocation() const;
+	const Coordinate2D<double>& getScreenLocation() const;
 
 	virtual bool update();
-
 };
 
 #endif

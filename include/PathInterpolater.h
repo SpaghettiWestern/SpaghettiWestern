@@ -8,15 +8,20 @@
 
 class PathInterpolater{
 private:
-	std::vector<ScreenCoordinate> out_path;
+	std::vector<Coordinate2D<double>> out_path;
+
+	void deepCopy(const PathInterpolater& other);
 
 public:
 	PathInterpolater();
+	PathInterpolater(const PathInterpolater& other);
 
-	void generatePath(const ScreenCoordinate& start, const ScreenCoordinate& dest, double speed);
-	void transferPath(std::vector<ScreenCoordinate>& dest_path);
+	PathInterpolater& operator=(const PathInterpolater& other);
 
-	const std::vector<ScreenCoordinate>& getPath() const;
+	void generatePath(const Coordinate2D<double>& start, const Coordinate2D<double>& dest, double speed);
+	void transferPath(std::vector<Coordinate2D<double>>& dest_path);
+
+	const std::vector<Coordinate2D<double>>& getPath() const;
 };
 
 

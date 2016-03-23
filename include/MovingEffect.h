@@ -6,26 +6,31 @@
 
 class MovingEffect : public Effect{
 private:
-	std::vector<ScreenCoordinate> move_path;
+	std::vector<Coordinate2D<double>> move_path;
 	bool moving;
 	PathInterpolater pathgen;
 
+	void deepCopy(const MovingEffect& other);
+
 public:
 	MovingEffect();
-	MovingEffect(ScreenCoordinate loc);
-	MovingEffect(ScreenCoordinate loc, const std::vector<ScreenCoordinate>& path);
-	MovingEffect(ScreenCoordinate loc, const Animation& anim);
-	MovingEffect(ScreenCoordinate loc, const Animation& anim, const std::vector<ScreenCoordinate>& path);
+	MovingEffect(Coordinate2D<double> loc);
+	MovingEffect(Coordinate2D<double> loc, const std::vector<Coordinate2D<double>>& path);
+	MovingEffect(Coordinate2D<double> loc, const Animation& anim);
+	MovingEffect(Coordinate2D<double> loc, const Animation& anim, const std::vector<Coordinate2D<double>>& path);
+	MovingEffect(const MovingEffect& other);
 
-	void setPath(const std::vector<ScreenCoordinate>& new_path);
-	void transferPath(std::vector<ScreenCoordinate>& new_path);
-	void generatePath(const ScreenCoordinate& dest, double speed);
+	MovingEffect& operator=(const MovingEffect& other);
+
+	void setPath(const std::vector<Coordinate2D<double>>& new_path);
+	void transferPath(std::vector<Coordinate2D<double>>& new_path);
+	void generatePath(const Coordinate2D<double>& dest, double speed);
 
 	bool startMove();
 	void stopMove();
 	bool isMoving() const;
 	bool moveStep();
-	ScreenCoordinate getNextStep() const;
+	Coordinate2D<double> getNextStep() const;
 	virtual effect_type getType() const;
 
 	virtual bool update();

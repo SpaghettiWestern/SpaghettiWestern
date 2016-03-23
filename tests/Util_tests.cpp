@@ -7,9 +7,9 @@ SUITE(Util){
 		std::cerr << "Testing Util\n";
 		for(int x = 0; x < 300; x++){
 			for(int y = 0; y < 300; y++){
-				Coordinate loc(x,y);
-				ScreenCoordinate conv = Util::coordToScreen(loc);
-				Coordinate conv_back = Util::screenToCoord(conv);
+				Coordinate3D<int> loc(x,y,0);
+				Coordinate2D<double> conv = Util::coordToScreen(loc);
+				Coordinate3D<int> conv_back = Util::screenToCoord(conv);
 				CHECK(loc == conv_back);
 //				if(loc != conv_back){
 //					std::cerr << "loc:";

@@ -10,14 +10,18 @@ class BoardStatic : public BoardPiece{
 private:
 	bool traversable;
 
+	void deepCopy(const BoardStatic& other);
+
 protected:
 	virtual void initAnimations();
 
 public:
 	BoardStatic(bool isTraversable);
-	BoardStatic(Coordinate loc, bool isTraversable);
+	BoardStatic(Coordinate3D<int> loc, bool isTraversable);
 	BoardStatic(bool isTraversable, int hitpoints);
-	BoardStatic(Coordinate loc, bool isTraversable, int hitpoints);
+	BoardStatic(Coordinate3D<int> loc, bool isTraversable, int hitpoints);
+	BoardStatic(const BoardStatic& other);
+	BoardStatic& operator=(const BoardStatic& other);
 
 	void setTraversable(bool traversable);
 	bool isTraversable() const;

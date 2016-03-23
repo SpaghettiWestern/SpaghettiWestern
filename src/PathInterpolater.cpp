@@ -4,11 +4,25 @@ PathInterpolater::PathInterpolater(){
 	out_path.clear();
 }
 
-void PathInterpolater::generatePath(const ScreenCoordinate& start, const ScreenCoordinate& dest, double speed){
+PathInterpolater::PathInterpolater(const PathInterpolater& other){
+	deepCopy(other);
+}
+
+PathInterpolater& PathInterpolater::operator=(const PathInterpolater& other){
+	deepCopy(other);
+	return *this;
+}
+
+void PathInterpolater::deepCopy(const PathInterpolater& other){
+	out_path = other.out_path;
+}
+
+
+void PathInterpolater::generatePath(const Coordinate2D<double>& start, const Coordinate2D<double>& dest, double speed){
 	out_path.clear();
 
-	double x_dist = dest.first - start.first;
-	double y_dist = dest.second - start.second;
+	double x_dist = dest.x - start.x;
+	double y_dist = dest.y - start.y;
 	double dist = sqrt(x_dist*x_dist + y_dist*y_dist);
 	if(dist <= 0){
 		return;
@@ -19,17 +33,17 @@ void PathInterpolater::generatePath(const ScreenCoordinate& start, const ScreenC
 
 	out_path.push_back(dest);
 	for(double dist_traveled = 0; dist_traveled < dist-speed; dist_traveled+=speed){
-		ScreenCoordinate loc(out_path.back().first-x_step, out_path.back().second-y_step);
+		Coordinate2D<double> loc(out_path.back().x-x_step, out_path.back().y-y_step);
 		out_path.push_back(loc);
 	}
 	out_path.push_back(start);
 }
 
-void PathInterpolater::transferPath(std::vector<ScreenCoordinate>& dest_path){
+void PathInterpolater::transferPath(std::vector<Coordinate2D<double>>& dest_path){
 	dest_path.swap(out_path);
 	out_path.clear();
 }
 
-const std::vector<ScreenCoordinate>& PathInterpolater::getPath() const{
+const std::vector<Coordinate2D<double>>& PathInterpolater::getPath() const{
 	return out_path;
 }

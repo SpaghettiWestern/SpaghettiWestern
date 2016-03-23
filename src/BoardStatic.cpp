@@ -4,7 +4,7 @@ BoardStatic::BoardStatic(bool isTraversable) : BoardPiece(-1), traversable(isTra
 	initAnimations();
 }
 
-BoardStatic::BoardStatic(Coordinate loc, bool traversable) : BoardPiece(loc, -1), traversable(traversable){
+BoardStatic::BoardStatic(Coordinate3D<int> loc, bool traversable) : BoardPiece(loc, -1), traversable(traversable){
 	initAnimations();
 }
 
@@ -12,10 +12,23 @@ BoardStatic::BoardStatic(bool isTraversable, int hitpoints) : BoardPiece(hitpoin
 	initAnimations();
 }
 
-BoardStatic::BoardStatic(Coordinate loc, bool traversable, int hitpoints) : BoardPiece(loc, hitpoints), traversable(traversable){
+BoardStatic::BoardStatic(Coordinate3D<int> loc, bool traversable, int hitpoints) : BoardPiece(loc, hitpoints), traversable(traversable){
 	initAnimations();
 }
 
+BoardStatic::BoardStatic(const BoardStatic& other) : BoardPiece((const BoardPiece&) other){
+	deepCopy(other);
+}
+
+BoardStatic& BoardStatic::operator=(const BoardStatic& other){
+	BoardPiece::operator=((const BoardPiece&) other);
+	deepCopy(other);
+	return *this;
+}
+
+void BoardStatic::deepCopy(const BoardStatic& other){
+	traversable = other.traversable;
+}
 
 void BoardStatic::initAnimations(){
 	animations.clear();

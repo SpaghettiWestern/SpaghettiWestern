@@ -6,8 +6,7 @@
 #include <cmath>
 #include <random>
 
-typedef std::pair<int, int> Coordinate;
-typedef std::pair<double, double> ScreenCoordinate;
+#include "Coordinate.h"
 
 
 class Util{
@@ -16,11 +15,11 @@ private:
 	static std::default_random_engine generator;
 
 public:
-	static ScreenCoordinate coordToScreen(Coordinate loc);
-	static Coordinate screenToCoord(ScreenCoordinate scr);
-	static void printErrCoordinate(const Coordinate loc);
-	static void printErrScreenCoordinate(const ScreenCoordinate scr);
-	static bool almostEquals_ScreenCoordinate(const ScreenCoordinate& s1, const ScreenCoordinate& s2);
+	static Coordinate2D<double> coordToScreen(Coordinate3D<int> loc);
+	static Coordinate3D<int> screenToCoord(Coordinate2D<double> scr);
+	static void printErrCoordinate(const Coordinate3D<int> loc);
+	static void printErrScreenCoordinate(const Coordinate2D<double> scr);
+	static bool almostEquals_ScreenCoordinate(const Coordinate2D<double>& s1, const Coordinate2D<double>& s2);
 
 	static std::default_random_engine& getRandomEngine();
 };

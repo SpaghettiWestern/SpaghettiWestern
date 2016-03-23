@@ -12,7 +12,7 @@ SUITE(BoardStatic){
 
 	//BoardStatic(Coordinate loc, bool isTraversable);
 	TEST(constructor_1){
-		Coordinate test_coord = Coordinate(5,6);
+		Coordinate3D<int> test_coord = Coordinate3D<int>(5,6,1);
 		BoardStatic test_static = BoardStatic(test_coord, false);
 		CHECK(test_static.isTraversable() == false);
 		CHECK(test_static.getLocation() == test_coord);
@@ -28,7 +28,7 @@ SUITE(BoardStatic){
 
 	//BoardStatic(Coordinate loc, bool isTraversable, int hitpoints);
 	TEST(constructor_3){
-		Coordinate test_coord = Coordinate(5,6);
+		Coordinate3D<int> test_coord = Coordinate3D<int>(5,6,1);
 		BoardStatic test_static = BoardStatic(test_coord, false, 50);
 		CHECK(test_static.isTraversable() == false);
 		CHECK(test_static.getLocation() == test_coord);

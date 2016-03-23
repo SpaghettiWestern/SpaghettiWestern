@@ -14,7 +14,7 @@ SUITE(){
 
 	//	StaticCover(Coordinate loc, bool isTraversable, int deflection_chance);
 	TEST(constructor_1){
-		Coordinate test_coord = Coordinate(5,6);
+		Coordinate3D<int> test_coord = Coordinate3D<int>(5,6,0);
 		StaticCover test_cover = StaticCover(test_coord, false, 100);
 		CHECK(test_cover.getLocation() == test_coord);
 		CHECK(test_cover.isTraversable() == false);
@@ -32,7 +32,7 @@ SUITE(){
 
 	//	StaticCover(Coordinate loc, bool isTraversable, int hitpoints, int deflection_chance);
 	TEST(constructor_3){
-		Coordinate test_coord = Coordinate(5,6);
+		Coordinate3D<int> test_coord = Coordinate3D<int>(5,6,0);
 		StaticCover test_cover = StaticCover(test_coord, false, 100, 600);
 		CHECK(test_cover.getLocation() == test_coord);
 		CHECK(test_cover.isTraversable() == false);

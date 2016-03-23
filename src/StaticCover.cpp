@@ -5,7 +5,7 @@ StaticCover::StaticCover(bool isTraversable, int deflection_chance) :
 
 }
 
-StaticCover::StaticCover(Coordinate loc, bool isTraversable, int deflection_chance) :
+StaticCover::StaticCover(Coordinate3D<int> loc, bool isTraversable, int deflection_chance) :
 	BoardStatic(loc, isTraversable, -1), deflection_chance(deflection_chance){
 
 }
@@ -15,9 +15,23 @@ StaticCover::StaticCover(bool isTraversable, int hitpoints, int deflection_chanc
 
 }
 
-StaticCover::StaticCover(Coordinate loc, bool isTraversable, int hitpoints, int deflection_chance) :
+StaticCover::StaticCover(Coordinate3D<int> loc, bool isTraversable, int hitpoints, int deflection_chance) :
 	BoardStatic(loc, isTraversable, hitpoints), deflection_chance(deflection_chance){
 
+}
+
+StaticCover::StaticCover(const StaticCover& other) : BoardStatic((const BoardStatic&) other){
+	deepCopy(other);
+}
+
+StaticCover& StaticCover::operator=(const StaticCover& other){
+	BoardStatic::operator=((const BoardStatic&) other);
+	deepCopy(other);
+	return *this;
+}
+
+void StaticCover::deepCopy(const StaticCover& other){
+	deflection_chance = other.deflection_chance;
 }
 
 bool StaticCover::receiveAttack(Attack& attack){

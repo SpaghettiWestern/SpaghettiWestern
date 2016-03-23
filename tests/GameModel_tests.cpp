@@ -10,9 +10,10 @@ SUITE(GameModel){
 	TEST(constructor_noplayers){
 		std::cerr << "Testing GameModel\n";
 
-		GameModel testmodel(50, 30);
+		GameModel testmodel(50, 30, 10);
 		CHECK(testmodel.getGameBoard().getBoard().getLength() == 50);
 		CHECK(testmodel.getGameBoard().getBoard().getWidth() == 30);
+		CHECK(testmodel.getGameBoard().getBoard().getHeight() == 10);
 		CHECK(testmodel.getPlayers().size() == 0);
 
 	}
@@ -20,10 +21,11 @@ SUITE(GameModel){
 	TEST(constructor_players){
 		std::vector<std::pair<std::string, bool>> test_players =
 			{std::make_pair("p1", true), std::make_pair("c1", false), std::make_pair("p2", true)};
-		GameModel testmodel(50,30, test_players);
+		GameModel testmodel(50,30,10, test_players);
 
 		CHECK(testmodel.getGameBoard().getBoard().getLength() == 50);
 		CHECK(testmodel.getGameBoard().getBoard().getWidth() == 30);
+		CHECK(testmodel.getGameBoard().getBoard().getHeight() == 10);
 		CHECK(testmodel.getPlayers().size() == test_players.size());
 		for(unsigned int i = 0; i < test_players.size(); i++){
 			CHECK(testmodel.getPlayers()[i].getName().compare(test_players[i].first) == 0);
@@ -31,7 +33,7 @@ SUITE(GameModel){
 		}
 	}
 
-	void create_actor_test(GameModel& testmodel, Coordinate loc, int player, bool successful){
+	void create_actor_test(GameModel& testmodel, Coordinate3D<int> loc, int player, bool successful){
 		std::vector<int> num_actors;
 		for(unsigned int i = 0; i < testmodel.getPlayers().size(); i++)
 			num_actors.push_back(testmodel.getPlayer(i).getNumActors());
@@ -57,22 +59,22 @@ SUITE(GameModel){
 
 	TEST(create_actor){
 		std::vector<std::pair<std::string, bool>> test_players = {std::make_pair("p1", true), std::make_pair("p2", true)};
-		GameModel testmodel(3,3, test_players);
+		GameModel testmodel(3,3,1, test_players);
 
-		Coordinate testact1_loc(0,0);
+		Coordinate3D<int> testact1_loc(0,0,0);
 		create_actor_test(testmodel, testact1_loc, 0, true);
 
-		Coordinate testact2_loc(1,0);
+		Coordinate3D<int> testact2_loc(1,0,0);
 		create_actor_test(testmodel, testact2_loc, 1, true);
 
-		Coordinate testact3_loc(0,1);
+		Coordinate3D<int> testact3_loc(0,1,0);
 		create_actor_test(testmodel, testact3_loc, 1, true);
 
 		create_actor_test(testmodel, testact1_loc, 1, false);
 
-		Coordinate bad_loc(-1, 4000);
+		Coordinate3D<int> bad_loc(-1, 4000,0);
 		create_actor_test(testmodel, bad_loc, 0, false);
-		Coordinate testact4_loc(1,1);
+		Coordinate3D<int> testact4_loc(1,1,0);
 		create_actor_test(testmodel, testact4_loc, -1, false);
 	}
 

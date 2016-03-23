@@ -15,15 +15,15 @@ void Renderer::render(){
 	Coordinate2D<int> traverseVector = view.getDiagonalTraversalVector();
 	dx = traverseVector.x;
 	dy = traverseVector.y;
-	Coordinate startCoord(startColumn.x, startColumn.y);
+	Coordinate3D<int> startCoord(startColumn.x, startColumn.y, 0);
 
-	for (; board.inBounds(startCoord); startCoord.first -= dx)
+	for (; board.inBounds(startCoord); startCoord.x -= dx)
 	{
 		renderBoardDiagonal(board, startCoord, dx, dy);
 	}
-	startCoord.first += dx;
+	startCoord.x += dx;
 
-	for(; board.inBounds(startCoord); startCoord.second += dy)
+	for(; board.inBounds(startCoord); startCoord.y += dy)
 	{
 		renderBoardDiagonal(board, startCoord, dx, dy);
 	}
@@ -32,15 +32,15 @@ void Renderer::render(){
 }
 
 
-void Renderer::renderBoardDiagonal(const GameBoardStructure& board, Coordinate startCoord, int dx, int dy)
+void Renderer::renderBoardDiagonal(const GameBoardStructure& board, Coordinate3D<int> startCoord, int dx, int dy)
 {
-	for (; board.inBounds(startCoord); startCoord.first += dx, startCoord.second += dy)
+	for (; board.inBounds(startCoord); startCoord.x += dx, startCoord.y += dy)
 	{
 		renderBoardCoordinate(board, startCoord);
 	}
 }
 
-void Renderer::renderBoardCoordinate(const GameBoardStructure& board, Coordinate coord)
+void Renderer::renderBoardCoordinate(const GameBoardStructure& board, Coordinate3D<int> coord)
 {
 	Coordinate3D<double> lookAtCoordinate = view.getLookAtCoordinate();
 	double x = lookAtCoordinate.x;
@@ -51,37 +51,65 @@ void Renderer::renderBoardCoordinate(const GameBoardStructure& board, Coordinate
 	double perspectiveDepth = zoom * PERSPECTIVE_DEPTH;
 	// double perspectiveHeight = zoom * PERSPECTIVE_HEIGHT;
 
-	ScreenCoordinate originScrCoord;
-	originScrCoord.first = .5 + (y - x)*spriteWidth/2;
-	originScrCoord.second = .5 - perspectiveDepth * (x+y);
+	Coordinate2D<double> originScrCoord;
+	originScrCoord.x = .5 + (y - x)*spriteWidth/2;
+	originScrCoord.y = .5 - perspectiveDepth * (x+y);
 
-	int u = coord.first;
-	int v = coord.second;
+	int u = coord.x;
+	int v = coord.y;
 
-	ScreenCoordinate scrCoord;
-	scrCoord.first = originScrCoord.first + (u - v)*spriteWidth/2;
-	scrCoord.second = originScrCoord.second + perspectiveDepth * (u+v);
+	Coordinate2D<double> scrCoord;
+	scrCoord.x = originScrCoord.x + (u - v)*spriteWidth/2;
+	scrCoord.y = originScrCoord.y + perspectiveDepth * (u+v);
 
-	ScreenCoordinate scrCoordBotRight;
-	scrCoordBotRight.first = scrCoord.first + spriteWidth;
-	scrCoordBotRight.second = scrCoord.second + spriteHeight;
+	Coordinate2D<double> scrCoordBotRight;
+	scrCoordBotRight.x = scrCoord.x + spriteWidth;
+	scrCoordBotRight.y = scrCoord.y + spriteHeight;
 
-	ScreenCoordinate scrCoordTex1(0,0);
-	ScreenCoordinate scrCoordTex2(1,1);
+	Coordinate2D<double> scrCoordTex1(0,0);
+	Coordinate2D<double> scrCoordTex2(1,1);
+
 
 	drawQuadrangle_textured(scrCoord, scrCoordBotRight, scrCoordTex1, scrCoordTex2, board.spriteSheet);
 	if ((u+v)%5 == 0)
 		drawQuadrangle_textured(scrCoord, scrCoordBotRight, scrCoordTex1, scrCoordTex2, board.spriteSheet2);
 }
 
+void Renderer::render(const GameBoardStructure& board){
+	for(int i = 0; i < board.getWidth(); i++){
+		for(int j = 0; j < board.getLength(); j++){
+			for(int k = 0; k < board.getHeight(); k++){
+				render(board.getEnvironmentCell(i,j,k));
+			}
+		}
+	}
+}
+
+void Renderer::render(const BoardCell& cell){
+	render(cell.getFloor());
+
+	for(int i = 0; i < 4; i++){
+		render(cell.getWall((BoardWall::WallEdge)i));
+	}
+
+	for(unsigned int i = 0; i < cell.getNumEffects(); i++){
+		render(cell.getEffect(i));
+	}
+
+	if (cell.actorExists()){
+		render(cell.getActor());
+	}
+
+}
+
 void Renderer::render(const BoardStatic& piece){
 	double size = piece.getCurrentAnimationFrame().getSize()/2.0;
 
-	ScreenCoordinate topLeft = piece.getScreenLocation();
-	topLeft = ScreenCoordinate(topLeft.first, topLeft.second);
-	ScreenCoordinate botLeft(topLeft.first, topLeft.second+size);
-	ScreenCoordinate botRight(topLeft.first+size, topLeft.second+size);
-	ScreenCoordinate topRight(topLeft.first+size, topLeft.second);
+	Coordinate2D<double> topLeft = piece.getScreenLocation();
+	topLeft = Coordinate2D<double>(topLeft.x, topLeft.y);
+	Coordinate2D<double> botLeft(topLeft.x, topLeft.y+size);
+	Coordinate2D<double> botRight(topLeft.x+size, topLeft.y+size);
+	Coordinate2D<double> topRight(topLeft.x+size, topLeft.y);
 
 	auto color = piece.getCurrentAnimationFrame().getColor();
 	drawQuadrangle(botLeft, botRight, topLeft, topRight, color);
@@ -90,20 +118,20 @@ void Renderer::render(const BoardStatic& piece){
 void Renderer::render(const BoardActor& actor){
 	float size = actor.getCurrentAnimationFrame().getSize();
 
-	ScreenCoordinate topLeft = actor.getScreenLocation();
-	ScreenCoordinate botRight(topLeft.first+size, topLeft.second+size);
+	Coordinate2D<double> topLeft = actor.getScreenLocation();
+	Coordinate2D<double> botRight(topLeft.x+size, topLeft.y+size);
 
 	drawQuadrangle_textured(topLeft, botRight,
 			actor.getCurrentAnimationFrame().tex_topLeft, actor.getCurrentAnimationFrame().tex_botRight,
-			actor.spriteSheet);
+			actor.getSpriteSheet());
 }
 
 void Renderer::render(const Effect& effect){
-	ScreenCoordinate topLeft = effect.getScreenLocation();
-	topLeft = ScreenCoordinate(topLeft.first+0.0025, topLeft.second+0.0025);
-	ScreenCoordinate botLeft(topLeft.first, topLeft.second+0.005);
-	ScreenCoordinate botRight(topLeft.first+0.005, topLeft.second+0.005);
-	ScreenCoordinate topRight(topLeft.first+0.005, topLeft.second);
+	Coordinate2D<double> topLeft = effect.getScreenLocation();
+	topLeft = Coordinate2D<double>(topLeft.x+0.0025, topLeft.y+0.0025);
+	Coordinate2D<double> botLeft(topLeft.x, topLeft.y+0.005);
+	Coordinate2D<double> botRight(topLeft.x+0.005, topLeft.y+0.005);
+	Coordinate2D<double> topRight(topLeft.x+0.005, topLeft.y);
 
 	auto color = effect.getCurrentAnimationFrame().getColor();
 
@@ -118,48 +146,47 @@ void Renderer::render(const Effect& effect){
  * @param topRight the top right corner of the box
  * @param color the rgb color percentages of the box
  */
-void Renderer::drawQuadrangle(const ScreenCoordinate botLeft, const ScreenCoordinate botRight,
-							  const ScreenCoordinate topLeft, const ScreenCoordinate topRight,
+void Renderer::drawQuadrangle(const Coordinate2D<double> botLeft, const Coordinate2D<double> botRight,
+							  const Coordinate2D<double> topLeft, const Coordinate2D<double> topRight,
 							  const std::tuple<float, float, float> color) {
 	glBindTexture(GL_TEXTURE_2D, 0);
-	//glColor3f(std::get<0>(color), std::get<1>(color), std::get<2>(color));
-	glColor3f(255, 255, 255); // draws every square white
+	glColor3f(std::get<0>(color), std::get<1>(color), std::get<2>(color));
 
 	glBegin(GL_QUADS);
-	glVertex2f(botLeft.first, 1-botLeft.second);
-	glVertex2f(botRight.first, 1-botRight.second);
-	glVertex2f(topRight.first, 1-topRight.second);
-	glVertex2f(topLeft.first, 1-topLeft.second);
+	glVertex2f(botLeft.x, 1-botLeft.y);
+	glVertex2f(botRight.x, 1-botRight.y);
+	glVertex2f(topRight.x, 1-topRight.y);
+	glVertex2f(topLeft.x, 1-topLeft.y);
 	glEnd();
 }
 
-void Renderer::drawQuadrangle(const ScreenCoordinate& topLeft, const ScreenCoordinate& botRight,
+void Renderer::drawQuadrangle(const Coordinate2D<double>& topLeft, const Coordinate2D<double>& botRight,
 		const std::tuple<float, float, float> color){
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor3f(std::get<0>(color), std::get<1>(color), std::get<2>(color));
 
 	glBegin(GL_QUADS);
-	glVertex2f(topLeft.first, topLeft.second-1);
-	glVertex2f(topLeft.first, botRight.second-1);
-	glVertex2f(botRight.first, botRight.second-1);
-	glVertex2f(botRight.first, topLeft.second-1);
+	glVertex2f(topLeft.x, topLeft.y-1);
+	glVertex2f(topLeft.x, botRight.y-1);
+	glVertex2f(botRight.x, botRight.y-1);
+	glVertex2f(botRight.x, topLeft.y-1);
 	glEnd();
 
 }
 
 
-void Renderer::drawQuadrangle_textured(const ScreenCoordinate& topLeft, const ScreenCoordinate& botRight,
-							  const ScreenCoordinate& tex_topLeft, const ScreenCoordinate& tex_botRight,
+void Renderer::drawQuadrangle_textured(const Coordinate2D<double>& topLeft, const Coordinate2D<double>& botRight,
+							  const Coordinate2D<double>& tex_topLeft, const Coordinate2D<double>& tex_botRight,
 							  const GLuint& texture) {
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glColor3f(255, 255, 255);
 
 	glBegin(GL_QUADS);
-	glTexCoord2f(tex_topLeft.first, tex_topLeft.second); 	 glVertex2f(topLeft.first, 1-topLeft.second);
-	glTexCoord2f(tex_topLeft.first, tex_botRight.second);	 glVertex2f(topLeft.first, 1-botRight.second);
-	glTexCoord2f(tex_botRight.first, tex_botRight.second); 	 glVertex2f(botRight.first, 1-botRight.second);
-	glTexCoord2f(tex_botRight.first, tex_topLeft.second);	 glVertex2f(botRight.first, 1-topLeft.second);
+	glTexCoord2f(tex_topLeft.x, tex_topLeft.y); 	 glVertex2f(topLeft.x, 1-topLeft.y);
+	glTexCoord2f(tex_topLeft.x, tex_botRight.y);	 glVertex2f(topLeft.x, 1-botRight.y);
+	glTexCoord2f(tex_botRight.x, tex_botRight.y); 	 glVertex2f(botRight.x, 1-botRight.y);
+	glTexCoord2f(tex_botRight.x, tex_topLeft.y);	 glVertex2f(botRight.x, 1-topLeft.y);
 	glEnd();
 }
 

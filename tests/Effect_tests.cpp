@@ -6,7 +6,7 @@ SUITE(Effect){
 	TEST(constructor_defaut){
 		std::cerr << "Testing Effects\n";
 
-		ScreenCoordinate s_loc(0.0,0.0);
+		Coordinate2D<double> s_loc(0.0,0.0);
 		Frame black(std::make_tuple<int,int,int>(0,0,0), .01);
 		Frame blue(std::make_tuple<int,int,int>(0,0,255), .01);
 
@@ -19,7 +19,7 @@ SUITE(Effect){
 
 	//Effect(ScreenCoordinate loc);
 	TEST(constructor_loc){
-		ScreenCoordinate s_loc(10.15,73.0);
+		Coordinate2D<double> s_loc(10.15,73.0);
 		Frame black(std::make_tuple<int,int,int>(0,0,0), .01);
 		Frame blue(std::make_tuple<int,int,int>(0,0,255), .01);
 
@@ -32,7 +32,7 @@ SUITE(Effect){
 
 	//Effect(ScreenCoordinate loc, Animation animation);
 	TEST(constructor_loc_anim){
-		ScreenCoordinate s_loc(10.15,73.0);
+		Coordinate2D<double> s_loc(10.15,73.0);
 		Frame black(std::make_tuple<int,int,int>(0,0,0), .01);
 		Frame yellow(std::make_tuple<int,int,int>(255,255,0), .01);
 		Animation test_anim;
@@ -49,8 +49,8 @@ SUITE(Effect){
 	//const ScreenCoordinate& getScreenLocation();
 	//void setScreenLocation(const ScreenCoordinate& new_loc);
 	TEST(get_set_screenCoordinate){
-		ScreenCoordinate start_loc(10.15,73.0);
-		ScreenCoordinate new_loc(28.0, 32.1);
+		Coordinate2D<double> start_loc(10.15,73.0);
+		Coordinate2D<double> new_loc(28.0, 32.1);
 
 		Effect testeffect(start_loc);
 		CHECK(testeffect.getScreenLocation() == start_loc);
@@ -62,7 +62,7 @@ SUITE(Effect){
 	//const Frame& getCurrentAnimationFrame();
 	//void update();
 	TEST(set_animation){
-		ScreenCoordinate s_loc(99999.0,111.0);
+		Coordinate2D<double> s_loc(99999.0,111.0);
 		Frame black(std::make_tuple<int,int,int>(0,0,0), .01);
 		Frame blue(std::make_tuple<int,int,int>(0,0,255), .01);
 		Frame yellow(std::make_tuple<int,int,int>(255,255,0), .01);

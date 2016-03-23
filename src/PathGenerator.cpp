@@ -2,8 +2,8 @@
 
 PathGenerator::PathGenerator(std::shared_ptr<GameBoardStructure>& board) : board(board){
 	resetSets();
-	curr = Coordinate(-1,-1);
-	end = Coordinate(-1,-1);
+	curr = Coordinate3D<int>(-1,-1,-1);
+	end = Coordinate3D<int>(-1,-1,-1);
 }
 
 void PathGenerator::resetSets(){
@@ -18,30 +18,19 @@ void PathGenerator::resetSets(){
 									  CoordinateComparison>();
 }
 
-Coordinate PathGenerator::getSmallestOpen(){
-	Coordinate smallest = open_set.begin()->first;
-	for(auto it = open_set.begin(); it != open_set.end(); ++it){
-		if(f_score[smallest] > f_score[it->first]){
-			smallest = it->first;
-		}
-	}
-	open_set.erase(smallest);
-
-	return smallest;
-}
-
-int PathGenerator::estimateDistance(const Coordinate& start, const Coordinate& end){
-	return std::abs(start.first - end.first) + std::abs(start.second-end.second);
+int PathGenerator::estimateDistance(const Coordinate3D<int>& start, const Coordinate3D<int>& end){
+	return std::abs(start.x - end.x) + std::abs(start.y-end.y) + std::abs(start.z-end.z);
 }
 
 void PathGenerator::traverseNeighbors(){
-	traverseNeighbor(Coordinate(curr.first+1, curr.second));
-	traverseNeighbor(Coordinate(curr.first-1, curr.second));
-	traverseNeighbor(Coordinate(curr.first, curr.second+1));
-	traverseNeighbor(Coordinate(curr.first, curr.second-1));
+	const BoardCell& currCell =  board->getEnvironmentCell(curr);
+
+	for(unsigned int i = 0; i < currCell.getNumNeighbors(); i++){
+		traverseNeighbor(currCell.getNeighbor(i).getLocation());
+	}
 }
 
-void PathGenerator::traverseNeighbor(const Coordinate& neighbor){
+void PathGenerator::traverseNeighbor(const Coordinate3D<int>& neighbor){
 	if(closed_set.count(neighbor) > 0){
 		return;
 	}
@@ -70,17 +59,23 @@ void PathGenerator::traverseNeighbor(const Coordinate& neighbor){
 	}
 }
 
-void PathGenerator::reconstructPath(const Coordinate& start){
+void PathGenerator::reconstructPath(const Coordinate3D<int>& start){
 	path.clear();
-	Coordinate curr_step = end;
+	Coordinate3D<int> curr_step = end;
 	while(curr_step != start){
+		Coordinate3D<int> next_step = came_from[curr_step];
+		int distanceChange = estimateDistance(curr_step, next_step);
+		if(std::abs(curr_step.x - next_step.x) >= 2 || std::abs(curr_step.y - next_step.y) >= 2 || std::abs(curr_step.z - next_step.z) >= 2){
+			int what = 0;
+		}
+
 		path.push_back(curr_step);
 		curr_step = came_from[curr_step];
 	}
 	path.push_back(start);
 }
 
-bool PathGenerator::findPath(const Coordinate& start, const Coordinate& goal){
+bool PathGenerator::findPath(const Coordinate3D<int>& start, const Coordinate3D<int>& goal){
 	resetSets();
 
 	if(!board->openSpace(goal))
@@ -92,6 +87,10 @@ bool PathGenerator::findPath(const Coordinate& start, const Coordinate& goal){
 	open_set[start] = true;
 
 	while(!open_set.empty()){
+		if(pq_open_set.size() == 0){
+			return false;
+		}
+
 		curr = pq_open_set.top().coord;
 		pq_open_set.pop();
 
@@ -107,11 +106,11 @@ bool PathGenerator::findPath(const Coordinate& start, const Coordinate& goal){
 	return false;
 }
 
-std::vector<Coordinate> PathGenerator::getPath(){
+std::vector<Coordinate3D<int>> PathGenerator::getPath(){
 	return path;
 }
 
-distanceCoordinate::distanceCoordinate(const Coordinate& coord, int g_score, int f_score) :
+distanceCoordinate::distanceCoordinate(const Coordinate3D<int>& coord, int g_score, int f_score) :
 	coord(coord), g_score(g_score), f_score(f_score){
 
 }
@@ -120,7 +119,7 @@ CoordinateComparison::CoordinateComparison(){
 
 }
 
-bool CoordinateComparison::operator() (const distanceCoordinate& lhs, const distanceCoordinate &rhs) const {
+bool CoordinateComparison::operator() (const distanceCoordinate& lhs, const distanceCoordinate& rhs) const {
 	if(lhs.f_score > rhs.f_score)
 		return true;
 	return false;

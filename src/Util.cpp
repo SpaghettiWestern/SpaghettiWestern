@@ -6,23 +6,23 @@ double Util::epsilon(){
 	return 0.0000000001;
 }
 
-ScreenCoordinate Util::coordToScreen(Coordinate loc){
-	return ScreenCoordinate(loc.first/20.0, loc.second/20.0);
+Coordinate2D<double> Util::coordToScreen(Coordinate3D<int> loc){
+	return Coordinate2D<double>(loc.x/20.0, loc.y/20.0);
 }
 
-Coordinate Util::screenToCoord(ScreenCoordinate scr){
-	return Coordinate((int)(scr.first*20.0+epsilon()), (int)(scr.second*20.0+epsilon()));
+Coordinate3D<int> Util::screenToCoord(Coordinate2D<double> scr){
+	return Coordinate3D<int>((int)(scr.x*20.0+epsilon()), (int)(scr.y*20.0+epsilon()), 0);
 }
 
-void Util::printErrCoordinate(const Coordinate loc){
-	std::cerr << "(" << loc.first << "," <<loc.second << ")";
+void Util::printErrCoordinate(const Coordinate3D<int> loc){
+	std::cerr << "(" << loc.x << "," <<loc.y << ")";
 }
-void Util::printErrScreenCoordinate(const ScreenCoordinate scr){
-	std::cerr << std::fixed << "(" << scr.first << "," <<scr.second << ")";
+void Util::printErrScreenCoordinate(const Coordinate2D<double> scr){
+	std::cerr << std::fixed << "(" << scr.x << "," <<scr.y << ")";
 }
 
-bool Util::almostEquals_ScreenCoordinate(const ScreenCoordinate& s1, const ScreenCoordinate& s2){
-	return (std::abs(s1.first - s2.first) < epsilon()) && (std::abs(s1.second - s2.second) < epsilon());
+bool Util::almostEquals_ScreenCoordinate(const Coordinate2D<double>& s1, const Coordinate2D<double>& s2){
+	return (std::abs(s1.x - s2.x) < epsilon()) && (std::abs(s1.y - s2.y) < epsilon());
 }
 
 std::default_random_engine& Util::getRandomEngine(){

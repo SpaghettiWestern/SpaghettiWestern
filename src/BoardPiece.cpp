@@ -1,14 +1,14 @@
 #include "BoardPiece.h"
 
 BoardPiece::BoardPiece(){
-	location = Coordinate(-1,-1);
+	location = Coordinate3D<int>(-1,-1,-1);
 	resetScreenLocation();
 	initAnimations();
 	max_hitpoints = -1;
 	curr_hitpoints = -1;
 }
 
-BoardPiece::BoardPiece(Coordinate loc){
+BoardPiece::BoardPiece(const Coordinate3D<int>& loc){
 	location = loc;
 	resetScreenLocation();
 	initAnimations();
@@ -17,7 +17,7 @@ BoardPiece::BoardPiece(Coordinate loc){
 }
 
 BoardPiece::BoardPiece(int hitpoints){
-	location = Coordinate(-1,-1);
+	location = Coordinate3D<int>(-1,-1,-1);
 	resetScreenLocation();
 	initAnimations();
 	max_hitpoints = hitpoints;
@@ -25,7 +25,7 @@ BoardPiece::BoardPiece(int hitpoints){
 
 }
 
-BoardPiece::BoardPiece(Coordinate loc, int hitpoints){
+BoardPiece::BoardPiece(const Coordinate3D<int>& loc, int hitpoints){
 	location = loc;
 	resetScreenLocation();
 	initAnimations();
@@ -34,11 +34,42 @@ BoardPiece::BoardPiece(Coordinate loc, int hitpoints){
 
 }
 
+BoardPiece& BoardPiece::operator=(const BoardPiece& other){
+	deepCopy(other);
+	return *this;
+}
+
+void BoardPiece::deepCopy(const BoardPiece& other){
+	location = other.location;
+	screen_location = other.screen_location;
+
+	animations = other.animations;
+	active_animation = other.active_animation;
+
+	max_hitpoints = other.max_hitpoints;
+	curr_hitpoints = other.curr_hitpoints;
+
+	spriteSheet = other.spriteSheet;
+}
+
 void BoardPiece::initAnimations(){
 	animations.clear();
 	animations.push_back(Animation());
 
 	active_animation = 0;
+}
+
+bool BoardPiece::setSpriteSheet(std::string spriteSheetFilepath){
+	GLuint newSheet = BlitHelper::loadImageGL(spriteSheetFilepath);
+	if(newSheet == 0){
+		return false;
+	}
+	spriteSheet = newSheet;
+	return true;
+}
+
+const GLuint& BoardPiece::getSpriteSheet() const{
+	return spriteSheet;
 }
 
 void BoardPiece::setAnimation(const Animation& new_animation){
@@ -87,11 +118,11 @@ void BoardPiece::resetScreenLocation(){
 	screen_location = Util::coordToScreen(location);
 }
 
-const Coordinate& BoardPiece::getLocation() const{
+const Coordinate3D<int>& BoardPiece::getLocation() const{
 	return location;
 }
 
-void BoardPiece::setLocation(Coordinate new_location){
+void BoardPiece::setLocation(Coordinate3D<int> new_location){
 	if(new_location != location){
 		location = new_location;
 		if(Util::screenToCoord(screen_location) != location){
@@ -100,7 +131,11 @@ void BoardPiece::setLocation(Coordinate new_location){
 	}
 }
 
-const ScreenCoordinate& BoardPiece::getScreenLocation() const{
+const GLuint& BoardPiece::getSpriteSheet(){
+	return spriteSheet;
+}
+
+const Coordinate2D<double>& BoardPiece::getScreenLocation() const{
 	return screen_location;
 }
 

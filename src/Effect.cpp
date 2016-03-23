@@ -1,11 +1,11 @@
 #include "Effect.h"
 
 Effect::Effect(){
-	loc = ScreenCoordinate(0.0,0.0);
+	loc = Coordinate2D<double>(0.0,0.0);
 	initAnimation();
 }
 
-Effect::Effect(ScreenCoordinate loc) : loc(loc){
+Effect::Effect(Coordinate2D<double> loc) : loc(loc){
 	initAnimation();
 }
 
@@ -15,14 +15,28 @@ void Effect::initAnimation(){
 	animation.addFrame(Frame(std::make_tuple(0,0,0), .01));
 }
 
-Effect::Effect(ScreenCoordinate loc, Animation animation) : loc(loc), animation(animation){
+Effect::Effect(Coordinate2D<double> loc, Animation animation) : loc(loc), animation(animation){
 
 }
 
-ScreenCoordinate Effect::getScreenLocation() const{
+Effect::Effect(const Effect& other){
+	deepCopy(other);
+}
+
+Effect& Effect::operator=(const Effect& other){
+	deepCopy(other);
+	return *this;
+}
+
+void Effect::deepCopy(const Effect& other){
+	loc = other.loc;
+	animation = other.animation;
+}
+
+Coordinate2D<double> Effect::getScreenLocation() const{
 	return loc;
 }
-void Effect::setScreenLocation(const ScreenCoordinate& new_loc){
+void Effect::setScreenLocation(const Coordinate2D<double>& new_loc){
 	loc = new_loc;
 }
 
