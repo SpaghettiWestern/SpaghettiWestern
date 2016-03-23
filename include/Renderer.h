@@ -9,6 +9,7 @@
 
 #include "Util.h"
 
+#include "GameView.h"
 #include "GameModel.h"
 #include "GameBoard.h"
 #include "GameBoardStructure.h"
@@ -19,11 +20,12 @@
 
 class Renderer{
 private:
-	GameModel& model;
+	const GameModel &model;
+	const GameView &view;
 
 public:
+	Renderer(const GameModel &model, const GameView &view);
 
-	Renderer(GameModel& model);
 	void render();
 	void render(GameModel& model);
 	void render(const GameBoard& gameboard);
@@ -32,6 +34,8 @@ public:
 	void render(const BoardStatic& piece);
 	void render(const BoardActor& actor);
 	void render(const Effect& effect);
+	void renderBoardDiagonal(const GameBoardStructure& board, Coordinate3D<int> startCoord, int dx, int dy);
+	void renderBoardCoordinate(const GameBoardStructure& board, Coordinate3D<int> coord);
 
 	void drawQuadrangle(const Coordinate2D<double> botLeft, const Coordinate2D<double> botRight,
 			  	  	  	const Coordinate2D<double> topLeft, const Coordinate2D<double> topRight,

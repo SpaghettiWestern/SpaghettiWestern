@@ -50,6 +50,12 @@ public:
 		return stream;
 	}
 
+	void set(T x, T y, T z)
+		{
+			this->x = x;
+			this->y = y;
+			this->z = z;
+		}
 };
 
 
@@ -86,6 +92,12 @@ public:
 	friend std::ostream& operator<< (std::ostream& stream, const Coordinate2D<T>& rhs) {
 		stream << "(" << rhs.x << ", " << rhs.y << ")";
 		return stream;
+	}
+
+	void set(T x, T y)
+	{
+		this->x = x;
+		this->y = y;
 	}
 };
 

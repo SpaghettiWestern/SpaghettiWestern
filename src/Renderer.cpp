@@ -1,25 +1,78 @@
 #include "Renderer.h"
 
-Renderer::Renderer(GameModel& model) : model(model){
 
-}
+Renderer::Renderer(const GameModel &model, const GameView &view)
+	: model(model), view(view)
+{}
+
 
 void Renderer::render(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	render(model);
+
+	int dx, dy;
+	const GameBoardStructure &board = model.getGameBoard().getBoard();
+	Coordinate2D<int> startColumn = view.getRearColumn(board.getWidth(), board.getLength());
+	Coordinate2D<int> traverseVector = view.getDiagonalTraversalVector();
+	dx = traverseVector.x;
+	dy = traverseVector.y;
+	Coordinate3D<int> startCoord(startColumn.x, startColumn.y, 0);
+
+	for (; board.inBounds(startCoord); startCoord.x -= dx)
+	{
+		renderBoardDiagonal(board, startCoord, dx, dy);
+	}
+	startCoord.x += dx;
+
+	for(; board.inBounds(startCoord); startCoord.y += dy)
+	{
+		renderBoardDiagonal(board, startCoord, dx, dy);
+	}
+
 	glFlush();
 }
 
-void Renderer::render(GameModel& model){
-	render(model.getGameBoard());
+
+void Renderer::renderBoardDiagonal(const GameBoardStructure& board, Coordinate3D<int> startCoord, int dx, int dy)
+{
+	for (; board.inBounds(startCoord); startCoord.x += dx, startCoord.y += dy)
+	{
+		renderBoardCoordinate(board, startCoord);
+	}
 }
 
-void Renderer::render(const GameBoard& gameboard){
-	render(gameboard.getBoard());
-	for(auto it = gameboard.getSurfaceEffects().begin(); it != gameboard.getSurfaceEffects().end(); ++it){
-		render(**it);
-	}
+void Renderer::renderBoardCoordinate(const GameBoardStructure& board, Coordinate3D<int> coord)
+{
+	Coordinate3D<double> lookAtCoordinate = view.getLookAtCoordinate();
+	double x = lookAtCoordinate.x;
+	double y = lookAtCoordinate.y;
+	double zoom = view.getZoom();
+	double spriteWidth = zoom * SPRITE_UNIT_WIDTH;
+	double spriteHeight = zoom * SPRITE_UNIT_HEIGHT;
+	double perspectiveDepth = zoom * PERSPECTIVE_DEPTH;
+	// double perspectiveHeight = zoom * PERSPECTIVE_HEIGHT;
 
+	Coordinate2D<double> originScrCoord;
+	originScrCoord.x = .5 + (y - x)*spriteWidth/2;
+	originScrCoord.y = .5 - perspectiveDepth * (x+y);
+
+	int u = coord.x;
+	int v = coord.y;
+
+	Coordinate2D<double> scrCoord;
+	scrCoord.x = originScrCoord.x + (u - v)*spriteWidth/2;
+	scrCoord.y = originScrCoord.y + perspectiveDepth * (u+v);
+
+	Coordinate2D<double> scrCoordBotRight;
+	scrCoordBotRight.x = scrCoord.x + spriteWidth;
+	scrCoordBotRight.y = scrCoord.y + spriteHeight;
+
+	Coordinate2D<double> scrCoordTex1(0,0);
+	Coordinate2D<double> scrCoordTex2(1,1);
+
+
+	drawQuadrangle_textured(scrCoord, scrCoordBotRight, scrCoordTex1, scrCoordTex2, board.spriteSheet);
+	if ((u+v)%5 == 0)
+		drawQuadrangle_textured(scrCoord, scrCoordBotRight, scrCoordTex1, scrCoordTex2, board.spriteSheet2);
 }
 
 void Renderer::render(const GameBoardStructure& board){
@@ -127,6 +180,8 @@ void Renderer::drawQuadrangle_textured(const Coordinate2D<double>& topLeft, cons
 							  const Coordinate2D<double>& tex_topLeft, const Coordinate2D<double>& tex_botRight,
 							  const GLuint& texture) {
 	glBindTexture(GL_TEXTURE_2D, texture);
+	glColor3f(255, 255, 255);
+
 	glBegin(GL_QUADS);
 	glTexCoord2f(tex_topLeft.x, tex_topLeft.y); 	 glVertex2f(topLeft.x, 1-topLeft.y);
 	glTexCoord2f(tex_topLeft.x, tex_botRight.y);	 glVertex2f(topLeft.x, 1-botRight.y);

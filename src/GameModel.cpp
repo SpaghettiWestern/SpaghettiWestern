@@ -15,7 +15,7 @@ GameModel::GameModel(int board_length, int board_width, int board_height, std::v
 	}
 }
 
-GameBoard& GameModel::getGameBoard(){
+const GameBoard& GameModel::getGameBoard() const {
 	return board;
 }
 const std::vector<Player>& GameModel::getPlayers() const{
@@ -102,12 +102,4 @@ void GameModel::update(){
 	}
 	board.update();
 }
-
-
-
-
-
-
-
-
 

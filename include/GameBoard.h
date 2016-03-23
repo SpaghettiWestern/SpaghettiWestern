@@ -38,6 +38,7 @@ public:
 	bool openSpace(const Coordinate3D<int>& loc);
 
 	bool canAttack(const Coordinate3D<int>& attacker_loc, const Coordinate3D<int>& attack_loc);
+	bool isWithinBounds(int x, int y, int z);
 
 	bool actorExists(const Coordinate3D<int>& loc);
 	const BoardActor& getActor(const Coordinate3D<int>& loc) const;

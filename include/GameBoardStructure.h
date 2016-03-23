@@ -36,6 +36,12 @@ private:
 	void updateEffects();
 
 public:
+
+
+	//demo only
+	GLuint spriteSheet;
+	GLuint spriteSheet2;
+
 	GameBoardStructure(int length, int width, int height);
 	GameBoardStructure(const GameBoardStructure& other);
 	GameBoardStructure& operator=(const GameBoardStructure& other);

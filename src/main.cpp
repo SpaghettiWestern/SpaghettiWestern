@@ -20,6 +20,7 @@
 #include "GameView.h"
 #include "GameController.h"
 #include "BlitHelper.h"
+#include "Renderer.h"
 
 /**
  * Initialize some OpenGL settings.
@@ -51,7 +52,9 @@ void updateViewport(int width, int height) {
  * @param displayWindow The window the game is being drawn in.
  * @param view The view of the game being drawn.
  */
-void gameLoop(SDL_Window& displayWindow, GameView& view, GameController& controller) {
+void gameLoop(SDL_Window& displayWindow, GameView& view, GameModel& model, GameController& controller) {
+	Renderer renderer(model, view);
+
 	bool running = true;
 	while(running) {
 		SDL_Event event;
@@ -59,7 +62,9 @@ void gameLoop(SDL_Window& displayWindow, GameView& view, GameController& control
 			running = controller.handleInput(event);
 		}
 
-		view.render();
+		controller.processDownKeys();
+		model.update();
+		renderer.render();
 
 		SDL_GL_SwapWindow(&displayWindow);
 		//To keep my computer from running at maximum
@@ -111,10 +116,11 @@ void startGame() {
 	model.playMovingEffect(Coordinate2D<double>(0,0), Coordinate2D<double>(1,1), true);
 	model.playMovingEffect(Coordinate2D<double>(0,.95), Coordinate2D<double>(.95,0), false);
 
-	GameView view(model);
-	GameController controller(model);
+	GameView view;
+	GameController controller(model, view);
 
-	gameLoop(*displayWindow, view, controller);
+	gameLoop(*displayWindow, view, model, controller);
+
 
 	SDL_DestroyWindow(displayWindow);
 	SDL_DestroyRenderer(displayRenderer);
