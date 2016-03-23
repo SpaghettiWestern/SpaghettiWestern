@@ -9,27 +9,27 @@
 
 #include "Util.h"
 
+#include "GameView.h"
 #include "GameModel.h"
 #include "GameBoard.h"
 #include "GameBoardStructure.h"
 #include "BoardStatic.h"
 #include "BoardActor.h"
 
-
 class Renderer{
 private:
-	GameModel& model;
+	const GameModel &model;
+	const GameView &view;
 
 public:
 
-	Renderer(GameModel& model);
+	Renderer(const GameModel &model, const GameView &view);
 	void render();
-	void render(GameModel& model);
-	void render(const GameBoard& gameboard);
-	void render(const GameBoardStructure& board);
 	void render(const BoardStatic& piece);
 	void render(const BoardActor& actor);
 	void render(const Effect& effect);
+	void renderBoardDiagonal(const GameBoardStructure& board, Coordinate startCoord, int dx, int dy);
+	void renderBoardCoordinate(const GameBoardStructure& board, Coordinate coord);
 
 	void drawQuadrangle(const ScreenCoordinate botLeft, const ScreenCoordinate botRight,
 			  	  	  	const ScreenCoordinate topLeft, const ScreenCoordinate topRight,

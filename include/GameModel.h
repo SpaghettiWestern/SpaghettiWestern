@@ -20,7 +20,7 @@ public:
 	GameModel(int board_length, int board_width);
 	GameModel(int board_length, int board_width, std::vector<std::pair<std::string, bool>> init_players);
 
-	GameBoard& getGameBoard();
+	const GameBoard& getGameBoard() const;
 	const std::vector<Player>& getPlayers() const;
 
 	bool playerExists(int index) const;
@@ -38,6 +38,7 @@ public:
 	bool playMovingEffect(const ScreenCoordinate& start, const ScreenCoordinate& dest, bool surface_level);
 
 	void update();
+
 };
 
 

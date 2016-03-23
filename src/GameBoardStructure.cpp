@@ -9,6 +9,9 @@ GameBoardStructure::GameBoardStructure(int length, int width){
 	this->width = width;
 	initEnvironment();
 	initActors();
+
+	this->spriteSheet = BlitHelper::loadImageGL("C:\\workspace\\SpaghettiWestern\\Resources\\floor_grass1.png");
+	this->spriteSheet2 = BlitHelper::loadImageGL("C:\\workspace\\SpaghettiWestern\\Resources\\object_tree_evergreen1.png");
 }
 
 void GameBoardStructure::initEnvironment(){
@@ -255,5 +258,3 @@ void GameBoardStructure::update(){
 	updateEffects();
 	updateEnvironment();
 }
-
-

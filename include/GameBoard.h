@@ -34,8 +34,8 @@ public:
 	const GameBoardStructure& getBoard() const;
 
 	bool openSpace(const Coordinate& loc);
-
 	bool canAttack(const Coordinate& attacker_loc, const Coordinate& attack_loc);
+	bool isWithinBounds(int x, int y);
 
 	bool actorExists(const Coordinate& loc);
 	BoardActor& getActor(const Coordinate& loc);
@@ -61,6 +61,7 @@ public:
 	bool addMovingSurfaceEffect(const ScreenCoordinate& loc, const std::vector<ScreenCoordinate>& path);
 
 	void update();
+
 };
 
 #endif

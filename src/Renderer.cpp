@@ -1,41 +1,77 @@
 #include "Renderer.h"
 
-Renderer::Renderer(GameModel& model) : model(model){
 
-}
+Renderer::Renderer(const GameModel &model, const GameView &view)
+	: model(model), view(view)
+{}
+
 
 void Renderer::render(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	render(model);
+
+	int dx, dy;
+	const GameBoardStructure &board = model.getGameBoard().getBoard();
+	Coordinate2D<int> startColumn = view.getRearColumn(board.getWidth(), board.getLength());
+	Coordinate2D<int> traverseVector = view.getDiagonalTraversalVector();
+	dx = traverseVector.x;
+	dy = traverseVector.y;
+	Coordinate startCoord(startColumn.x, startColumn.y);
+
+	for (; board.inBounds(startCoord); startCoord.first -= dx)
+	{
+		renderBoardDiagonal(board, startCoord, dx, dy);
+	}
+	startCoord.first += dx;
+
+	for(; board.inBounds(startCoord); startCoord.second += dy)
+	{
+		renderBoardDiagonal(board, startCoord, dx, dy);
+	}
+
 	glFlush();
 }
 
-void Renderer::render(GameModel& model){
-	render(model.getGameBoard());
+
+void Renderer::renderBoardDiagonal(const GameBoardStructure& board, Coordinate startCoord, int dx, int dy)
+{
+	for (; board.inBounds(startCoord); startCoord.first += dx, startCoord.second += dy)
+	{
+		renderBoardCoordinate(board, startCoord);
+	}
 }
 
-void Renderer::render(const GameBoard& gameboard){
-	render(gameboard.getBoard());
-	for(auto it = gameboard.getSurfaceEffects().begin(); it != gameboard.getSurfaceEffects().end(); ++it){
-		render(**it);
-	}
+void Renderer::renderBoardCoordinate(const GameBoardStructure& board, Coordinate coord)
+{
+	Coordinate3D<double> lookAtCoordinate = view.getLookAtCoordinate();
+	double x = lookAtCoordinate.x;
+	double y = lookAtCoordinate.y;
+	double zoom = view.getZoom();
+	double spriteWidth = zoom * SPRITE_UNIT_WIDTH;
+	double spriteHeight = zoom * SPRITE_UNIT_HEIGHT;
+	double perspectiveDepth = zoom * PERSPECTIVE_DEPTH;
+	// double perspectiveHeight = zoom * PERSPECTIVE_HEIGHT;
 
-}
+	ScreenCoordinate originScrCoord;
+	originScrCoord.first = .5 + (y - x)*spriteWidth/2;
+	originScrCoord.second = .5 - perspectiveDepth * (x+y);
 
-void Renderer::render(const GameBoardStructure& board){
-	for(int i = 0; i < board.getWidth(); i++){
-		for(int j = 0; j < board.getLength(); j++){
-			render(board.getEnvironmentPiece(i,j));
-			if (board.actorExists(i, j)){
-				render(*(board.getActor(i,j)));
-			}
-			if (board.effectsExist(Coordinate(i,j))){
-				for(auto it = board.getEffects(Coordinate(i,j)).begin(); it != board.getEffects(Coordinate(i,j)).end(); ++it){
-					render((**it));
-				}
-			}
-		}
-	}
+	int u = coord.first;
+	int v = coord.second;
+
+	ScreenCoordinate scrCoord;
+	scrCoord.first = originScrCoord.first + (u - v)*spriteWidth/2;
+	scrCoord.second = originScrCoord.second + perspectiveDepth * (u+v);
+
+	ScreenCoordinate scrCoordBotRight;
+	scrCoordBotRight.first = scrCoord.first + spriteWidth;
+	scrCoordBotRight.second = scrCoord.second + spriteHeight;
+
+	ScreenCoordinate scrCoordTex1(0,0);
+	ScreenCoordinate scrCoordTex2(1,1);
+
+	drawQuadrangle_textured(scrCoord, scrCoordBotRight, scrCoordTex1, scrCoordTex2, board.spriteSheet);
+	if ((u+v)%5 == 0)
+		drawQuadrangle_textured(scrCoord, scrCoordBotRight, scrCoordTex1, scrCoordTex2, board.spriteSheet2);
 }
 
 void Renderer::render(const BoardStatic& piece){
@@ -86,7 +122,8 @@ void Renderer::drawQuadrangle(const ScreenCoordinate botLeft, const ScreenCoordi
 							  const ScreenCoordinate topLeft, const ScreenCoordinate topRight,
 							  const std::tuple<float, float, float> color) {
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glColor3f(std::get<0>(color), std::get<1>(color), std::get<2>(color));
+	//glColor3f(std::get<0>(color), std::get<1>(color), std::get<2>(color));
+	glColor3f(255, 255, 255); // draws every square white
 
 	glBegin(GL_QUADS);
 	glVertex2f(botLeft.first, 1-botLeft.second);
@@ -116,6 +153,8 @@ void Renderer::drawQuadrangle_textured(const ScreenCoordinate& topLeft, const Sc
 							  const ScreenCoordinate& tex_topLeft, const ScreenCoordinate& tex_botRight,
 							  const GLuint& texture) {
 	glBindTexture(GL_TEXTURE_2D, texture);
+	glColor3f(255, 255, 255);
+
 	glBegin(GL_QUADS);
 	glTexCoord2f(tex_topLeft.first, tex_topLeft.second); 	 glVertex2f(topLeft.first, 1-topLeft.second);
 	glTexCoord2f(tex_topLeft.first, tex_botRight.second);	 glVertex2f(topLeft.first, 1-botRight.second);
